@@ -4,7 +4,7 @@ namespace SimplyRecruitAPI.Auth
 {
     public class AuthDtos
     {
-        public record RegisterUserDto([Required] string UserName,[Required] string Name, [Required] string Surname, [EmailAddress][Required] string Email, [Required] string Password);
+        public record RegisterUserDto([Required] string UserName,[Required] string Name, [Required] string CompanyName, [Required] string Surname, [EmailAddress][Required] string Email, [Required] string Password);
         public record LoginUserDto([EmailAddress]string Email, string Password);
 
         public record UserDto(string Id, string UserName, string Email);

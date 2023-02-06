@@ -34,7 +34,7 @@ namespace SimplyRecruitAPI.Auth
             (
                 issuer: _issuer,
                 audience: _audience,
-                expires: DateTime.UtcNow.AddHours(2),
+                expires: DateTime.UtcNow.AddHours(2), // todo pakeisti i 5-10 min
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(_authSigningKey, SecurityAlgorithms.HmacSha256)
             );

@@ -12,7 +12,7 @@ using SimplyRecruitAPI.Data;
 namespace SimplyRecruitAPI.Migrations
 {
     [DbContext(typeof(SimplyRecruitDbContext))]
-    [Migration("20230205155510_auth")]
+    [Migration("20230205203343_auth")]
     partial class auth
     {
         /// <inheritdoc />
@@ -165,6 +165,9 @@ namespace SimplyRecruitAPI.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Company")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

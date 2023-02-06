@@ -10,6 +10,9 @@ namespace SimplyRecruitAPI.Auth.Model
         [PersonalData]
         public string? Surname { get; set; }
 
+        [PersonalData]
+        public string? Company { get; set; }
+
         public string? RefreshToken { get; set; }
 
         public DateTime RefreshTokenExpiryTime { get; set; }
