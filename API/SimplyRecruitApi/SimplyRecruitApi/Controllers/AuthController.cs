@@ -59,7 +59,7 @@ namespace SimplyRecruitAPI.Controllers
             if (!createUserResult.Succeeded)
                 return BadRequest($"Could not create a user. Error: {createUserResult.Errors}");
 
-            await _userManager.AddToRoleAsync(newUser, Roles.User); //todo recruiterius gali pridet adminas, o paprasti naudotojai gali prisiregistruoti
+            await _userManager.AddToRoleAsync(newUser, Roles.User); 
 
             return CreatedAtAction(nameof(Register), new UserDto(newUser.Id, newUser.UserName, newUser.Email));
         }
