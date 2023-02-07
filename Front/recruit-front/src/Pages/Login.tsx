@@ -11,36 +11,44 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert/Alert";
 import image from "../img/login-image.png";
+import InputEmailField from "../Components/InputEmailField";
+import isEmail from "validator/lib/isEmail";
 
 const Login = () => {
-  const [userName, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [failed, setFailed] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-
-    const response = await fetch("https://localhost:7054/api/login", {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        userName,
-        password,
-      }),
-    });
-
-    if (response.status == 200) {
-      const token = await response.json();
-      localStorage.setItem("accessToken", token.accessToken);
-      localStorage.setItem("username", token.userName);
-      localStorage.setItem("refreshToken", token.refreshToken);
-      localStorage.setItem("roles", token.roles);
-      localStorage.setItem("userId", token.userId);
-      localStorage.setItem("email", token.email);
-      return navigate("/");
-    } else {
-      setFailed(true);
+    if (isEmail(email)) {
+      const response = await fetch("https://localhost:7108/api/login", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      console.log(
+        JSON.stringify({
+          email,
+          password,
+        })
+      );
+      if (response.status == 200) {
+        const token = await response.json();
+        localStorage.setItem("accessToken", token.accessToken);
+        localStorage.setItem("username", token.userName);
+        localStorage.setItem("refreshToken", token.refreshToken);
+        localStorage.setItem("roles", token.roles);
+        localStorage.setItem("userId", token.userId);
+        localStorage.setItem("email", token.email);
+        return navigate("/");
+      } else {
+        setFailed(true);
+      }
     }
   };
 
@@ -76,16 +84,12 @@ const Login = () => {
             Sign in
           </Typography>
           <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 1 }}>
-            <TextField
+            <InputEmailField
               margin="normal"
-              required
+              label="Email"
               fullWidth
-              id="email"
-              label="Username"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={(e) => setUsername(e.target.value)}
+              fieldName="Email"
+              onChange={(e: any) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
