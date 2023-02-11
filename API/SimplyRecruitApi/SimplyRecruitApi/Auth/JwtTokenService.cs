@@ -19,11 +19,11 @@ namespace SimplyRecruitAPI.Auth
             _audience = configuration["JWT:ValidAudience"];
         }
 
-        public string CreateAccessToken(string userName, string userId, IEnumerable<string> userRoles)
+        public string CreateAccessToken(string email, string userId, IEnumerable<string> userRoles)
         {
             var authClaims = new List<Claim>
             {
-                new(ClaimTypes.Name, userName),
+                new(ClaimTypes.Email, email),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new(JwtRegisteredClaimNames.Sub, userId),
             };

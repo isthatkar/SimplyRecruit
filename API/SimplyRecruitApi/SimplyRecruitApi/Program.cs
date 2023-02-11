@@ -41,6 +41,7 @@ namespace SimplyRecruitAPI
                 {
                     options.TokenValidationParameters.ValidAudience = builder.Configuration["JWT:ValidAudience"];
                     options.TokenValidationParameters.ValidIssuer = builder.Configuration["JWT:ValidIssuer"];
+                    options.SaveToken = true;
                     options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]));
                 });
 

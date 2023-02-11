@@ -23,25 +23,6 @@ const Register = () => {
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setFailed(false);
-    const response = await fetch("https://localhost:7054/api/register", {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        userName,
-        email,
-        password,
-      }),
-    });
-
-    console.log(response);
-    console.log(response.status);
-
-    if (response.status == 201) {
-      setRedir(true);
-      return navigate("/login");
-    } else {
-      setFailed(true);
-    }
   };
 
   return (

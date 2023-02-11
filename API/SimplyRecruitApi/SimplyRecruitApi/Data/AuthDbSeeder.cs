@@ -25,12 +25,13 @@ namespace SimplyRecruitAPI.Data
             var newAdminUser = new SimplyUser()
             {
                 UserName = "admin",
-                Email = "admin@admin.com"
+                Email = "rugile.karengaite@gmail.com"
             };
 
             var existingAdminUser = await _userManager.FindByNameAsync(newAdminUser.UserName);
             if (existingAdminUser == null)
             {
+                var createAdminUserResult = await _userManager.CreateAsync(newAdminUser);
                 if (createAdminUserResult.Succeeded)
                 {
                     await _userManager.AddToRolesAsync(newAdminUser, Roles.All);

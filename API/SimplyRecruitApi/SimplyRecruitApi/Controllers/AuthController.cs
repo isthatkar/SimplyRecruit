@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Auth;
+using Google.Apis.Auth;
 
 namespace SimplyRecruitAPI.Controllers
 {
@@ -16,6 +17,7 @@ namespace SimplyRecruitAPI.Controllers
     [Route("api")]
     public class AuthController : ControllerBase
     {
+        private readonly string[] NordDomains = { "@nordsec.com", "@tesonet.com", "@surfshark.com" };
         private UserManager<SimplyUser> _userManager;
         private IJwtTokenService _jwtTokenService;
         private IConfiguration _configuration;
@@ -31,68 +33,31 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register(RegisterUserDto registerUserDto)
+        [Route("googlelogin")]
+        public async Task<IActionResult> GoogleLogin(GoogleLoginDto googleLoginDto)
         {
-            var user = await _userManager.FindByEmailAsync(registerUserDto.Email);
+            GoogleJsonWebSignature.Payload payload = await GoogleJsonWebSignature.ValidateAsync(googleLoginDto.AccessToken);
+
+            var user = await _userManager.FindByEmailAsync(payload.Email);
             if (user != null)
             {
-                return BadRequest("Email aready has an account ");
+                return Ok(await LoginUser(user));
             }
 
-            var userName = await _userManager.FindByNameAsync(registerUserDto.UserName);
-            if (user != null)
-            {
-                return BadRequest("Username aready taken ");
-            }
-
+            bool isNordEmployee = IsNordDomain(payload.Email);
             var newUser = new SimplyUser()
             {
-                Email = registerUserDto.Email,
-                Name = registerUserDto.Name,
-                Surname = registerUserDto.Surname,
-                Company = registerUserDto.CompanyName,
-                UserName = registerUserDto.UserName
+                Email = payload.Email,
+                UserName = $"{payload.FamilyName}{payload.GivenName}"
             };
 
-            var createUserResult = await _userManager.CreateAsync(newUser, registerUserDto.Password);
+            var createUserResult = await _userManager.CreateAsync(newUser);
             if (!createUserResult.Succeeded)
                 return BadRequest($"Could not create a user. Error: {createUserResult.Errors}");
 
-            await _userManager.AddToRoleAsync(newUser, Roles.User); 
+            await _userManager.AddToRoleAsync(newUser, isNordEmployee ? Roles.Employee : Roles.Candidate);
 
-            return CreatedAtAction(nameof(Register), new UserDto(newUser.Id, newUser.UserName, newUser.Email));
-        }
-
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login(LoginUserDto loginDto)
-        {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
-            if (user == null)
-                return BadRequest("Email or password is invalid.");
-
-            var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-            if (!isPasswordValid)
-                return BadRequest("Email or password is invalid.");
-
-            // valid user
-            var roles = await _userManager.GetRolesAsync(user);
-            var accessToken = _jwtTokenService.CreateAccessToken(user.UserName, user.Id, roles);
-            var refreshToken = _jwtTokenService.CreateRefreshToken();
-
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
-
-            await _userManager.UpdateAsync(user);
-
-
-            var allRoles = string.Empty;
-            foreach (string role in roles)
-            {
-                allRoles += role;
-            }
-            return Ok(new SuccessfulLoginDto(accessToken, refreshToken, allRoles, user.Id, user.UserName, user.Email));
+            return Ok(await LoginUser(newUser));
         }
 
         [HttpPost]
@@ -133,16 +98,16 @@ namespace SimplyRecruitAPI.Controllers
             {
                 allRoles += role;
             }
-            return Ok(new SuccessfulLoginDto(newAccessToken, newRefreshToken, allRoles, user.Id, username, user.Email));
+            return Ok(new SuccessfulLoginDto(newAccessToken, newRefreshToken, allRoles, user.Id, user.Email));
         }
 
         [Authorize]
         [HttpPost]
-        [Route("revoke/{username}")]
-        public async Task<IActionResult> Revoke(string username)
+        [Route("revoke/{id}")]
+        public async Task<IActionResult> Revoke(string id)
         {
-            var user = await _userManager.FindByNameAsync(username);
-            if (user == null) return BadRequest("Invalid user name");
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return BadRequest("Invalid email");
 
             user.RefreshToken = null;
 
@@ -168,7 +133,28 @@ namespace SimplyRecruitAPI.Controllers
                 throw new SecurityTokenException("Invalid token");
 
             return principal;
-
         }
+
+        private async Task<SuccessfulLoginDto> LoginUser(SimplyUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            var accessToken = _jwtTokenService.CreateAccessToken(user.Email, user.Id, roles);
+            var refreshToken = _jwtTokenService.CreateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+            await _userManager.UpdateAsync(user);
+
+            var allRoles = string.Empty;
+            foreach (string role in roles)
+            {
+                allRoles += role;
+            }
+            
+            return new SuccessfulLoginDto(accessToken, refreshToken, allRoles, user.Id, user.Email);
+        }
+
+        private bool IsNordDomain(string email) => NordDomains.Any(domain => email.EndsWith(domain));
     }
 }

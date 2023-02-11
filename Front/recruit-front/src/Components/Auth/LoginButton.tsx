@@ -8,6 +8,7 @@ export default function LoginButton() {
 
   const onSuccess = (credentialResponse: CredentialResponse) => {
     const jwtToken = credentialResponse.credential as string;
+    console.log(credentialResponse);
     const decoded = jwt_decode(jwtToken);
     localStorage.setItem("accessToken", jwtToken);
     console.log(decoded);
