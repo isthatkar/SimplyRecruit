@@ -1,9 +1,7 @@
 import React, { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,46 +9,12 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert/Alert";
 import image from "../img/login-image.png";
-import InputEmailField from "../Components/InputEmailField";
-import isEmail from "validator/lib/isEmail";
+import LoginButton from "../Components/Auth/LoginButton";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [failed, setFailed] = useState(false);
   const navigate = useNavigate();
-
-  const onSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    if (isEmail(email)) {
-      const response = await fetch("https://localhost:7108/api/login", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-      console.log(
-        JSON.stringify({
-          email,
-          password,
-        })
-      );
-      if (response.status == 200) {
-        const token = await response.json();
-        localStorage.setItem("accessToken", token.accessToken);
-        localStorage.setItem("username", token.userName);
-        localStorage.setItem("refreshToken", token.refreshToken);
-        localStorage.setItem("roles", token.roles);
-        localStorage.setItem("userId", token.userId);
-        localStorage.setItem("email", token.email);
-        return navigate("/");
-      } else {
-        setFailed(true);
-      }
-    }
-  };
+  const token = localStorage.getItem("accessToken");
 
   return (
     <Grid container component="main" sx={{ height: "95vh" }}>
@@ -83,32 +47,8 @@ const Login = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 1 }}>
-            <InputEmailField
-              margin="normal"
-              label="Email"
-              fullWidth
-              fieldName="Email"
-              onChange={(e: any) => setEmail(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
+          <Box component="form" noValidate sx={{ mt: 1 }}>
+            <LoginButton></LoginButton>
           </Box>
           {failed ? (
             <Alert severity="error">

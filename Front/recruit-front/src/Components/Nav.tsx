@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import Button from "@mui/material/Button";
 import React from "react";
+import LogoutButton from "./Auth/LogoutButton";
 
 const Nav = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("accessToken");
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
       <a className="navbar-brand mb-0 ml-1 h2" href="/">
@@ -30,34 +32,31 @@ const Nav = () => {
 
       <div className="navbar navbar-dark bg-dark" id="navbarsExample02">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link className="nav-link active" aria-current="page" to={"/login"}>
-              Login
-            </Link>{" "}
-          </li>
-          <li className="nav-item">
-            <Link
-              className="nav-link active"
-              aria-current="page"
-              to={"/register"}
-            >
-              Register
-            </Link>{" "}
-          </li>
+          {!token ? (
+            <li className="nav-item">
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={"/login"}
+              >
+                Login
+              </Link>{" "}
+            </li>
+          ) : (
+            ""
+          )}
         </ul>
         <div className="navbar-collapse collapse w-100 order-3 dual-collapse2"></div>
-        <div className="nav-item ">
-          <Button>Logout</Button>{" "}
-        </div>
-        {/*  {token ? (
-                    <ul className="navbar-nav justify-content-right">
-                        <li className="nav-item mr-1">
-                            <Button onClick={(e) => Logout(e)}>Logout</Button>{' '}
-                        </li>
-                    </ul>
-                ) : (
-                    ''
-                )} */}
+
+        {token ? (
+          <ul className="navbar-nav justify-content-right">
+            <li className="nav-item mr-1">
+              <LogoutButton></LogoutButton>
+            </li>
+          </ul>
+        ) : (
+          ""
+        )}
       </div>
     </nav>
   );
