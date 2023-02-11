@@ -48,7 +48,7 @@ namespace SimplyRecruitAPI.Controllers
             var newUser = new SimplyUser()
             {
                 Email = payload.Email,
-                UserName = $"{payload.FamilyName}{payload.GivenName}"
+                UserName = new Random().Next().ToString()
             };
 
             var createUserResult = await _userManager.CreateAsync(newUser);
