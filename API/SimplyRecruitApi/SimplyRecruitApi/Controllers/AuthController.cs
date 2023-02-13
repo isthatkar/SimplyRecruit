@@ -9,11 +9,14 @@ using System.Text;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Auth;
 using Google.Apis.Auth;
+using System.Linq;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json.Linq;
+using System.Security.Principal;
 
 namespace SimplyRecruitAPI.Controllers
 {
     [ApiController]
-    [AllowAnonymous]
     [Route("api")]
     public class AuthController : ControllerBase
     {
@@ -33,6 +36,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("googlelogin")]
         public async Task<IActionResult> GoogleLogin(GoogleLoginDto googleLoginDto)
         {
@@ -61,6 +65,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenDto tokenModel)
         {
@@ -75,22 +80,25 @@ namespace SimplyRecruitAPI.Controllers
             var principal = GetPrincipalFromExpiredToken(accessToken);
             if (principal == null)
             {
-                return BadRequest("Invalid access token or refresh token");
+                return Unauthorized("Invalid access token or refresh token");
             }
 
-            string username = principal.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            string id = principal.Claims.Where(c => c.Type == "sub")
+                   .Select(c => c.Value).SingleOrDefault();
+            var user = await _userManager.FindByIdAsync(id);
             var roles = await _userManager.GetRolesAsync(user);
 
-            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
-                return BadRequest("Invalid access token or refresh token");
+                return Unauthorized("Invalid access token or refresh token");
             }
 
-            var newAccessToken = _jwtTokenService.CreateAccessToken(username, user.Id, roles);
+            var newAccessToken = _jwtTokenService.CreateAccessToken(user.Email, user.Id, roles);
             var newRefreshToken = _jwtTokenService.CreateRefreshToken();
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddHours(7);
 
             user.RefreshToken = newRefreshToken;
+            user.AccessToken = newAccessToken;
             await _userManager.UpdateAsync(user);
 
             var allRoles = string.Empty;
@@ -98,6 +106,7 @@ namespace SimplyRecruitAPI.Controllers
             {
                 allRoles += role;
             }
+
             return Ok(new SuccessfulLoginDto(newAccessToken, newRefreshToken, allRoles, user.Id, user.Email));
         }
 
@@ -110,10 +119,22 @@ namespace SimplyRecruitAPI.Controllers
             if (user == null) return BadRequest("Invalid email");
 
             user.RefreshToken = null;
+            user.AccessToken = null;
 
             await _userManager.UpdateAsync(user);
 
             return NoContent();
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("curentUser")]
+        public async Task<IActionResult> CurrentUser()
+        {
+            var id = User.FindFirst("sub")?.Value;
+            var user = await _userManager.FindByIdAsync(id);
+
+            return Ok(new LoginUserDto(user.Email, ""));
         }
 
         private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
@@ -141,8 +162,9 @@ namespace SimplyRecruitAPI.Controllers
             var accessToken = _jwtTokenService.CreateAccessToken(user.Email, user.Id, roles);
             var refreshToken = _jwtTokenService.CreateRefreshToken();
 
+            user.AccessToken = accessToken;
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddHours(7);
 
             await _userManager.UpdateAsync(user);
 
@@ -151,8 +173,8 @@ namespace SimplyRecruitAPI.Controllers
             {
                 allRoles += role;
             }
-            
-            return new SuccessfulLoginDto(accessToken, refreshToken, allRoles, user.Id, user.Email);
+
+            return new SuccessfulLoginDto(user.AccessToken, user.RefreshToken, allRoles, user.Id, user.Email);
         }
 
         private bool IsNordDomain(string email) => NordDomains.Any(domain => email.EndsWith(domain));

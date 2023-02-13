@@ -1,6 +1,7 @@
 ﻿namespace SimplyRecruitAPI.Auth.Model
 {
-    public class PolicyNames
+    public static class PolicyNames
     {
+        public const string ResourceOwner = nameof(ResourceOwner);
     }
 }

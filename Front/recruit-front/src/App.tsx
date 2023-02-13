@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Nav from "./Components/Nav";
 import "./App.css";
+import Projects from "./Pages/Projects";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/projects" element={<Projects />} />
           </Routes>
         </BrowserRouter>
       </div>

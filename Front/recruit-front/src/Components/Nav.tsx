@@ -4,61 +4,177 @@ import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import Button from "@mui/material/Button";
 import React from "react";
 import LogoutButton from "./Auth/LogoutButton";
+import Toolbar from "@mui/material/Toolbar";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import { ThemeProvider } from "@mui/material";
+import Theme from "../Styles/Theme";
 
 const Nav = () => {
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
   const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-      <a className="navbar-brand mb-0 ml-1 h2" href="/">
-        <WorkOutlineIcon
-          width="30"
-          height="30"
-          className="d-inline-block align-top mx-4"
-        />
-        Simply Recruit
-      </a>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarsExample02"
-        aria-controls="navbarsExample02"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
+    <ThemeProvider theme={Theme}>
+      <AppBar position="sticky" color="primary">
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <WorkOutlineIcon
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              SimplyRecruit
+            </Typography>
 
-      <div className="navbar navbar-dark bg-dark" id="navbarsExample02">
-        <ul className="navbar-nav mr-auto">
-          {!token ? (
-            <li className="nav-item">
-              <Link
-                className="nav-link active"
-                aria-current="page"
-                to={"/login"}
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
               >
-                Login
-              </Link>{" "}
-            </li>
-          ) : (
-            ""
-          )}
-        </ul>
-        <div className="navbar-collapse collapse w-100 order-3 dual-collapse2"></div>
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                {!token ? (
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href="/login"
+                  >
+                    <Typography textAlign="center">Login</Typography>
+                  </MenuItem>
+                ) : (
+                  ""
+                )}
+                {token ? (
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href="/projects"
+                  >
+                    <Typography textAlign="center">Projects</Typography>
+                  </MenuItem>
+                ) : (
+                  ""
+                )}
+              </Menu>
+            </Box>
+            <WorkOutlineIcon
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            />
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href=""
+              sx={{
+                mr: 2,
+                display: { xs: "flex", md: "none" },
+                flexGrow: 1,
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              SimplyRecruit
+            </Typography>
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              {!token ? (
+                <Button
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component="a"
+                  href="/login"
+                >
+                  Login
+                </Button>
+              ) : (
+                ""
+              )}
+              {token ? (
+                <Button
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component="a"
+                  href="/projects"
+                >
+                  Projects
+                </Button>
+              ) : (
+                ""
+              )}
+            </Box>
 
-        {token ? (
-          <ul className="navbar-nav justify-content-right">
-            <li className="nav-item mr-1">
-              <LogoutButton></LogoutButton>
-            </li>
-          </ul>
-        ) : (
-          ""
-        )}
-      </div>
-    </nav>
+            {token ? (
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Logout">
+                  <IconButton sx={{ p: 0 }}>
+                    <Avatar alt="Remy Sharp" />
+                  </IconButton>
+                </Tooltip>
+                <LogoutButton></LogoutButton>
+              </Box>
+            ) : (
+              ""
+            )}
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </ThemeProvider>
   );
 };
 

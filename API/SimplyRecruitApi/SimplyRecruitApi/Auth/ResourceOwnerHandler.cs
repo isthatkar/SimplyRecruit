@@ -21,6 +21,7 @@ namespace SimplyRecruitAPI.Auth
             return Task.CompletedTask;
         }
     }
+
     public record ResourceOwnerRequirement : IAuthorizationRequirement;
 
 }

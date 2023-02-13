@@ -1,5 +1,4 @@
-import React, { SyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
@@ -11,8 +10,6 @@ import image from "../img/login-image.png";
 import LoginButton from "../Components/Auth/LoginButton";
 
 const Login = () => {
-  const navigate = useNavigate();
-
   return (
     <Grid container component="main" sx={{ height: "95vh" }}>
       <CssBaseline />
@@ -33,6 +30,7 @@ const Login = () => {
           sx={{
             my: 8,
             width: "auto",
+            heigt: "*",
             mx: 5,
             display: "flex",
             flexDirection: "column",

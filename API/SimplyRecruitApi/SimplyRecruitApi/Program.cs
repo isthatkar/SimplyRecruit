@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -6,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using SimplyRecruitAPI.Auth;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace SimplyRecruitAPI
@@ -16,7 +18,7 @@ namespace SimplyRecruitAPI
         {
 
             var builder = WebApplication.CreateBuilder(args);
-
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -41,13 +43,20 @@ namespace SimplyRecruitAPI
                 {
                     options.TokenValidationParameters.ValidAudience = builder.Configuration["JWT:ValidAudience"];
                     options.TokenValidationParameters.ValidIssuer = builder.Configuration["JWT:ValidIssuer"];
-                    options.SaveToken = true;
                     options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]));
                 });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddAuthorization(options =>
+            {
+
+                options.AddPolicy(PolicyNames.ResourceOwner, policy => policy.Requirements.Add(new ResourceOwnerRequirement()));
+            });
+
+            builder.Services.AddSingleton<IAuthorizationHandler, ResourceOwnerHandler>();
 
             var app = builder.Build();
 
@@ -65,9 +74,10 @@ namespace SimplyRecruitAPI
 
             app.UseRouting();
 
-            app.UseAuthorization();
-            app.UseAuthentication();
             app.MapControllers();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             var dbSeeder = app.Services.CreateScope().ServiceProvider.GetRequiredService<AuthDbSeeder>();
             await dbSeeder.SeedAsync();
