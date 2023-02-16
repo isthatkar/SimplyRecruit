@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SimplyRecruitAPI.Data.Dtos.Positions;
 using SimplyRecruitAPI.Data.Dtos.Projects;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Enums;
@@ -12,10 +13,12 @@ namespace SimplyRecruitAPI.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectsRepository _projectsRepository;
+        private readonly IPositionsRepository _positionsRepository;
 
-        public ProjectsController(IProjectsRepository projectsRepository)
+        public ProjectsController(IProjectsRepository projectsRepository, IPositionsRepository positionsRepository)
         {
             _projectsRepository = projectsRepository;
+            _positionsRepository = positionsRepository;
         }
 
         [HttpGet]

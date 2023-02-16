@@ -12,12 +12,10 @@ namespace SimplyRecruitAPI.Controllers
     public class PositionsController : Controller
     {
         private readonly IPositionsRepository _positionsRepository;
-        private readonly IProjectsRepository _projectsRepository;
 
-        public PositionsController(IPositionsRepository positionsRepository, IProjectsRepository projectsRepository)
+        public PositionsController(IPositionsRepository positionsRepository)
         {
             _positionsRepository = positionsRepository;
-            _projectsRepository = projectsRepository;
         }
 
         [HttpGet]
@@ -39,34 +37,6 @@ namespace SimplyRecruitAPI.Controllers
             }
 
             return new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.Location, position.WorkTime, position.Field, position.Project);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<PositionDto>> Create(CreatePositionDto createPositionDto)
-        {
-            var project = await _projectsRepository.GetAsync(createPositionDto.ProjectId);
-
-            if(project == null)
-            {
-                return NotFound("Project to which you want to add position was not found");
-            }
-
-            var position = new Position
-            {
-               Name = createPositionDto.Name,
-               Description  = createPositionDto.Description,
-               Project = project,
-               Deadline = createPositionDto.DeadLine,
-               Location = createPositionDto.Location,
-               Field = createPositionDto.Field,
-               WorkTime = createPositionDto.WorkTime
-            };
-
-            await _positionsRepository.CreateAsync(position);
-
-            //201
-            return Created("", new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.Location, position.WorkTime, position.Field, position.Project));
-
         }
 
         [HttpPut]
