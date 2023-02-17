@@ -2,7 +2,7 @@
 {
     public enum NordProduct
     {
-        Nordvpn, 
+        NordVPN, 
         NordPass, 
         NordLocker, 
         NordLayer,

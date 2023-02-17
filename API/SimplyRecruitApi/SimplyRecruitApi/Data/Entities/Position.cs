@@ -14,6 +14,8 @@ namespace SimplyRecruitAPI.Data.Entities
 
         public DateTime Deadline { get; set; }
 
+        public bool IsOpen { get; set; }
+
         public Location Location { get; set; }
 
         public WorkTime WorkTime { get; set; }

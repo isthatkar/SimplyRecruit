@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import Button from "@mui/material/Button";
 import React from "react";
@@ -31,7 +29,6 @@ const Nav = () => {
     setAnchorElNav(null);
   };
 
-  const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
   return (
     <ThemeProvider theme={Theme}>

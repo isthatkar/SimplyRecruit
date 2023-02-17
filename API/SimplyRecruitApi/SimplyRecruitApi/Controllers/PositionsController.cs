@@ -22,7 +22,7 @@ namespace SimplyRecruitAPI.Controllers
         public async Task<IEnumerable<PositionDto>> GetMany()
         {
             var positions = await _positionsRepository.GetManyAsync();
-            return positions.Select(p => new PositionDto(p.Id, p.Name, p.Description, p.Deadline, p.Location, p.WorkTime, p.Field, p.Project));
+            return positions.Select(p => new PositionDto(p.Id, p.Name, p.Description, p.Deadline, p.IsOpen, p.Location, p.WorkTime, p.Field, p.Project));
         }
 
         [HttpGet]
@@ -36,7 +36,7 @@ namespace SimplyRecruitAPI.Controllers
                 return NotFound(); //404
             }
 
-            return new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.Location, position.WorkTime, position.Field, position.Project);
+            return new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.IsOpen, position.Location, position.WorkTime, position.Field, position.Project);
         }
 
         [HttpPut]
@@ -53,13 +53,14 @@ namespace SimplyRecruitAPI.Controllers
             position.Name = updatePositionDto.Name is null ? position.Name : updatePositionDto.Name;
             position.Description = updatePositionDto.Description is null ? position.Description : updatePositionDto.Description;
             position.Deadline = updatePositionDto.DeadLine is null ? position.Deadline : (DateTime)updatePositionDto.DeadLine;
+            position.IsOpen = updatePositionDto.IsOpen is null ? position.IsOpen : (bool)updatePositionDto.IsOpen;
             position.Location = updatePositionDto.Location is null ? position.Location : (Location)updatePositionDto.Location;
             position.WorkTime = updatePositionDto.WorkTime is null ? position.WorkTime : (WorkTime)updatePositionDto.WorkTime;
             position.Field = updatePositionDto.Field is null ? position.Field : (Field)updatePositionDto.Field;
 
             await _positionsRepository.UpdateAsync(position);
 
-            return Ok(new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.Location, position.WorkTime, position.Field, position.Project));
+            return Ok(new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.IsOpen, position.Location, position.WorkTime, position.Field, position.Project));
         }
 
         [HttpDelete]

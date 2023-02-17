@@ -10,6 +10,7 @@ import "./App.css";
 import Projects from "./Pages/Projects";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Positions from "./Pages/Positions";
+import ProjectView from "./Pages/ProjectView";
 
 const token = localStorage.getItem("accessToken");
 const isAuth = !(token === null);
@@ -25,6 +26,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/projects" element={<ProtectedRoute isAuth={isAuth} />}>
             <Route path="/projects" element={<Projects />} />
+          </Route>
+          <Route
+            path="/projects/:projectid"
+            element={<ProtectedRoute isAuth={isAuth} />}
+          >
+            <Route path="/projects/:projectid" element={<ProjectView />} />
           </Route>
           <Route path="/positions" element={<ProtectedRoute isAuth={isAuth} />}>
             <Route path="/positions" element={<Positions />} />

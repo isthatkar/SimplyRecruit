@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SimplyRecruitAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class ProjectAndPositions : Migration
+    public partial class projectsandpositions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,6 +37,7 @@ namespace SimplyRecruitAPI.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsOpen = table.Column<bool>(type: "bit", nullable: false),
                     Location = table.Column<int>(type: "int", nullable: false),
                     WorkTime = table.Column<int>(type: "int", nullable: false),
                     Field = table.Column<int>(type: "int", nullable: false)

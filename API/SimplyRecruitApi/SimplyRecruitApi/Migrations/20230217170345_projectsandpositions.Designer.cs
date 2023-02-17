@@ -12,8 +12,8 @@ using SimplyRecruitAPI.Data;
 namespace SimplyRecruitAPI.Migrations
 {
     [DbContext(typeof(SimplyRecruitDbContext))]
-    [Migration("20230216163013_ProjectAndPositions")]
-    partial class ProjectAndPositions
+    [Migration("20230217170345_projectsandpositions")]
+    partial class projectsandpositions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -249,6 +249,9 @@ namespace SimplyRecruitAPI.Migrations
 
                     b.Property<int>("Field")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Location")
                         .HasColumnType("int");

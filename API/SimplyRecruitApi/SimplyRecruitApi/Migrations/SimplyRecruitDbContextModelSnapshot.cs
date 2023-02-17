@@ -247,6 +247,9 @@ namespace SimplyRecruitAPI.Migrations
                     b.Property<int>("Field")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Location")
                         .HasColumnType("int");
 

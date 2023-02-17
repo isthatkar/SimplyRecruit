@@ -7,10 +7,58 @@ export interface Project {
   image: string;
 }
 
+export interface Position {
+  id: number;
+  project: Project;
+  name: string;
+  description: string;
+  deadline: Date;
+  isOpen: boolean;
+  location: JobLocation;
+  workTime: WorkTime;
+  field: Field;
+}
+
 export enum NordProduct {
   NordVPN,
   NordPass,
   NordLocker,
   NordLayer,
   NordSecurity,
+}
+
+export enum JobLocation {
+  Kaunas,
+  Vilnius,
+  Berlin,
+  Warsaw,
+  WashingtonDC,
+}
+
+export enum WorkTime {
+  Fulltime,
+  Parttime,
+}
+
+export enum Field {
+  Administration,
+  Architecture,
+  Backend,
+  Bussiness,
+  Communications,
+  Data,
+  DesktopApps,
+  EngineeringLeadership,
+  Finance,
+  Frontend,
+  HumanResources,
+  Infrastructure,
+  Legal,
+  Marketing,
+  Mobile,
+  Payments,
+  Design,
+  QA,
+  Risk,
+  Sales,
 }

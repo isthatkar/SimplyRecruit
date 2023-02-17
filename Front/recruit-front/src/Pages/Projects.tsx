@@ -11,6 +11,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import EditProjectDialog from "../Components/Projects/EditProjectDialog";
 import projectImages from "../img/Projects/projectImages";
@@ -18,6 +19,8 @@ import Theme from "../Styles/Theme";
 import { NordProduct, Project } from "../Types/types";
 
 const Projects = () => {
+  const navigate = useNavigate();
+
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [isEmployee, setIsEmployee] = useState(false);
 
@@ -40,6 +43,10 @@ const Projects = () => {
     const isEmployee = roles?.includes("Employee");
     setIsEmployee(isEmployee ? isEmployee : false);
   }, []);
+
+  const onView = (ColId: number) => {
+    return navigate(`/projects/${ColId}`);
+  };
 
   return (
     <ThemeProvider theme={Theme}>
@@ -108,7 +115,11 @@ const Projects = () => {
                   <Typography>{card.description}</Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small" color="primary">
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => onView(card.id)}
+                  >
                     View
                   </Button>
                   {isEmployee ? (
