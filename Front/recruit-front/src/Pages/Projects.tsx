@@ -11,6 +11,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
+import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import projectImages from "../img/Projects/projectImages";
 import Theme from "../Styles/Theme";
 import { NordProduct, Project } from "../Types/types";
@@ -27,7 +28,6 @@ const Projects = () => {
 
   const getProjects = useCallback(async () => {
     const response = await axios.get("projects");
-    console.log(response);
     const projects = response.data;
     projects.forEach((project: Project) => (project.image = GetImage()));
     setAllProjects(projects);
@@ -74,11 +74,7 @@ const Projects = () => {
             spacing={2}
             justifyContent="center"
           >
-            {isEmployee ? (
-              <Button variant="contained">Add new project</Button>
-            ) : (
-              ""
-            )}
+            {isEmployee ? <AddProjectDialog></AddProjectDialog> : ""}
           </Stack>
         </Container>
       </Box>
