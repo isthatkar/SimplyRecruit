@@ -19,10 +19,13 @@ import {
 } from "@mui/material";
 import Theme from "../../Styles/Theme";
 import ValidEmailTextField from "../ValidEmailTextField";
-import { NordProduct } from "../../Types/types";
+import { NordProduct, Project } from "../../Types/types";
 import axios from "axios";
 
-const AddProjectDialog = () => {
+const EditProjectDialog = (props: any) => {
+  const [projectId, setProjectId] = React.useState(props.projectId);
+  const [project, setProject] = React.useState<Project>();
+
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -34,6 +37,7 @@ const AddProjectDialog = () => {
   };
 
   const handleClickOpen = () => {
+    getProject();
     setOpen(true);
   };
 
@@ -41,9 +45,21 @@ const AddProjectDialog = () => {
     setOpen(false);
   };
 
-  const handleAdd = async () => {
+  const handleSave = async () => {
     await addProject();
     setOpen(false);
+  };
+
+  const getProject = async () => {
+    const response = await axios.get(`projects/${projectId}`);
+
+    console.log(response);
+    const fetchedProject = response.data;
+    setProject(fetchedProject);
+    setEmail(fetchedProject.email);
+    setName(fetchedProject.name);
+    setDescription(fetchedProject.description);
+    setSelectedProduct(fetchedProject.product);
   };
 
   const nordProducts = Object.keys(NordProduct).filter(
@@ -58,13 +74,13 @@ const AddProjectDialog = () => {
       responsiblePersonEmail: email,
     };
 
-    const response = await axios.post("projects", projectDto);
+    const response = await axios.put(`projects/${projectId}`, projectDto);
 
     console.log(response);
-    if (response.status === 201) {
+    if (response.status === 200) {
       location.reload();
     } else {
-      toast.error("Failed to add collection!", {
+      toast.error("Failed to edit collection!", {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
@@ -75,14 +91,14 @@ const AddProjectDialog = () => {
       <div>
         <ToastContainer />
 
-        <Button variant="contained" onClick={handleClickOpen}>
-          Add new project
+        <Button size="small" onClick={handleClickOpen}>
+          Edit
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Add new project</DialogTitle>
+          <DialogTitle>Edit {project?.name} project</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Please enter the projects information
+              Please edit the projects information
             </DialogContentText>
             <Box
               component="form"
@@ -96,6 +112,7 @@ const AddProjectDialog = () => {
                 <TextField
                   onChange={(e) => setName(e.target.value)}
                   required
+                  value={name}
                   id="outlined-name-input"
                   label="Name"
                   type="text"
@@ -106,6 +123,7 @@ const AddProjectDialog = () => {
                 <TextField
                   onChange={(e) => setDescription(e.target.value)}
                   required
+                  value={description}
                   id="outlined-description-input"
                   label="Description"
                   type="text"
@@ -124,12 +142,14 @@ const AddProjectDialog = () => {
                     label="Product"
                     onChange={productChanged}
                   >
-                    {nordProducts.map((product) => (
+                    {nordProducts.map((productMapped) => (
                       <MenuItem
-                        key={product}
-                        value={Object.values(NordProduct).indexOf(product)}
+                        key={productMapped}
+                        value={Object.values(NordProduct).indexOf(
+                          productMapped
+                        )}
                       >
-                        {product}
+                        {productMapped}
                       </MenuItem>
                     ))}
                   </Select>
@@ -148,7 +168,7 @@ const AddProjectDialog = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleAdd}>Add</Button>
+            <Button onClick={handleSave}>Save</Button>
           </DialogActions>
         </Dialog>
       </div>
@@ -156,4 +176,4 @@ const AddProjectDialog = () => {
   );
 };
 
-export default AddProjectDialog;
+export default EditProjectDialog;

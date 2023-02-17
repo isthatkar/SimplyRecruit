@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
+import EditProjectDialog from "../Components/Projects/EditProjectDialog";
 import projectImages from "../img/Projects/projectImages";
 import Theme from "../Styles/Theme";
 import { NordProduct, Project } from "../Types/types";
@@ -110,7 +111,11 @@ const Projects = () => {
                   <Button size="small" color="primary">
                     View
                   </Button>
-                  {isEmployee ? <Button size="small">Edit</Button> : ""}
+                  {isEmployee ? (
+                    <EditProjectDialog projectId={card.id}></EditProjectDialog>
+                  ) : (
+                    ""
+                  )}
                 </CardActions>
               </Card>
             </Grid>
