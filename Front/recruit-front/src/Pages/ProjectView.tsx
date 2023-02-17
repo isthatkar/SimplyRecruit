@@ -14,6 +14,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import AddPositionDialog from "../Components/Positions/AddPositionDialog";
 import PositionListItem from "../Components/Positions/PositionListItem";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import Theme from "../Styles/Theme";
@@ -102,7 +103,7 @@ const Projects = () => {
             spacing={2}
             justifyContent="center"
           >
-            {isEmployee ? <AddProjectDialog></AddProjectDialog> : ""}
+            {isEmployee ? <AddPositionDialog></AddPositionDialog> : ""}
           </Stack>
           <Stack
             sx={{ pt: 4 }}
@@ -122,6 +123,7 @@ const Projects = () => {
           {allPositions.map((position) => (
             <PositionListItem
               key={position.id}
+              id={position.id}
               positionName={position.name}
               location={JobLocation[position.location]}
               time={WorkTime[position.workTime]}
