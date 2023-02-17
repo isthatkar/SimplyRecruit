@@ -15,7 +15,6 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { ThemeProvider } from "@mui/material";
 import Theme from "../Styles/Theme";
 
@@ -153,6 +152,17 @@ const Nav = () => {
                   href="/projects"
                 >
                   Projects
+                </Button>
+              ) : (
+                ""
+              )}
+              {token ? (
+                <Button
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component="a"
+                  href="/positions"
+                >
+                  Positions
                 </Button>
               ) : (
                 ""

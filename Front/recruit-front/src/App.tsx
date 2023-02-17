@@ -9,6 +9,7 @@ import Nav from "./Components/Nav";
 import "./App.css";
 import Projects from "./Pages/Projects";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import Positions from "./Pages/Positions";
 
 const token = localStorage.getItem("accessToken");
 const isAuth = !(token === null);
@@ -24,6 +25,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/projects" element={<ProtectedRoute isAuth={isAuth} />}>
             <Route path="/projects" element={<Projects />} />
+          </Route>
+          <Route path="/positions" element={<ProtectedRoute isAuth={isAuth} />}>
+            <Route path="/positions" element={<Positions />} />
           </Route>
         </Routes>
       </BrowserRouter>
