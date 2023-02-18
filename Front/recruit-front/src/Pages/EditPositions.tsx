@@ -19,14 +19,16 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import Theme from "../../Styles/Theme";
-import { Field, JobLocation, WorkTime } from "../../Types/types";
+import Theme from "../Styles/Theme";
+import { Field, JobLocation, Position, WorkTime } from "../Types/types";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useCallback, useEffect } from "react";
 
-const AddPositionPage = (props: any) => {
+const EditPositions = (props: any) => {
   const navigate = useNavigate();
 
+  const [position, setPosition] = React.useState<Position>();
   const [name, setName] = React.useState("");
   const [expectations, setExpectations] = React.useState("");
   const [duties, setDuties] = React.useState("");
@@ -56,12 +58,12 @@ const AddPositionPage = (props: any) => {
     setDeadline(newValue);
   };
 
-  const { projectid } = useParams();
+  const { positionId } = useParams();
   const nordFields = Object.keys(Field).filter((x) => !(parseInt(x) >= 0));
   const workTimes = Object.keys(WorkTime).filter((x) => !(parseInt(x) >= 0));
   const locations = Object.keys(JobLocation).filter((x) => !(parseInt(x) >= 0));
 
-  const addPosition = async (): Promise<void> => {
+  const editPosition = async (): Promise<void> => {
     const positionsDto = {
       name: name,
       description: description,
@@ -75,24 +77,39 @@ const AddPositionPage = (props: any) => {
       offers: offers,
     };
 
-    console.log(positionsDto);
-    const response = await axios.post(
-      `projects/${projectid}/positions`,
-      positionsDto
-    );
-
-    console.log(response);
-    if (response.status === 201) {
-      return navigate(`/projects/${projectid}`);
+    const response = await axios.put(`positions/${positionId}`, positionsDto);
+    if (response.status === 200) {
+      return navigate(`/positions/${positionId}`);
     } else {
-      toast.error("Failed to add position!", {
+      toast.error("Failed to edit position !", {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
   };
 
-  const handleAdd = () => {
-    addPosition();
+  const getPosition = useCallback(async () => {
+    const response = await axios.get(`positions/${positionId}`);
+    const position = response.data;
+    setPosition(position);
+    setName(position.name);
+    setDescription(position.description);
+    setDuties(position.duties);
+    setSalary(position.salaryRange);
+    setExpectations(position.expectations);
+    setOffers(position.offers);
+    setDeadline(position.deadline);
+    setSelectedWorkTime(position.workTime);
+    setSelectedLocation(position.location);
+    setSelectedField(position.field);
+  }, []);
+
+  useEffect(() => {
+    getPosition();
+
+    const roles = localStorage.getItem("roles");
+  }, []);
+  const handleSave = () => {
+    editPosition();
     return;
   };
 
@@ -115,7 +132,7 @@ const AddPositionPage = (props: any) => {
             color="text.primary"
             gutterBottom
           >
-            Add a new position
+            Edit {position?.name} position
           </Typography>
         </Container>
       </Box>
@@ -141,16 +158,18 @@ const AddPositionPage = (props: any) => {
               <TextField
                 onChange={(e) => setName(e.target.value)}
                 required
+                value={name}
                 id="outlined-name-input"
                 label="Name"
                 type="text"
-              />{" "}
+              />
             </div>
 
             <div>
               <TextField
                 onChange={(e) => setDescription(e.target.value)}
                 required
+                value={description}
                 id="outlined-description-input"
                 label="Description"
                 multiline
@@ -162,6 +181,7 @@ const AddPositionPage = (props: any) => {
               <TextField
                 onChange={(e) => setSalary(e.target.value)}
                 required
+                value={salary}
                 id="outlined-salary-input"
                 label="Gross salary range"
                 type="text"
@@ -171,6 +191,7 @@ const AddPositionPage = (props: any) => {
               <TextField
                 onChange={(e) => setDuties(e.target.value)}
                 required
+                value={duties}
                 id="outlined-duties-input"
                 label="Duties"
                 multiline
@@ -182,6 +203,7 @@ const AddPositionPage = (props: any) => {
               <TextField
                 onChange={(e) => setExpectations(e.target.value)}
                 required
+                value={expectations}
                 id="outlined-expectations-input"
                 label="Expectations"
                 multiline
@@ -193,6 +215,7 @@ const AddPositionPage = (props: any) => {
               <TextField
                 onChange={(e) => setOffers(e.target.value)}
                 required
+                value={offers}
                 id="outlined-offers-input"
                 label="Offers"
                 multiline
@@ -279,8 +302,12 @@ const AddPositionPage = (props: any) => {
               />
             </LocalizationProvider>
           </Box>
-          <Button variant="contained" onClick={handleAdd} sx={{ mt: 3, mb: 4 }}>
-            Add position
+          <Button
+            variant="contained"
+            onClick={handleSave}
+            sx={{ mt: 3, mb: 4 }}
+          >
+            Save changes
           </Button>
         </Stack>
       </Container>
@@ -288,4 +315,4 @@ const AddPositionPage = (props: any) => {
   );
 };
 
-export default AddPositionPage;
+export default EditPositions;

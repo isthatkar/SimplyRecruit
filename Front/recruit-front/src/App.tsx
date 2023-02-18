@@ -12,6 +12,7 @@ import Positions from "./Pages/Positions";
 import ProjectView from "./Pages/ProjectView";
 import PositionView from "./Pages/PositionView";
 import AddPositionPage from "./Components/Positions/AddPositionPage";
+import EditPositions from "./Pages/EditPositions";
 
 const token = localStorage.getItem("accessToken");
 const isAuth = !(token === null);
@@ -51,6 +52,15 @@ function App() {
             element={<ProtectedRoute isAuth={isAuth} />}
           >
             <Route path="/positions/:positionId" element={<PositionView />} />
+          </Route>
+          <Route
+            path="/editPosition/:positionId"
+            element={<ProtectedRoute isAuth={isAuth} />}
+          >
+            <Route
+              path="/editPosition/:positionId"
+              element={<EditPositions />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

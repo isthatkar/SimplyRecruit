@@ -34,7 +34,8 @@ namespace SimplyRecruitAPI.Controllers
                 p.Project, 
                 p.SalaryRange, 
                 p.Duties, 
-                p.Expectations));
+                p.Expectations, 
+                p.Offers));
         }
 
         [HttpGet]
@@ -60,7 +61,8 @@ namespace SimplyRecruitAPI.Controllers
                 position.Project, 
                 position.SalaryRange, 
                 position.Duties, 
-                position.Expectations);
+                position.Expectations,
+                position.Offers);
         }
 
         [HttpPut]
@@ -81,6 +83,10 @@ namespace SimplyRecruitAPI.Controllers
             position.Location = updatePositionDto.Location is null ? position.Location : (Location)updatePositionDto.Location;
             position.WorkTime = updatePositionDto.WorkTime is null ? position.WorkTime : (WorkTime)updatePositionDto.WorkTime;
             position.Field = updatePositionDto.Field is null ? position.Field : (Field)updatePositionDto.Field;
+            position.SalaryRange = updatePositionDto.SalaryRange is null ? position.SalaryRange : (string)updatePositionDto.SalaryRange;
+            position.Duties = updatePositionDto.Duties is null ? position.Duties : (string)updatePositionDto.Duties;
+            position.Expectations = updatePositionDto.Expectations is null ? position.Expectations : (string)updatePositionDto.Expectations;
+            position.Offers = updatePositionDto.Offers is null ? position.Offers : (string)updatePositionDto.Offers;
 
             await _positionsRepository.UpdateAsync(position);
 
@@ -96,7 +102,8 @@ namespace SimplyRecruitAPI.Controllers
                 position.Project,
                 position.SalaryRange,
                 position.Duties,
-                position.Expectations));
+                position.Expectations,
+                position.Offers));
         }
 
         [HttpDelete]

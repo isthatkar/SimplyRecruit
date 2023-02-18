@@ -43,7 +43,8 @@ namespace SimplyRecruitAPI.Migrations
                     Field = table.Column<int>(type: "int", nullable: false),
                     SalaryRange = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Expectations = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Duties = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Duties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Offers = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

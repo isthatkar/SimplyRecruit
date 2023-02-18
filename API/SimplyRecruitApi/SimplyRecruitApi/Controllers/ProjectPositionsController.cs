@@ -41,7 +41,8 @@ namespace SimplyRecruitAPI.Controllers
                 p.Field,
                 p.SalaryRange,
                 p.Duties,
-                p.Expectations));
+                p.Expectations,
+                p.Offers));
             return Ok(positionsDto);
         }
 
@@ -67,7 +68,8 @@ namespace SimplyRecruitAPI.Controllers
                 WorkTime = createPositionDto.WorkTime,
                 SalaryRange = createPositionDto.SalaryRange,
                 Duties = createPositionDto.Duties,
-                Expectations = createPositionDto.Expectations
+                Expectations = createPositionDto.Expectations,
+                Offers = createPositionDto.Offers
             };
 
             await _positionsRepository.CreateAsync(position);
@@ -85,7 +87,8 @@ namespace SimplyRecruitAPI.Controllers
                 position.Project,
                 position.SalaryRange,
                 position.Duties,
-                position.Expectations));
+                position.Expectations, 
+                position.Offers));
 
         }
     }

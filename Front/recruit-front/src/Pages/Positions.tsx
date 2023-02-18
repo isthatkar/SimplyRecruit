@@ -54,6 +54,7 @@ const Positions = () => {
           {allPositions.map((position) => (
             <PositionListItem
               key={position.id}
+              id={position.id}
               positionName={position.name}
               location={JobLocation[position.location]}
               time={WorkTime[position.workTime]}

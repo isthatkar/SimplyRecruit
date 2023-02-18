@@ -4,6 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   ThemeProvider,
 } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -99,20 +100,53 @@ const Projects = () => {
           >
             {NordProduct[project?.product as number]} {project?.name} positions
           </Typography>
-          <Stack
-            sx={{ pt: 4 }}
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-          >
-            {isEmployee ? (
+
+          {isEmployee ? (
+            <Stack
+              sx={{ pt: 4 }}
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+            >
+              {" "}
               <Button variant="contained" onClick={handleClickAdd}>
                 Add new position
               </Button>
-            ) : (
-              ""
-            )}
-          </Stack>
+              <Stack direction="row" spacing={2} justifyContent="center">
+                <Button
+                  size="medium"
+                  color="error"
+                  sx={{ my: 1 }}
+                  onClick={handleClickOpen}
+                >
+                  Delete project
+                </Button>
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Are you sure you want to delete this project?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    All of the projects positions will also be deleted. This
+                    cannot be undone.
+                  </DialogContent>
+
+                  <DialogActions>
+                    <Button onClick={handleClose} autoFocus>
+                      Disagree
+                    </Button>
+                    <Button onClick={() => onDelete()}>Agree</Button>
+                  </DialogActions>
+                </Dialog>
+              </Stack>
+            </Stack>
+          ) : (
+            ""
+          )}
           <Stack
             sx={{ pt: 4 }}
             direction="row"
@@ -138,41 +172,6 @@ const Projects = () => {
             ></PositionListItem>
           ))}
         </Stack>
-        {isEmployee ? (
-          <Stack direction="row" spacing={2} justifyContent="center">
-            <Button
-              size="medium"
-              color="error"
-              sx={{ my: 1 }}
-              onClick={handleClickOpen}
-            >
-              Delete project
-            </Button>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Are you sure you want to delete this project?"}
-              </DialogTitle>
-              <DialogContent>
-                All of the projects positions will also be deleted. This cannot
-                be undone.
-              </DialogContent>
-
-              <DialogActions>
-                <Button onClick={handleClose} autoFocus>
-                  Disagree
-                </Button>
-                <Button onClick={() => onDelete()}>Agree</Button>
-              </DialogActions>
-            </Dialog>
-          </Stack>
-        ) : (
-          ""
-        )}
       </Container>
     </ThemeProvider>
   );

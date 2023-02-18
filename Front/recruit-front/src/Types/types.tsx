@@ -17,6 +17,10 @@ export interface Position {
   location: JobLocation;
   workTime: WorkTime;
   field: Field;
+  salaryRange: string;
+  duties: string;
+  expectations: string;
+  offers: string;
 }
 
 export enum NordProduct {

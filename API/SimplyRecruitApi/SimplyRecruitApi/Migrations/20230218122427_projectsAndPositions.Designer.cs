@@ -12,7 +12,7 @@ using SimplyRecruitAPI.Data;
 namespace SimplyRecruitAPI.Migrations
 {
     [DbContext(typeof(SimplyRecruitDbContext))]
-    [Migration("20230218072501_projectsAndPositions")]
+    [Migration("20230218122427_projectsAndPositions")]
     partial class projectsAndPositions
     {
         /// <inheritdoc />
@@ -265,6 +265,10 @@ namespace SimplyRecruitAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Offers")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -1,0 +1,27 @@
+"filename", "language", "TypeScript JSX", "TypeScript", "XML", "CSS", "comment", "blank", "total"
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\App.css", "CSS", 0, 0, 0, 37, 0, 7, 44
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\App.test.tsx", "TypeScript JSX", 8, 0, 0, 0, 0, 2, 10
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\App.tsx", "TypeScript JSX", 36, 0, 0, 0, 0, 3, 39
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Components\Auth\LoginButton.tsx", "TypeScript JSX", 78, 0, 0, 0, 0, 6, 84
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Components\Auth\LogoutButton.tsx", "TypeScript JSX", 27, 0, 0, 0, 0, 5, 32
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Components\Nav.tsx", "TypeScript JSX", 184, 0, 0, 0, 0, 8, 192
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Components\Projects\AddProjectDialog.tsx", "TypeScript JSX", 146, 0, 0, 0, 0, 14, 160
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Components\Projects\EditProjectDialog.tsx", "TypeScript JSX", 163, 0, 0, 0, 0, 17, 180
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Components\ProtectedRoute.tsx", "TypeScript JSX", 13, 0, 0, 0, 0, 4, 17
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Components\ValidEmailTextField.tsx", "TypeScript JSX", 35, 0, 0, 0, 0, 6, 41
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Pages\Home.tsx", "TypeScript JSX", 18, 0, 0, 0, 0, 6, 24
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Pages\Login.tsx", "TypeScript JSX", 51, 0, 0, 0, 0, 3, 54
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Pages\Positions.tsx", "TypeScript JSX", 5, 0, 0, 0, 0, 3, 8
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Pages\Projects.tsx", "TypeScript JSX", 123, 0, 0, 0, 0, 7, 130
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Pages\Register.tsx", "TypeScript JSX", 108, 0, 0, 0, 0, 5, 113
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Styles\Theme.tsx", "TypeScript JSX", 42, 0, 0, 0, 0, 8, 50
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\Types\types.tsx", "TypeScript JSX", 15, 0, 0, 0, 0, 2, 17
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\img\Projects\projectImages.tsx", "TypeScript JSX", 13, 0, 0, 0, 11, 2, 26
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\index.css", "CSS", 0, 0, 0, 12, 0, 2, 14
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\index.tsx", "TypeScript JSX", 11, 0, 0, 0, 3, 3, 17
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\interceptors\axios.tsx", "TypeScript JSX", 37, 0, 0, 0, 0, 7, 44
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\logo.svg", "XML", 0, 0, 1, 0, 0, 0, 1
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\react-app-env.d.ts", "TypeScript", 0, 0, 0, 0, 1, 1, 2
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\reportWebVitals.ts", "TypeScript", 0, 13, 0, 0, 0, 3, 16
+"c:\Users\rugil\Desktop\BAKIS\SimplyRecruit\Front\recruit-front\src\setupTests.ts", "TypeScript", 0, 1, 0, 0, 4, 1, 6
+"Total", "-", 1113, 14, 1, 49, 19, 125, 1321

@@ -27,5 +27,8 @@ namespace SimplyRecruitAPI.Data.Entities
         public string Expectations { get; set; }
 
         public string Duties { get; set; }
+
+        public string Offers { get; set; }
+
     }
 }
