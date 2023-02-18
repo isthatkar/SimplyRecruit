@@ -38,7 +38,7 @@ namespace SimplyRecruitAPI.Data.Repositories
 
         public async Task<Position?> GetAsync(int positionId)
         {
-            return await _context.Positions.FirstAsync(p => p.Id == positionId);
+            return await _context.Positions.FirstOrDefaultAsync(p => p.Id == positionId);
         }
 
         public async Task<IReadOnlyList<Position>> GetManyAsync()

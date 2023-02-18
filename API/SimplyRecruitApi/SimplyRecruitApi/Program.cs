@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using SimplyRecruitAPI.Auth;
 using SimplyRecruitAPI.Auth.Model;
@@ -60,6 +59,8 @@ namespace SimplyRecruitAPI
 
             builder.Services.AddTransient<IProjectsRepository, ProjectsRepository>();
             builder.Services.AddTransient<IPositionsRepository, PositionsRepository>();
+            builder.Services.AddTransient<IApplicationsRepository, ApplicationsRepository>();
+            builder.Services.AddTransient<IResumesRepository, ResumesRepository>();
             builder.Services.AddSingleton<IAuthorizationHandler, ResourceOwnerHandler>();
 
             var app = builder.Build();
