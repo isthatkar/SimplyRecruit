@@ -30,7 +30,18 @@ namespace SimplyRecruitAPI.Controllers
             }
 
             var positions = await _positionsRepository.GetProjectsManyAsync(projectId);
-            var positionsDto = positions.Select(p => new ProjectPositionDto(p.Id, p.Name, p.Description, p.Deadline, p.IsOpen, p.Location, p.WorkTime, p.Field));
+            var positionsDto = positions.Select(p => new ProjectPositionDto(
+                p.Id, 
+                p.Name, 
+                p.Description, 
+                p.Deadline, 
+                p.IsOpen, 
+                p.Location, 
+                p.WorkTime, 
+                p.Field,
+                p.SalaryRange,
+                p.Duties,
+                p.Expectations));
             return Ok(positionsDto);
         }
 
@@ -54,12 +65,27 @@ namespace SimplyRecruitAPI.Controllers
                 Location = createPositionDto.Location,
                 Field = createPositionDto.Field,
                 WorkTime = createPositionDto.WorkTime,
+                SalaryRange = createPositionDto.SalaryRange,
+                Duties = createPositionDto.Duties,
+                Expectations = createPositionDto.Expectations
             };
 
             await _positionsRepository.CreateAsync(position);
 
             //201
-            return Created("", new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.IsOpen, position.Location, position.WorkTime, position.Field, position.Project));
+            return Created("", new PositionDto(
+                position.Id, 
+                position.Name, 
+                position.Description, 
+                position.Deadline, 
+                position.IsOpen, 
+                position.Location, 
+                position.WorkTime, 
+                position.Field, 
+                position.Project,
+                position.SalaryRange,
+                position.Duties,
+                position.Expectations));
 
         }
     }

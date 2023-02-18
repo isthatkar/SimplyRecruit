@@ -14,9 +14,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import AddPositionDialog from "../Components/Positions/AddPositionDialog";
 import PositionListItem from "../Components/Positions/PositionListItem";
-import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import Theme from "../Styles/Theme";
 import {
   JobLocation,
@@ -54,6 +52,10 @@ const Projects = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleClickAdd = () => {
+    navigate("addPosition");
   };
 
   const onDelete = async () => {
@@ -103,7 +105,13 @@ const Projects = () => {
             spacing={2}
             justifyContent="center"
           >
-            {isEmployee ? <AddPositionDialog></AddPositionDialog> : ""}
+            {isEmployee ? (
+              <Button variant="contained" onClick={handleClickAdd}>
+                Add new position
+              </Button>
+            ) : (
+              ""
+            )}
           </Stack>
           <Stack
             sx={{ pt: 4 }}

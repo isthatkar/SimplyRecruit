@@ -14,7 +14,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import AddPositionDialog from "../Components/Positions/AddPositionDialog";
+import AddPositionDialog from "../Components/Positions/AddPositionPage";
 import PositionListItem from "../Components/Positions/PositionListItem";
 import Theme from "../Styles/Theme";
 import {

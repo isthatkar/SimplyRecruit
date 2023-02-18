@@ -22,7 +22,19 @@ namespace SimplyRecruitAPI.Controllers
         public async Task<IEnumerable<PositionDto>> GetMany()
         {
             var positions = await _positionsRepository.GetManyAsync();
-            return positions.Select(p => new PositionDto(p.Id, p.Name, p.Description, p.Deadline, p.IsOpen, p.Location, p.WorkTime, p.Field, p.Project));
+            return positions.Select(p => new PositionDto(
+                p.Id, 
+                p.Name, 
+                p.Description, 
+                p.Deadline, 
+                p.IsOpen, 
+                p.Location, 
+                p.WorkTime, 
+                p.Field, 
+                p.Project, 
+                p.SalaryRange, 
+                p.Duties, 
+                p.Expectations));
         }
 
         [HttpGet]
@@ -36,7 +48,19 @@ namespace SimplyRecruitAPI.Controllers
                 return NotFound(); //404
             }
 
-            return new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.IsOpen, position.Location, position.WorkTime, position.Field, position.Project);
+            return new PositionDto(
+                position.Id, 
+                position.Name, 
+                position.Description, 
+                position.Deadline, 
+                position.IsOpen, 
+                position.Location, 
+                position.WorkTime, 
+                position.Field, 
+                position.Project, 
+                position.SalaryRange, 
+                position.Duties, 
+                position.Expectations);
         }
 
         [HttpPut]
@@ -60,7 +84,19 @@ namespace SimplyRecruitAPI.Controllers
 
             await _positionsRepository.UpdateAsync(position);
 
-            return Ok(new PositionDto(position.Id, position.Name, position.Description, position.Deadline, position.IsOpen, position.Location, position.WorkTime, position.Field, position.Project));
+            return Ok(new PositionDto(
+                position.Id,
+                position.Name,
+                position.Description,
+                position.Deadline,
+                position.IsOpen,
+                position.Location,
+                position.WorkTime,
+                position.Field,
+                position.Project,
+                position.SalaryRange,
+                position.Duties,
+                position.Expectations));
         }
 
         [HttpDelete]

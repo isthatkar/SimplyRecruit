@@ -21,5 +21,11 @@ namespace SimplyRecruitAPI.Data.Entities
         public WorkTime WorkTime { get; set; }
 
         public Field Field { get; set; }
+
+        public string SalaryRange { get; set; }
+
+        public string Expectations { get; set; }
+
+        public string Duties { get; set; }
     }
 }
