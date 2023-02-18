@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using SimplyRecruitAPI.Auth;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data;
+using SimplyRecruitAPI.Data.Repositories;
+using SimplyRecruitAPI.Data.Repositories.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -56,6 +58,8 @@ namespace SimplyRecruitAPI
                 options.AddPolicy(PolicyNames.ResourceOwner, policy => policy.Requirements.Add(new ResourceOwnerRequirement()));
             });
 
+            builder.Services.AddTransient<IProjectsRepository, ProjectsRepository>();
+            builder.Services.AddTransient<IPositionsRepository, PositionsRepository>();
             builder.Services.AddSingleton<IAuthorizationHandler, ResourceOwnerHandler>();
 
             var app = builder.Build();

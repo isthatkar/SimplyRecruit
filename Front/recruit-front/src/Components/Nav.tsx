@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import Button from "@mui/material/Button";
 import React from "react";
@@ -15,7 +13,6 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { ThemeProvider } from "@mui/material";
 import Theme from "../Styles/Theme";
 
@@ -32,7 +29,6 @@ const Nav = () => {
     setAnchorElNav(null);
   };
 
-  const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
   return (
     <ThemeProvider theme={Theme}>
@@ -111,6 +107,17 @@ const Nav = () => {
                 ) : (
                   ""
                 )}
+                {token ? (
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href="/positions"
+                  >
+                    <Typography textAlign="center">Positions</Typography>
+                  </MenuItem>
+                ) : (
+                  ""
+                )}
               </Menu>
             </Box>
             <WorkOutlineIcon
@@ -153,6 +160,17 @@ const Nav = () => {
                   href="/projects"
                 >
                   Projects
+                </Button>
+              ) : (
+                ""
+              )}
+              {token ? (
+                <Button
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component="a"
+                  href="/positions"
+                >
+                  Positions
                 </Button>
               ) : (
                 ""

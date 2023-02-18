@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SimplyRecruitAPI.Auth.Model;
+using SimplyRecruitAPI.Data.Entities;
 
 namespace SimplyRecruitAPI.Data
 {
@@ -10,5 +11,9 @@ namespace SimplyRecruitAPI.Data
         {
 
         }
+
+        public DbSet<Project> Projects { get; set; }
+
+        public DbSet<Position> Positions { get; set; }
     }
 }
