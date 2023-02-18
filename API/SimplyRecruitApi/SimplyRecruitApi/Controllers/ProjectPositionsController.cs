@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Positions;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
@@ -6,7 +8,6 @@ using SimplyRecruitAPI.Data.Repositories.Interfaces;
 namespace SimplyRecruitAPI.Controllers
 {
     [Route("api/projects/{projectId}/positions")]
-    // [Authorize] !!!!!! PO TESTAVIMO ATKOMENTUOTI //prideti roles prie editinimo ir pridejimo 
     [ApiController]
     public class ProjectPositionsController : ControllerBase
     {
@@ -20,6 +21,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ProjectPositionDto>>> GetProjectsPositions(int projectId)
         {
             var project = await _projectsRepository.GetAsync(projectId);
@@ -47,6 +49,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Employee)]
         public async Task<ActionResult<PositionDto>> Create(int projectId, CreatePositionDto createPositionDto)
         {
             var project = await _projectsRepository.GetAsync(projectId);
@@ -84,7 +87,7 @@ namespace SimplyRecruitAPI.Controllers
                 position.Location, 
                 position.WorkTime, 
                 position.Field, 
-                position.Project,
+                position.ProjectId,
                 position.SalaryRange,
                 position.Duties,
                 position.Expectations, 

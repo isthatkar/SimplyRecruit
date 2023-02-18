@@ -107,6 +107,17 @@ const Nav = () => {
                 ) : (
                   ""
                 )}
+                {token ? (
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href="/positions"
+                  >
+                    <Typography textAlign="center">Positions</Typography>
+                  </MenuItem>
+                ) : (
+                  ""
+                )}
               </Menu>
             </Box>
             <WorkOutlineIcon

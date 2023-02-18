@@ -74,7 +74,7 @@ const PositionView = () => {
 
     console.log(response);
     if (response.status === 204) {
-      navigate(-1);
+      navigate(`/projects/${position?.projectId}`);
     } else {
       toast.error("Could not delete position !", {
         position: toast.POSITION.TOP_RIGHT,

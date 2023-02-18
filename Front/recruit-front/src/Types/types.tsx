@@ -9,7 +9,7 @@ export interface Project {
 
 export interface Position {
   id: number;
-  project: Project;
+  projectId: number;
   name: string;
   description: string;
   deadline: Date;

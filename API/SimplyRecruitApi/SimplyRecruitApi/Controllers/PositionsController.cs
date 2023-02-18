@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Positions;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Enums;
@@ -7,7 +9,6 @@ using SimplyRecruitAPI.Data.Repositories.Interfaces;
 namespace SimplyRecruitAPI.Controllers
 {
     [Route("api/positions")]
-    // [Authorize] !!!!!! PO TESTAVIMO ATKOMENTUOTI //prideti roles prie editinimo ir pridejimo 
     [ApiController]
     public class PositionsController : Controller
     {
@@ -19,6 +20,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<PositionDto>> GetMany()
         {
             var positions = await _positionsRepository.GetManyAsync();
@@ -31,7 +33,7 @@ namespace SimplyRecruitAPI.Controllers
                 p.Location, 
                 p.WorkTime, 
                 p.Field, 
-                p.Project, 
+                p.ProjectId, 
                 p.SalaryRange, 
                 p.Duties, 
                 p.Expectations, 
@@ -39,6 +41,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("{positionId}", Name = "GetPosition")]
         public async Task<ActionResult<PositionDto>> Get(int positionId)
         {
@@ -57,8 +60,8 @@ namespace SimplyRecruitAPI.Controllers
                 position.IsOpen, 
                 position.Location, 
                 position.WorkTime, 
-                position.Field, 
-                position.Project, 
+                position.Field,
+                position.ProjectId, 
                 position.SalaryRange, 
                 position.Duties, 
                 position.Expectations,
@@ -66,6 +69,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = Roles.Employee)]
         [Route("{positionId}")]
         public async Task<ActionResult<Position>> Update(int positionId, UpdatePositionDto updatePositionDto)
         {
@@ -99,7 +103,7 @@ namespace SimplyRecruitAPI.Controllers
                 position.Location,
                 position.WorkTime,
                 position.Field,
-                position.Project,
+                position.ProjectId,
                 position.SalaryRange,
                 position.Duties,
                 position.Expectations,
@@ -107,6 +111,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = Roles.Employee)]
         [Route("{positionId}")]
         public async Task<ActionResult> Remove(int positionId)
         {

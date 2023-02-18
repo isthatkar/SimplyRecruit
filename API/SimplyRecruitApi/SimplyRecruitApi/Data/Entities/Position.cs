@@ -30,5 +30,7 @@ namespace SimplyRecruitAPI.Data.Entities
 
         public string Offers { get; set; }
 
+        public int ProjectId { get; set; }
+
     }
 }

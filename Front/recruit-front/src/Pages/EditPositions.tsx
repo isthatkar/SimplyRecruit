@@ -9,8 +9,11 @@ import Box from "@mui/material/Box/Box";
 import dayjs, { Dayjs } from "dayjs";
 import {
   Button,
+  Checkbox,
   Container,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   InputLabel,
   MenuItem,
   Select,
@@ -35,6 +38,7 @@ const EditPositions = (props: any) => {
   const [salary, setSalary] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [offers, setOffers] = React.useState("");
+  const [isOpen, setIsOpen] = React.useState(true);
   const [deadline, setDeadline] = React.useState<Dayjs | null>(
     dayjs("2023-08-18T21:11:54")
   );
@@ -73,6 +77,7 @@ const EditPositions = (props: any) => {
       field: selectedField,
       salaryRange: salary,
       duties: duties,
+      isOpen: isOpen,
       expectations: expectations,
       offers: offers,
     };
@@ -90,10 +95,12 @@ const EditPositions = (props: any) => {
   const getPosition = useCallback(async () => {
     const response = await axios.get(`positions/${positionId}`);
     const position = response.data;
+    console.log(position);
     setPosition(position);
     setName(position.name);
     setDescription(position.description);
     setDuties(position.duties);
+    setIsOpen(position.isOpen);
     setSalary(position.salaryRange);
     setExpectations(position.expectations);
     setOffers(position.offers);
@@ -154,6 +161,17 @@ const EditPositions = (props: any) => {
               },
             }}
           >
+            <FormGroup sx={{ mx: 2, mb: 2 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isOpen}
+                    onChange={(e) => setIsOpen(e.target.checked)}
+                  />
+                }
+                label="Is open"
+              />
+            </FormGroup>
             <div>
               <TextField
                 onChange={(e) => setName(e.target.value)}

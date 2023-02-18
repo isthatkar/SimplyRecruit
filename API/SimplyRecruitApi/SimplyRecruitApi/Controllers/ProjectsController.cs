@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SimplyRecruitAPI.Data.Dtos.Positions;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Projects;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Enums;
@@ -8,20 +9,18 @@ using SimplyRecruitAPI.Data.Repositories.Interfaces;
 namespace SimplyRecruitAPI.Controllers
 {
     [Route("api/projects")]
-    // [Authorize] !!!!!! PO TESTAVIMO ATKOMENTUOTI //prideti roles prie editinimo ir pridejimo 
     [ApiController]
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectsRepository _projectsRepository;
-        private readonly IPositionsRepository _positionsRepository;
 
-        public ProjectsController(IProjectsRepository projectsRepository, IPositionsRepository positionsRepository)
+        public ProjectsController(IProjectsRepository projectsRepository)
         {
             _projectsRepository = projectsRepository;
-            _positionsRepository = positionsRepository;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<ProjectDto>> GetMany()
         {
             var projects = await _projectsRepository.GetManyAsync();
@@ -29,6 +28,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("{projectId}", Name = "GetProject")]
         public async Task<ActionResult<ProjectDto>> Get(int projectId)
         {
@@ -43,6 +43,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Employee)]
         public async Task<ActionResult<ProjectDto>> Create(CreateProjectDto createProjectDto)
         {
             var project = new Project
@@ -61,6 +62,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = Roles.Employee)]
         [Route("{projectId}")]
         public async Task<ActionResult<Project>> Update(int projectId, UpdateProjectDto updateProjectDto)
         {
@@ -82,6 +84,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = Roles.Employee)]
         [Route("{projectId}")]
         public async Task<ActionResult> Remove(int projectId)
         {
