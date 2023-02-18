@@ -22,7 +22,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = Roles.Employee)]
         public async Task<IEnumerable<ApplicationDto>> GetMany()
         {
             var applications = await _applicationsRepository.GetManyAsync();
@@ -39,7 +39,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = Roles.Employee)]
         [Route("{applicationId}", Name = "GetApplication")]
         public async Task<ActionResult<ApplicationDto>> Get(int applicationId)
         {
