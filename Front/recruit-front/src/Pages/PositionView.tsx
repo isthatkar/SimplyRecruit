@@ -55,10 +55,8 @@ const PositionView = () => {
     getPosition();
 
     const roles = localStorage.getItem("roles");
-    const rolesIncludeEmployee = roles?.includes("Employee");
-    const rolesIcludeCandidate = roles?.includes("Candidate");
-    setIsEmployee(rolesIncludeEmployee ? rolesIncludeEmployee : false);
-    setIsCandidate(rolesIcludeCandidate ? rolesIcludeCandidate : false);
+    setIsEmployee(roles ? roles.includes("Employee") : false);
+    setIsCandidate(roles ? roles.includes("Candidate") : false);
   }, []);
 
   const handleClickOpen = () => {

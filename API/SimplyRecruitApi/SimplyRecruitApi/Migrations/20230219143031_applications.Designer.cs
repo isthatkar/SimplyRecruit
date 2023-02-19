@@ -12,8 +12,8 @@ using SimplyRecruitAPI.Data;
 namespace SimplyRecruitAPI.Migrations
 {
     [DbContext(typeof(SimplyRecruitDbContext))]
-    [Migration("20230218172126_applicationsandResumes")]
-    partial class applicationsandResumes
+    [Migration("20230219143031_applications")]
+    partial class applications
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -257,6 +257,10 @@ namespace SimplyRecruitAPI.Migrations
 
                     b.Property<int>("PositionId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PositionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfileUrl")
                         .HasColumnType("nvarchar(max)");

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Enums;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
@@ -67,7 +66,8 @@ namespace SimplyRecruitAPI.Controllers
                 ContactEmail = createApplicationDto.ContactEmail,
                 Stage = Stage.New,
                 Position = position,
-                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
+                PositionName = position.Name
             };
     
             await _applicationsRepository.CreateAsync(application);
@@ -82,7 +82,8 @@ namespace SimplyRecruitAPI.Controllers
                 application.ContactEmail,
                 application.Stage,
                 application.PositionId,
-                application.UserId
+                application.UserId,
+                application.PositionName
                ));
         }
     }

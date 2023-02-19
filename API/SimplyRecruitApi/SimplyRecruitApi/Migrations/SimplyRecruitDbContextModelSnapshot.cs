@@ -255,6 +255,10 @@ namespace SimplyRecruitAPI.Migrations
                     b.Property<int>("PositionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("PositionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProfileUrl")
                         .HasColumnType("nvarchar(max)");
 

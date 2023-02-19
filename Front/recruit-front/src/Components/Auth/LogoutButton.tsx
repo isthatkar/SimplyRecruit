@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { googleLogout } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -7,7 +7,6 @@ import axios from "axios";
 export default function LoginButton() {
   const navigate = useNavigate();
   const id = localStorage.getItem("userId");
-  const accessToken = localStorage.getItem("accessToken");
 
   const Logout = async (e: any): Promise<void> => {
     e.preventDefault();

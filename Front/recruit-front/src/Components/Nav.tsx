@@ -1,6 +1,6 @@
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import Button from "@mui/material/Button";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LogoutButton from "./Auth/LogoutButton";
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
@@ -15,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { ThemeProvider } from "@mui/material";
 import Theme from "../Styles/Theme";
+import { useLocation } from "react-router-dom";
 
 const Nav = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -29,7 +30,28 @@ const Nav = () => {
     setAnchorElNav(null);
   };
 
-  const token = localStorage.getItem("accessToken");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isCandidate, setIsCandidate] = useState(false);
+  const [isEmployee, setIsEmployee] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    const roles = localStorage.getItem("roles");
+    if (roles) {
+      setIsEmployee(roles.includes("Employee"));
+      setIsCandidate(roles.includes("Candidate"));
+    } else {
+      setIsCandidate(false);
+      setIsEmployee(false);
+    }
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [location]);
+
   return (
     <ThemeProvider theme={Theme}>
       <AppBar position="sticky" color="primary">
@@ -85,7 +107,7 @@ const Nav = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                {!token ? (
+                {!isLoggedIn ? (
                   <MenuItem
                     onClick={handleCloseNavMenu}
                     component="a"
@@ -96,7 +118,7 @@ const Nav = () => {
                 ) : (
                   ""
                 )}
-                {token ? (
+                {isLoggedIn ? (
                   <MenuItem
                     onClick={handleCloseNavMenu}
                     component="a"
@@ -107,13 +129,24 @@ const Nav = () => {
                 ) : (
                   ""
                 )}
-                {token ? (
+                {isLoggedIn ? (
                   <MenuItem
                     onClick={handleCloseNavMenu}
                     component="a"
                     href="/positions"
                   >
                     <Typography textAlign="center">Positions</Typography>
+                  </MenuItem>
+                ) : (
+                  ""
+                )}
+                {isCandidate ? (
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href="/userApplications"
+                  >
+                    <Typography textAlign="center">My applications</Typography>
                   </MenuItem>
                 ) : (
                   ""
@@ -142,7 +175,7 @@ const Nav = () => {
               SimplyRecruit
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {!token ? (
+              {!isLoggedIn ? (
                 <Button
                   sx={{ my: 2, color: "white", display: "block" }}
                   component="a"
@@ -153,7 +186,7 @@ const Nav = () => {
               ) : (
                 ""
               )}
-              {token ? (
+              {isLoggedIn ? (
                 <Button
                   sx={{ my: 2, color: "white", display: "block" }}
                   component="a"
@@ -164,7 +197,7 @@ const Nav = () => {
               ) : (
                 ""
               )}
-              {token ? (
+              {isLoggedIn ? (
                 <Button
                   sx={{ my: 2, color: "white", display: "block" }}
                   component="a"
@@ -175,9 +208,20 @@ const Nav = () => {
               ) : (
                 ""
               )}
+              {isCandidate ? (
+                <Button
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component="a"
+                  href="/userApplications"
+                >
+                  My applications
+                </Button>
+              ) : (
+                ""
+              )}
             </Box>
 
-            {token ? (
+            {isLoggedIn ? (
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Logout">
                   <IconButton sx={{ p: 0 }}>

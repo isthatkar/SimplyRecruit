@@ -5,7 +5,7 @@
 namespace SimplyRecruitAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class applicationsandResumes : Migration
+    public partial class applications : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,8 @@ namespace SimplyRecruitAPI.Migrations
                     ContactEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Stage = table.Column<int>(type: "int", nullable: false),
                     PositionId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PositionName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

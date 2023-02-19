@@ -35,7 +35,8 @@ namespace SimplyRecruitAPI.Controllers
                 a.ContactEmail,
                 a.Stage,
                 a.PositionId,
-                a.UserId));
+                a.UserId,
+                a.PositionName));
         }
 
         [HttpGet]
@@ -59,7 +60,8 @@ namespace SimplyRecruitAPI.Controllers
                 application.ContactEmail,
                 application.Stage,
                 application.PositionId,
-                application.UserId);
+                application.UserId,
+                application.PositionName);
         }
 
         [HttpGet]
@@ -78,7 +80,8 @@ namespace SimplyRecruitAPI.Controllers
                 a.ContactEmail,
                 a.Stage,
                 a.PositionId,
-                a.UserId));
+                a.UserId,
+                a.PositionName));
         }
 
         [HttpPut]
@@ -111,7 +114,8 @@ namespace SimplyRecruitAPI.Controllers
                 application.ContactEmail,
                 application.Stage,
                 application.PositionId,
-                application.UserId));
+                application.UserId, 
+                application.PositionName));
         }
 
         [HttpDelete]

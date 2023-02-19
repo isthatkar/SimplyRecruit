@@ -15,5 +15,6 @@ namespace SimplyRecruitAPI.Data.Entities
         public Position Position { get; set; }
         public int PositionId { get; set; }
         public string UserId { get; set; }
+        public string PositionName { get; set; }
     }
 }

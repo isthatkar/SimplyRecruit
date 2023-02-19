@@ -4,7 +4,6 @@ import isEmail from "validator/lib/isEmail";
 import { TextField, TextFieldProps } from "@mui/material";
 
 interface EmailTextFieldProps {
-  // Define any additional props you want to use on the TextField component
   fieldName: string;
   value: string;
 }
