@@ -23,6 +23,7 @@ import { Position } from "../Types/types";
 const PositionView = () => {
   const [position, setPosition] = useState<Position>();
   const [isEmployee, setIsEmployee] = useState(false);
+  const [isCandidate, setIsCandidate] = useState(false);
   const { positionId } = useParams();
   const navigate = useNavigate();
   const [expectations, setExpectations] = useState<string[]>([]);
@@ -54,8 +55,10 @@ const PositionView = () => {
     getPosition();
 
     const roles = localStorage.getItem("roles");
-    const isEmployee = roles?.includes("Employee");
-    setIsEmployee(isEmployee ? isEmployee : false);
+    const rolesIncludeEmployee = roles?.includes("Employee");
+    const rolesIcludeCandidate = roles?.includes("Candidate");
+    setIsEmployee(rolesIncludeEmployee ? rolesIncludeEmployee : false);
+    setIsCandidate(rolesIcludeCandidate ? rolesIcludeCandidate : false);
   }, []);
 
   const handleClickOpen = () => {
@@ -205,7 +208,11 @@ const PositionView = () => {
                 {"Gross salary. "} {position?.salaryRange}
               </ListItem>
             </List>
-            <ApplicationForm positionId={positionId}></ApplicationForm>
+            {isCandidate ? (
+              <ApplicationForm positionId={positionId}></ApplicationForm>
+            ) : (
+              ""
+            )}
           </Stack>
         </Container>
       </Box>

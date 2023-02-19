@@ -7,13 +7,14 @@ import {
   Typography,
 } from "@mui/material";
 import isEmail from "validator/lib/isEmail";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
 import Theme from "../../Styles/Theme";
 import ValidEmailTextField from "../ValidEmailTextField";
 import { toast, ToastContainer } from "react-toastify";
 
 const ApplicationForm = (props: any) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filename, setFilename] = useState("");
   const [name, setName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -28,6 +29,7 @@ const ApplicationForm = (props: any) => {
     const file = e.target.files[0];
     const { name } = file;
     setFilename(name);
+    setSelectedFile(file);
   };
 
   const handleAdd = async () => {
@@ -45,6 +47,28 @@ const ApplicationForm = (props: any) => {
       isEmail(contactEmail) &&
       phoneNumber !== ""
     );
+  };
+
+  const addResume = async (applicationId: number) => {
+    if (!selectedFile) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("fileName", filename);
+    try {
+      const response = await axios.post(
+        `applications/${applicationId}/resume`,
+        formData
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add resume to application!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
   };
 
   const addApplication = async (): Promise<void> => {
@@ -69,6 +93,8 @@ const ApplicationForm = (props: any) => {
 
     console.log(response);
     if (response.status === 201) {
+      const applicationId = response.data.id;
+      addResume(applicationId);
       toast.success("Application sent succesfully!", {
         position: toast.POSITION.TOP_RIGHT,
       });
