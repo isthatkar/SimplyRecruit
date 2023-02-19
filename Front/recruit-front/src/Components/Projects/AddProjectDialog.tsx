@@ -137,11 +137,13 @@ const AddProjectDialog = () => {
               </div>
               <div>
                 <ValidEmailTextField
+                  value=""
                   onChange={(e: any) => setEmail(e.target.value)}
                   required
                   id="outlined-email-input"
                   label="Responsible employee email"
                   type="email"
+                  fieldName={""}
                 />
               </div>
             </Box>

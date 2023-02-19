@@ -123,7 +123,10 @@ const Projects = () => {
                     View
                   </Button>
                   {isEmployee ? (
-                    <EditProjectDialog projectId={card.id}></EditProjectDialog>
+                    <EditProjectDialog
+                      projectId={card.id}
+                      email={card.responsiblePersonEmail}
+                    ></EditProjectDialog>
                   ) : (
                     ""
                   )}

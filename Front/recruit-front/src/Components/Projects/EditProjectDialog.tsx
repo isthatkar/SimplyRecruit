@@ -29,7 +29,7 @@ const EditProjectDialog = (props: any) => {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = React.useState(props.email);
   const [selectedProduct, setSelectedProduct] = React.useState("0");
 
   const productChanged = (event: SelectChangeEvent) => {
@@ -56,7 +56,7 @@ const EditProjectDialog = (props: any) => {
     console.log(response);
     const fetchedProject = response.data;
     setProject(fetchedProject);
-    setEmail(fetchedProject.email);
+    setEmail(fetchedProject.responsiblePersonEmail);
     setName(fetchedProject.name);
     setDescription(fetchedProject.description);
     setSelectedProduct(fetchedProject.product);
@@ -85,6 +85,10 @@ const EditProjectDialog = (props: any) => {
       });
     }
   };
+
+  function handleEmailChange(value: string) {
+    setEmail(value);
+  }
 
   return (
     <ThemeProvider theme={Theme}>
@@ -157,11 +161,13 @@ const EditProjectDialog = (props: any) => {
               </div>
               <div>
                 <ValidEmailTextField
-                  onChange={(e: any) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
+                  value={email}
                   required
                   id="outlined-email-input"
                   label="Responsible employee email"
                   type="email"
+                  fieldName={""}
                 />
               </div>
             </Box>

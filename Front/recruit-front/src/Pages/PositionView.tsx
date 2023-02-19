@@ -16,6 +16,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import ApplicationForm from "../Components/Applications/ApplicationForm";
 import Theme from "../Styles/Theme";
 import { Position } from "../Types/types";
 
@@ -204,17 +205,10 @@ const PositionView = () => {
                 {"Gross salary. "} {position?.salaryRange}
               </ListItem>
             </List>
+            <ApplicationForm positionId={positionId}></ApplicationForm>
           </Stack>
         </Container>
       </Box>
-      <Container sx={{ py: 1 }} maxWidth="md">
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        ></Stack>
-      </Container>
     </ThemeProvider>
   );
 };
