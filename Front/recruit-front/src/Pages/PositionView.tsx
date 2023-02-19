@@ -63,12 +63,16 @@ const PositionView = () => {
     setOpen(true);
   };
 
+  const handleViewApplications = () => {
+    return navigate(`/positions/${positionId}/applications`);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleClickAdd = () => {
-    navigate(`/editPosition/${positionId}`);
+    return navigate(`/editPosition/${positionId}`);
   };
 
   const onDelete = async () => {
@@ -104,41 +108,46 @@ const PositionView = () => {
             {position?.name}
           </Typography>
           {isEmployee ? (
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              {" "}
-              <Button variant="contained" onClick={handleClickAdd}>
-                Edit position
+            <Stack>
+              <Button variant="contained" onClick={handleViewApplications}>
+                View applications
               </Button>
-              <Stack direction="row" spacing={2} justifyContent="center">
-                <Button size="medium" color="error" onClick={handleClickOpen}>
-                  Delete position
+              <Stack
+                sx={{ pt: 4 }}
+                direction="row"
+                spacing={2}
+                justifyContent="center"
+              >
+                {" "}
+                <Button variant="contained" onClick={handleClickAdd}>
+                  Edit position
                 </Button>
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    {"Are you sure you want to delete this position?"}
-                  </DialogTitle>
-                  <DialogContent>
-                    All of the positions applications will also be deleted. This
-                    cannot be undone.
-                  </DialogContent>
+                <Stack direction="row" spacing={2} justifyContent="center">
+                  <Button size="medium" color="error" onClick={handleClickOpen}>
+                    Delete position
+                  </Button>
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Are you sure you want to delete this position?"}
+                    </DialogTitle>
+                    <DialogContent>
+                      All of the positions applications will also be deleted.
+                      This cannot be undone.
+                    </DialogContent>
 
-                  <DialogActions>
-                    <Button onClick={handleClose} autoFocus>
-                      Disagree
-                    </Button>
-                    <Button onClick={() => onDelete()}>Agree</Button>
-                  </DialogActions>
-                </Dialog>
+                    <DialogActions>
+                      <Button onClick={handleClose} autoFocus>
+                        Disagree
+                      </Button>
+                      <Button onClick={() => onDelete()}>Agree</Button>
+                    </DialogActions>
+                  </Dialog>
+                </Stack>
               </Stack>
             </Stack>
           ) : (

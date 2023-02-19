@@ -23,11 +23,10 @@ const ApplicationListItem = (props: any) => {
         }
         secondary={
           <React.Fragment>
-            <Typography
-              sx={{ display: "inline" }}
-              variant="subtitle1"
-              color="text.primary"
-            >
+            <Typography variant="subtitle1" color="text.primary">
+              {props.fullName}
+            </Typography>
+            <Typography variant="subtitle1" color="text.primary">
               Stage of application: {Object.values(Stage)[props.stage]}
             </Typography>
           </React.Fragment>

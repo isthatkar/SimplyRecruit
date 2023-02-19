@@ -42,7 +42,8 @@ namespace SimplyRecruitAPI.Controllers
                 a.CoverLetter,
                 a.ContactEmail,
                 a.Stage,
-                a.UserId));
+                a.UserId,
+                a.PositionName));
             return Ok(applicationsDto);
         }
 
