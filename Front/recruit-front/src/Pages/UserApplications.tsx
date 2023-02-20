@@ -7,24 +7,21 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import PositionListItem from "../Components/Positions/PositionListItem";
+import ApplicationListItem from "../Components/Applications/ApplicationListItem";
 import Theme from "../Styles/Theme";
-import { JobLocation, Position, WorkTime } from "../Types/types";
+import { Application } from "../Types/types";
 
-const Positions = () => {
-  const [allPositions, setAllPositions] = useState<Position[]>([]);
-  const getPositions = useCallback(async () => {
-    const response = await axios.get("positions");
+const UserApplications = () => {
+  const [allApplications, setAllApplications] = useState<Application[]>([]);
+  const getUserApplications = useCallback(async () => {
+    const response = await axios.get("applications/currentUser");
     console.log(response.data);
-    const positions = response.data;
-    const openPositions = (positions as Position[]).filter(
-      (position) => position.isOpen
-    );
-    setAllPositions(openPositions);
+    const applications = response.data;
+    setAllApplications(applications);
   }, []);
 
   useEffect(() => {
-    getPositions();
+    getUserApplications();
   }, []);
   return (
     <ThemeProvider theme={Theme}>
@@ -43,7 +40,7 @@ const Positions = () => {
             color="text.primary"
             gutterBottom
           >
-            All open positions
+            All my applications
           </Typography>
         </Container>
       </Box>
@@ -54,14 +51,13 @@ const Positions = () => {
           alignItems="center"
           spacing={1}
         >
-          {allPositions.map((position) => (
-            <PositionListItem
-              key={position.id}
-              id={position.id}
-              positionName={position.name}
-              location={JobLocation[position.location]}
-              time={WorkTime[position.workTime]}
-            ></PositionListItem>
+          {allApplications.map((application) => (
+            <ApplicationListItem
+              key={application.id}
+              email={application.contactEmail}
+              stage={application.stage}
+              positionName={application.positionName}
+            ></ApplicationListItem>
           ))}
         </Stack>
       </Container>
@@ -69,4 +65,4 @@ const Positions = () => {
   );
 };
 
-export default Positions;
+export default UserApplications;

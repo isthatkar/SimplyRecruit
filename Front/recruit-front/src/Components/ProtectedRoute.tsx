@@ -1,5 +1,5 @@
 import React from "react";
-import { PathRouteProps, Route, Navigate, Outlet } from "react-router";
+import { PathRouteProps, Navigate, Outlet } from "react-router";
 
 interface Props extends PathRouteProps {
   isAuth: boolean;

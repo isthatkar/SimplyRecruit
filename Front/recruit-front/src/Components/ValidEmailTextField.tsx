@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import TextField from "@mui/material/TextField";
 import isEmail from "validator/lib/isEmail";
 
-export default function ValidEmailTextField(props: any) {
-  const [value, setValue] = useState("");
+import { TextField, TextFieldProps } from "@mui/material";
+
+interface EmailTextFieldProps {
+  fieldName: string;
+  value: string;
+}
+
+type Props = Omit<TextFieldProps, "onChange"> &
+  EmailTextFieldProps & {
+    onChange: (value: string) => void;
+  };
+export default function ValidEmailTextField(props: Props) {
+  const [value, setValue] = useState(props.value);
   const [isValid, setIsValid] = useState(false);
   const [dirty, setDirty] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.currentTarget.value;
 
     if (isEmail(val) || val === "" || val === undefined) {
@@ -19,6 +27,7 @@ export default function ValidEmailTextField(props: any) {
     }
 
     setValue(val);
+    props.onChange(value);
   };
 
   return (
@@ -33,7 +42,7 @@ export default function ValidEmailTextField(props: any) {
         helperText={props.helperText}
         value={value}
         fullWidth
-        onChange={(e) => handleChange(e)}
+        onChange={handleChange}
       />
     </React.Fragment>
   );

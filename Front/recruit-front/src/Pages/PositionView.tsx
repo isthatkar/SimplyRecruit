@@ -16,12 +16,14 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import ApplicationForm from "../Components/Applications/ApplicationForm";
 import Theme from "../Styles/Theme";
 import { Position } from "../Types/types";
 
 const PositionView = () => {
   const [position, setPosition] = useState<Position>();
   const [isEmployee, setIsEmployee] = useState(false);
+  const [isCandidate, setIsCandidate] = useState(false);
   const { positionId } = useParams();
   const navigate = useNavigate();
   const [expectations, setExpectations] = useState<string[]>([]);
@@ -53,12 +55,16 @@ const PositionView = () => {
     getPosition();
 
     const roles = localStorage.getItem("roles");
-    const isEmployee = roles?.includes("Employee");
-    setIsEmployee(isEmployee ? isEmployee : false);
+    setIsEmployee(roles ? roles.includes("Employee") : false);
+    setIsCandidate(roles ? roles.includes("Candidate") : false);
   }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const handleViewApplications = () => {
+    return navigate(`/positions/${positionId}/applications`);
   };
 
   const handleClose = () => {
@@ -66,7 +72,7 @@ const PositionView = () => {
   };
 
   const handleClickAdd = () => {
-    navigate(`/editPosition/${positionId}`);
+    return navigate(`/editPosition/${positionId}`);
   };
 
   const onDelete = async () => {
@@ -102,41 +108,46 @@ const PositionView = () => {
             {position?.name}
           </Typography>
           {isEmployee ? (
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              {" "}
-              <Button variant="contained" onClick={handleClickAdd}>
-                Edit position
+            <Stack>
+              <Button variant="contained" onClick={handleViewApplications}>
+                View applications
               </Button>
-              <Stack direction="row" spacing={2} justifyContent="center">
-                <Button size="medium" color="error" onClick={handleClickOpen}>
-                  Delete position
+              <Stack
+                sx={{ pt: 4 }}
+                direction="row"
+                spacing={2}
+                justifyContent="center"
+              >
+                {" "}
+                <Button variant="contained" onClick={handleClickAdd}>
+                  Edit position
                 </Button>
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    {"Are you sure you want to delete this position?"}
-                  </DialogTitle>
-                  <DialogContent>
-                    All of the positions applications will also be deleted. This
-                    cannot be undone.
-                  </DialogContent>
+                <Stack direction="row" spacing={2} justifyContent="center">
+                  <Button size="medium" color="error" onClick={handleClickOpen}>
+                    Delete position
+                  </Button>
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Are you sure you want to delete this position?"}
+                    </DialogTitle>
+                    <DialogContent>
+                      All of the positions applications will also be deleted.
+                      This cannot be undone.
+                    </DialogContent>
 
-                  <DialogActions>
-                    <Button onClick={handleClose} autoFocus>
-                      Disagree
-                    </Button>
-                    <Button onClick={() => onDelete()}>Agree</Button>
-                  </DialogActions>
-                </Dialog>
+                    <DialogActions>
+                      <Button onClick={handleClose} autoFocus>
+                        Disagree
+                      </Button>
+                      <Button onClick={() => onDelete()}>Agree</Button>
+                    </DialogActions>
+                  </Dialog>
+                </Stack>
               </Stack>
             </Stack>
           ) : (
@@ -204,17 +215,14 @@ const PositionView = () => {
                 {"Gross salary. "} {position?.salaryRange}
               </ListItem>
             </List>
+            {isCandidate ? (
+              <ApplicationForm positionId={positionId}></ApplicationForm>
+            ) : (
+              ""
+            )}
           </Stack>
         </Container>
       </Box>
-      <Container sx={{ py: 1 }} maxWidth="md">
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        ></Stack>
-      </Container>
     </ThemeProvider>
   );
 };

@@ -23,6 +23,32 @@ export interface Position {
   offers: string;
 }
 
+export interface Application {
+  id: number;
+  fullName: string;
+  phoneNumber: string;
+  profileUrl: string;
+  coverLetter: string;
+  contactEmail: string;
+  stage: Stage;
+  positionId: number;
+  positionName: string;
+}
+
+export enum Stage {
+  New,
+  Introduced,
+  WaitingFirstInterview,
+  TaskSent,
+  TaskReceived,
+  TaskGraded,
+  WaitingSecondInterview,
+  InConsideration,
+  OfferSent,
+  Inactive,
+  Hired,
+}
+
 export enum NordProduct {
   NordVPN,
   NordPass,
