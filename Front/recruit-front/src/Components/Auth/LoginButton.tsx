@@ -14,6 +14,7 @@ export default function LoginButton() {
   const [cookies, setCookie] = useCookies(["refreshToken"]);
 
   const onSuccess = async (credentialResponse: CredentialResponse) => {
+    setFailed(false);
     const accessToken = credentialResponse.credential as string;
     const decoded = jwt_decode(accessToken);
     console.log(decoded);

@@ -17,7 +17,10 @@ const Positions = () => {
     const response = await axios.get("positions");
     console.log(response.data);
     const positions = response.data;
-    setAllPositions(positions);
+    const openPositions = (positions as Position[]).filter(
+      (position) => position.isOpen
+    );
+    setAllPositions(openPositions);
   }, []);
 
   useEffect(() => {

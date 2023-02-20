@@ -118,7 +118,7 @@ const Nav = () => {
                 ) : (
                   ""
                 )}
-                {isLoggedIn ? (
+                {isEmployee ? (
                   <MenuItem
                     onClick={handleCloseNavMenu}
                     component="a"
@@ -186,7 +186,7 @@ const Nav = () => {
               ) : (
                 ""
               )}
-              {isLoggedIn ? (
+              {isEmployee ? (
                 <Button
                   sx={{ my: 2, color: "white", display: "block" }}
                   component="a"
