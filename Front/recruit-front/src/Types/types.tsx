@@ -33,6 +33,13 @@ export interface Meeting {
   dateString: string | undefined;
 }
 
+export interface Review {
+  id: number;
+  userEmail: string;
+  rating: number;
+  comment: string;
+}
+
 export interface Application {
   id: number;
   fullName: string;

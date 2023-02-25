@@ -27,6 +27,7 @@ import Theme from "../Styles/Theme";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { Application, Stage } from "../Types/types";
 import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
+import ReviewsTab from "../Components/Reviews/ReviewsTab";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -179,7 +180,7 @@ const ApplicationView = () => {
         <ApplicationMeetings></ApplicationMeetings>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <ReviewsTab></ReviewsTab>
       </TabPanel>
       <TabPanel value={value} index={3}>
         Item Four
