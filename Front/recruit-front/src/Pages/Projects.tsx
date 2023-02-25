@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@mui/material";
+import { Skeleton, ThemeProvider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -101,10 +101,24 @@ const Projects = () => {
                   component="img"
                   sx={{
                     pt: "5%",
+
+                    height: "250px", // set the height of the CardMedia component
+                    objectFit: "cover", // set the object-fit property to cover the image
                   }}
                   image={card.image}
                   alt="random"
+                  onLoad={(e) => {
+                    e.currentTarget.style.opacity = "1"; // set the opacity to 1 when the image is loaded
+                  }}
+                  style={{ opacity: 0 }} // set the opacity to 0 initially
                 />
+
+                {card.image ? null : (
+                  <Skeleton
+                    variant="rectangular"
+                    sx={{ height: 250, borderRadius: "10px" }}
+                  />
+                )}
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography gutterBottom variant="h5" component="h1">
                     {NordProduct[card.product]}
