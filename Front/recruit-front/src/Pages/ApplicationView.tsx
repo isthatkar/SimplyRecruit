@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import PhoneIcon from "@mui/icons-material/Phone";
+import TaskIcon from "@mui/icons-material/Task";
 import DownloadIcon from "@mui/icons-material/Download";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
@@ -26,6 +26,7 @@ import { useParams } from "react-router-dom";
 import Theme from "../Styles/Theme";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { Application, Stage } from "../Types/types";
+import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -83,12 +84,14 @@ const ApplicationView = () => {
         <Container sx={{ width: "100%" }}>
           <Tabs value={value} onChange={handleChange} variant="fullWidth">
             <Tab icon={<InfoIcon />} label="Overview" sx={{ flexGrow: 1 }} />
-            <Tab icon={<ReviewsIcon />} label="Reviews" sx={{ flexGrow: 1 }} />
             <Tab
               icon={<MeetingRoomIcon />}
               label="Meetings"
               sx={{ flexGrow: 1 }}
             />
+            <Tab icon={<ReviewsIcon />} label="Reviews" sx={{ flexGrow: 1 }} />
+
+            <Tab icon={<TaskIcon />} label="Tasks" sx={{ flexGrow: 1 }} />
           </Tabs>
         </Container>
       </Box>
@@ -173,10 +176,13 @@ const ApplicationView = () => {
         </Card>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <ApplicationMeetings></ApplicationMeetings>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        Item Four
       </TabPanel>
     </ThemeProvider>
   );

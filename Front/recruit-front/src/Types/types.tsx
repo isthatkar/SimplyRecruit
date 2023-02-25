@@ -23,6 +23,16 @@ export interface Position {
   offers: string;
 }
 
+export interface Meeting {
+  id: number;
+  title: string;
+  description: string;
+  agenda: string;
+  time: Date;
+  timeString: string | undefined;
+  dateString: string | undefined;
+}
+
 export interface Application {
   id: number;
   fullName: string;
