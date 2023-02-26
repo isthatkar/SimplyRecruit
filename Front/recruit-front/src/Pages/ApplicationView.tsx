@@ -5,7 +5,6 @@ import {
   Container,
   Grid,
   IconButton,
-  Select,
   Stack,
   Tab,
   Tabs,
@@ -15,8 +14,6 @@ import {
 
 import TaskIcon from "@mui/icons-material/Task";
 import DownloadIcon from "@mui/icons-material/Download";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
 import EditIcon from "@mui/icons-material/Edit";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import InfoIcon from "@mui/icons-material/Info";
@@ -28,6 +25,7 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import { Application, Stage } from "../Types/types";
 import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
 import ReviewsTab from "../Components/Reviews/ReviewsTab";
+import EmployeeTasksTab from "../Components/Tasks/EmployeeTasksTab";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -183,7 +181,7 @@ const ApplicationView = () => {
         <ReviewsTab></ReviewsTab>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <EmployeeTasksTab></EmployeeTasksTab>
       </TabPanel>
     </ThemeProvider>
   );

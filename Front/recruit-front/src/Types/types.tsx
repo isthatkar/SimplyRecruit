@@ -40,6 +40,24 @@ export interface Review {
   comment: string;
 }
 
+export interface Task {
+  id: number;
+  title: string;
+  goal: string;
+  instructions: string;
+  deliverables: string;
+  criteriaForEval: string;
+  state: TaskStatus;
+  deadline: Date;
+}
+
+export interface TaskAnswer {
+  id: number;
+  comment: string;
+  fileName: string;
+  url: string | undefined;
+}
+
 export interface Application {
   id: number;
   fullName: string;
@@ -50,6 +68,11 @@ export interface Application {
   stage: Stage;
   positionId: number;
   positionName: string;
+}
+
+export enum TaskStatus {
+  Assigned,
+  Completed,
 }
 
 export enum Stage {
