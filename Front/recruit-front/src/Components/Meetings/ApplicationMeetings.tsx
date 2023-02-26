@@ -4,6 +4,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Theme from "../../Styles/Theme";
 import { Meeting } from "../../Types/types";
 import MeetingListItem from "./MeetingListItem";
+import AddScheduledMeetingDialog from "./AddScheduledMeetingDialog";
 
 const ApplicationMeetings = (props: any) => {
   const [meetings, setMeetings] = React.useState<Meeting[]>([]);
@@ -65,8 +66,7 @@ const ApplicationMeetings = (props: any) => {
           alignItems="center"
           spacing={3}
         >
-          <Button variant="contained">Add scheduled meeting</Button>
-          <Button variant="contained">Get meeting scheduling link</Button>
+          <AddScheduledMeetingDialog></AddScheduledMeetingDialog>
         </Stack>
       </Box>
 

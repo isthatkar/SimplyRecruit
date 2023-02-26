@@ -1,52 +1,67 @@
-import SickOutlinedIcon from "@mui/icons-material/SickOutlined";
-import MoodBadOutlinedIcon from "@mui/icons-material/MoodBadOutlined";
-import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
-import SentimentNeutralOutlinedIcon from "@mui/icons-material/SentimentNeutralOutlined";
-import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
-import SentimentVerySatisfiedOutlinedIcon from "@mui/icons-material/SentimentVerySatisfiedOutlined";
 import React from "react";
 import { Avatar } from "@mui/material";
+import {
+  MoodBadOutlined as MoodBadOutlinedIcon,
+  SentimentDissatisfiedOutlined as SentimentDissatisfiedOutlinedIcon,
+  SentimentNeutralOutlined as SentimentNeutralOutlinedIcon,
+  SentimentSatisfiedOutlined as SentimentSatisfiedOutlinedIcon,
+  SentimentVerySatisfiedOutlined as SentimentVerySatisfiedOutlinedIcon,
+} from "@mui/icons-material";
 
 type Props = {
   value: number;
+  selected: boolean;
+  onClick?: (value: number) => void;
 };
 
-const RatingIcon = ({ value }: Props) => {
-  if (value >= 1 && value <= 5) {
-    switch (value) {
-      case 1:
-        return (
-          <Avatar sx={{ backgroundColor: "#ff3838" }}>
-            <MoodBadOutlinedIcon />
-          </Avatar>
-        );
-      case 2:
-        return (
-          <Avatar sx={{ backgroundColor: "#ff9338" }}>
-            <SentimentDissatisfiedOutlinedIcon />
-          </Avatar>
-        );
-      case 3:
-        return (
-          <Avatar sx={{ backgroundColor: "#fff338" }}>
-            <SentimentNeutralOutlinedIcon />
-          </Avatar>
-        );
-      case 4:
-        return (
-          <Avatar sx={{ backgroundColor: "#d2ff38" }}>
-            <SentimentSatisfiedOutlinedIcon />
-          </Avatar>
-        );
-      case 5:
-        return (
-          <Avatar sx={{ backgroundColor: "#82ff38" }}>
-            <SentimentVerySatisfiedOutlinedIcon />
-          </Avatar>
-        );
+const RatingIcon = ({ value, selected, onClick }: Props) => {
+  const handleClick = () => {
+    if (onClick) {
+      onClick(value);
     }
+  };
+
+  const backgroundColor = selected ? "#3f51b5" : getBackgroundColor(value);
+
+  return (
+    <Avatar sx={{ backgroundColor }} onClick={handleClick}>
+      {getIcon(value)}
+    </Avatar>
+  );
+};
+
+const getBackgroundColor = (value: number): string => {
+  switch (value) {
+    case 1:
+      return "#ff3838";
+    case 2:
+      return "#ff9338";
+    case 3:
+      return "#fff338";
+    case 4:
+      return "#d2ff38";
+    case 5:
+      return "#82ff38";
+    default:
+      return "";
   }
-  return <SickOutlinedIcon />; // or a default icon
+};
+
+const getIcon = (value: number) => {
+  switch (value) {
+    case 1:
+      return <MoodBadOutlinedIcon />;
+    case 2:
+      return <SentimentDissatisfiedOutlinedIcon />;
+    case 3:
+      return <SentimentNeutralOutlinedIcon />;
+    case 4:
+      return <SentimentSatisfiedOutlinedIcon />;
+    case 5:
+      return <SentimentVerySatisfiedOutlinedIcon />;
+    default:
+      return <MoodBadOutlinedIcon />;
+  }
 };
 
 export default RatingIcon;

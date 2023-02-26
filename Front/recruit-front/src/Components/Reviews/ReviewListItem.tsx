@@ -22,7 +22,7 @@ const ReviewListItem = (props: any) => {
       }}
     >
       <ListItemAvatar>
-        <RatingIcon value={props.rating} />
+        <RatingIcon value={props.rating} selected={false} />
       </ListItemAvatar>
       <ListItemText primary={props.comment} secondary={props.email} />
     </ListItem>

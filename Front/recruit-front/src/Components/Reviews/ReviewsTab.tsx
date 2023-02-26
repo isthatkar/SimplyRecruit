@@ -4,6 +4,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Theme from "../../Styles/Theme";
 import { Meeting, Review } from "../../Types/types";
 import ReviewListItem from "./ReviewListItem";
+import AddReviewDialog from "./AddReviewDialog";
 
 const ReviewsTab = (props: any) => {
   const [reviews, setReviews] = React.useState<Review[]>([]);
@@ -63,7 +64,7 @@ const ReviewsTab = (props: any) => {
           alignItems="center"
           spacing={3}
         >
-          <Button variant="contained">Add A REVIEW</Button>
+          <AddReviewDialog></AddReviewDialog>
         </Stack>
       </Box>
 
