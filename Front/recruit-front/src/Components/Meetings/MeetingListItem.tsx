@@ -6,9 +6,15 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import MeetingStateChip from "./MeetingStateChip";
 
 const MeetingListItem = (props: any) => {
+  const navigate = useNavigate();
+
+  const HandleMoreDetails = () => {
+    navigate(`/meetings/${props.id}`);
+  };
   return (
     <ListItem
       alignItems="flex-start"
@@ -52,7 +58,9 @@ const MeetingListItem = (props: any) => {
         }
       />
       <div>
-        <ListItemButton>More details</ListItemButton>
+        <ListItemButton onClick={HandleMoreDetails}>
+          More details
+        </ListItemButton>
       </div>{" "}
     </ListItem>
   );

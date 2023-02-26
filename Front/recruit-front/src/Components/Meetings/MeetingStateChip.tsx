@@ -5,7 +5,7 @@ import { Chip } from "@mui/material";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 
 type Props = {
-  value: number;
+  value: boolean;
 };
 
 const MeetingStateChip = ({ value }: Props) => {

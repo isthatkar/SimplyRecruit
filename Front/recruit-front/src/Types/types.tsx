@@ -27,11 +27,20 @@ export interface Meeting {
   id: number;
   title: string;
   description: string;
-  agenda: string;
-  time: Date;
-  final: boolean;
+  finalTime: string;
+  isFinalTime: boolean;
+  attendees: string[];
+  meetingTimes: MeetingTime[];
+  duration: number;
+  schedulingUrl: string;
   timeString: string | undefined;
   dateString: string | undefined;
+}
+
+export interface MeetingTime {
+  id: number;
+  time: string;
+  selectedAttendees: string[];
 }
 
 export interface Review {

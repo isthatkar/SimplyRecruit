@@ -1,0 +1,140 @@
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
+import { Meeting } from "../Types/types";
+import React from "react";
+import CopyLinkDialog from "../Components/Meetings/CopyLinkDialog";
+import AttendeeList from "../Components/Meetings/AttendeesList";
+import MeetingStateChip from "../Components/Meetings/MeetingStateChip";
+import Theme from "../Styles/Theme";
+import { useNavigate } from "react-router-dom";
+
+const MeetingView = () => {
+  const [showCopyLinkDialog, setShowCopyLinkDialog] = useState(false);
+  const navigate = useNavigate();
+  const [meeting, setMeeting] = useState<Meeting>({
+    id: 1,
+    title: "Team Meeting",
+    description: "Discuss team progress",
+    finalTime: "2023-03-01T09:30:00Z",
+    duration: 60,
+    isFinalTime: false,
+    schedulingUrl: "https://randomurl.com",
+    attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
+    meetingTimes: [
+      {
+        id: 1,
+        time: "2023-03-01T09:30:00Z",
+        selectedAttendees: ["Bob", "Alice"],
+      },
+      {
+        id: 2,
+        time: "2023-03-01T09:30:00Z",
+        selectedAttendees: [],
+      },
+      {
+        id: 3,
+        time: "2023-03-01T09:30:00Z",
+        selectedAttendees: ["Bob"],
+      },
+    ],
+    dateString: "",
+    timeString: "",
+  });
+
+  const handleCopyLink = () => {
+    setShowCopyLinkDialog(true);
+  };
+
+  const handleGoToLink = () => {
+    navigate(`randomUrl`);
+  };
+
+  const handleCloseCopyLinkDialog = () => {
+    setShowCopyLinkDialog(false);
+  };
+
+  return (
+    <ThemeProvider theme={Theme}>
+      <Box
+        sx={{
+          pb: 6,
+          width: 1,
+        }}
+      >
+        <Container sx={{ width: "100%", my: 8 }}>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Typography variant="h4" component="h1" gutterBottom>
+              {meeting?.title}
+            </Typography>
+            <MeetingStateChip value={meeting?.isFinalTime}></MeetingStateChip>
+          </Stack>
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Typography variant="subtitle1" gutterBottom>
+              {meeting?.description}
+            </Typography>
+            {meeting?.isFinalTime && (
+              <Typography variant="subtitle1" gutterBottom>
+                Final Meeting Time: {meeting?.finalTime.toLocaleString()}
+              </Typography>
+            )}
+            <Typography variant="subtitle1" gutterBottom>
+              Duration: {meeting?.duration} minutes
+            </Typography>
+            <Typography variant="subtitle1" gutterBottom>
+              Attendees:
+            </Typography>
+            <AttendeeList attendees={meeting.attendees} />
+
+            <Box mt={2}>
+              {meeting?.isFinalTime ? (
+                <Button variant="contained" disabled>
+                  Meeting Time is Final
+                </Button>
+              ) : (
+                <>
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                  >
+                    <Button variant="outlined" onClick={handleCopyLink}>
+                      Copy Meeting Scheduling Link
+                    </Button>
+                    <Button variant="outlined" onClick={handleGoToLink}>
+                      Go To Meeting Scheduling Page
+                    </Button>
+                  </Stack>
+                </>
+              )}
+            </Box>
+            <CopyLinkDialog
+              open={showCopyLinkDialog}
+              onClose={handleCloseCopyLinkDialog}
+              link={meeting.schedulingUrl}
+            />
+          </Stack>
+        </Container>
+      </Box>
+    </ThemeProvider>
+  );
+};
+
+export default MeetingView;

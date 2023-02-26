@@ -32,24 +32,63 @@ const ApplicationMeetings = (props: any) => {
     };
 
     const date = new Date("2023-03-01T09:30:00Z");
+
     const upcomingMeetings: Meeting[] = [
       {
         id: 1,
         title: "Team Meeting",
         description: "Discuss team progress",
-        agenda: "Review project status, assign new tasks",
-        time: new Date("2023-03-01T09:30:00Z"),
-        final: false,
+        finalTime: "2023-03-01T09:30:00Z",
+        duration: 60,
+        schedulingUrl: "https://randomurl.com",
+        isFinalTime: false,
+        attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
+        meetingTimes: [
+          {
+            id: 1,
+            time: "2023-03-01T09:30:00Z",
+            selectedAttendees: ["Bob", "Alice"],
+          },
+          {
+            id: 2,
+            time: "2023-03-01T09:30:00Z",
+            selectedAttendees: [],
+          },
+          {
+            id: 3,
+            time: "2023-03-01T09:30:00Z",
+            selectedAttendees: ["Bob"],
+          },
+        ],
         dateString: date.toLocaleDateString("en-US", optionsDate),
         timeString: date.toLocaleTimeString("en-US", optionsTime),
       },
       {
         id: 2,
-        title: "Client Meeting",
-        description: "Present project updates to client",
-        agenda: "Demo new features, discuss feedback",
-        time: new Date("2023-03-03T14:00:00Z"),
-        final: true,
+        title: "Team Meeting",
+        description: "Discuss team progress",
+        finalTime: "2023-03-01T09:30:00Z",
+        duration: 60,
+        schedulingUrl: "https://randomurl.com",
+        isFinalTime: true,
+        attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
+        meetingTimes: [
+          {
+            id: 1,
+            time: "2023-03-01T09:30:00Z",
+            selectedAttendees: ["Bob", "Alice"],
+          },
+          {
+            id: 1,
+            time: "2023-03-01T09:30:00Z",
+            selectedAttendees: [],
+          },
+          {
+            id: 1,
+            time: "2023-03-01T09:30:00Z",
+            selectedAttendees: ["Bob"],
+          },
+        ],
         dateString: date.toLocaleDateString("en-US", optionsDate),
         timeString: date.toLocaleTimeString("en-US", optionsTime),
       },
@@ -108,11 +147,12 @@ const ApplicationMeetings = (props: any) => {
             </Typography>
             {meetings.map((meet) => (
               <MeetingListItem
+                id={meet.id}
                 key={meet.id}
                 title={meet.title}
                 description={meet.description}
-                time={meet.final ? meet.dateString : ""}
-                final={meet.final}
+                time={meet.isFinalTime ? meet.dateString : ""}
+                final={meet.isFinalTime}
               ></MeetingListItem>
             ))}
           </Stack>
