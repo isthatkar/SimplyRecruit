@@ -21,25 +21,25 @@ const ReviewsTab = (props: any) => {
         id: 2,
         userEmail: "vardas.test@gmail.com",
         rating: 2,
-        comment: "Perfect candidate for this possition in my opinion",
+        comment: "Didn't really like him",
       },
       {
         id: 3,
         userEmail: "vardas.test@gmail.com",
         rating: 1,
-        comment: "Perfect candidate for this possition in my opinion",
+        comment: "Very bad, rude and arrogant",
       },
       {
         id: 4,
         userEmail: "vardas.test@gmail.com",
         rating: 3,
-        comment: "Perfect candidate for this possition in my opinion",
+        comment: "Could improve his technical knowledge",
       },
       {
         id: 5,
         userEmail: "vardas.test@gmail.com",
         rating: 4,
-        comment: "Perfect candidate for this possition in my opinion",
+        comment: "Not bad",
       },
     ];
 
@@ -69,16 +69,29 @@ const ReviewsTab = (props: any) => {
       </Box>
 
       {reviews.length > 0 ? (
-        <Box>
-          <Typography align="center" variant="h5">
-            APPLICANT REVIEWS
-          </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Stack
+            sx={{
+              width: "80%",
+              maxWidth: "900",
+              "@media (max-width: 900px)": {
+                width: "100%",
+              },
+            }}
             direction="column"
             justifyContent="center"
             alignItems="center"
             spacing={1}
           >
+            <Typography align="center" variant="h5" sx={{ mb: 5 }}>
+              APPLICANT REVIEWS
+            </Typography>
             {reviews.map((review) => (
               <ReviewListItem
                 key={review.id}

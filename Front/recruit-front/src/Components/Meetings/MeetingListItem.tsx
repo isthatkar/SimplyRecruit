@@ -2,9 +2,11 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Stack,
   Typography,
 } from "@mui/material";
 import React from "react";
+import MeetingStateChip from "./MeetingStateChip";
 
 const MeetingListItem = (props: any) => {
   return (
@@ -21,9 +23,14 @@ const MeetingListItem = (props: any) => {
       <ListItemText
         disableTypography
         primary={
-          <Typography sx={{ mb: 2 }} variant="h5" color="text.primary">
-            {props.title}
-          </Typography>
+          <React.Fragment>
+            <Stack direction="row" spacing={2}>
+              <Typography sx={{ mb: 2 }} variant="h5" color="text.primary">
+                {props.title}
+              </Typography>
+              <MeetingStateChip value={props.final}></MeetingStateChip>
+            </Stack>
+          </React.Fragment>
         }
         secondary={
           <React.Fragment>
@@ -44,6 +51,9 @@ const MeetingListItem = (props: any) => {
           </React.Fragment>
         }
       />
+      <div>
+        <ListItemButton>More details</ListItemButton>
+      </div>{" "}
     </ListItem>
   );
 };

@@ -31,6 +31,7 @@ const ApplicationMeetings = (props: any) => {
         description: "Discuss team progress",
         agenda: "Review project status, assign new tasks",
         time: new Date("2023-03-01T09:30:00Z"),
+        final: false,
         dateString: date.toLocaleDateString("en-US", optionsDate),
         timeString: date.toLocaleTimeString("en-US", optionsTime),
       },
@@ -40,6 +41,7 @@ const ApplicationMeetings = (props: any) => {
         description: "Present project updates to client",
         agenda: "Demo new features, discuss feedback",
         time: new Date("2023-03-03T14:00:00Z"),
+        final: true,
         dateString: date.toLocaleDateString("en-US", optionsDate),
         timeString: date.toLocaleTimeString("en-US", optionsTime),
       },
@@ -71,22 +73,36 @@ const ApplicationMeetings = (props: any) => {
       </Box>
 
       {meetings.length > 0 ? (
-        <Box>
-          <Typography align="center" variant="h5">
-            UPCOMING MEETINGS
-          </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Stack
+            sx={{
+              width: "80%",
+              maxWidth: "900",
+              "@media (max-width: 900px)": {
+                width: "100%",
+              },
+            }}
             direction="column"
             justifyContent="center"
             alignItems="center"
             spacing={1}
           >
+            <Typography align="center" variant="h5" sx={{ mb: 5 }}>
+              UPCOMING MEETINGS
+            </Typography>
             {meetings.map((meet) => (
               <MeetingListItem
                 key={meet.id}
                 title={meet.title}
                 description={meet.description}
-                time={meet.dateString}
+                time={meet.final ? meet.dateString : ""}
+                final={meet.final}
               ></MeetingListItem>
             ))}
           </Stack>

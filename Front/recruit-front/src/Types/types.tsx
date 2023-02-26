@@ -29,6 +29,7 @@ export interface Meeting {
   description: string;
   agenda: string;
   time: Date;
+  final: boolean;
   timeString: string | undefined;
   dateString: string | undefined;
 }
