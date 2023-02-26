@@ -16,6 +16,7 @@ import EditPositions from "./Pages/EditPositions";
 import UserApplications from "./Pages/UserApplications";
 import PositionApplications from "./Pages/PossitionApplications";
 import ApplicationView from "./Pages/ApplicationView";
+import AddMeeting from "./Pages/AddMeeting";
 
 const token = localStorage.getItem("accessToken");
 const isAuth = !(token === null);
@@ -87,6 +88,15 @@ function App() {
             <Route
               path="/application/:applicationId"
               element={<ApplicationView />}
+            />
+          </Route>
+          <Route
+            path="/application/:applicationId/addMeeting"
+            element={<ProtectedRoute isAuth={isAuth} />}
+          >
+            <Route
+              path="/application/:applicationId/addMeeting"
+              element={<AddMeeting />}
             />
           </Route>
         </Routes>

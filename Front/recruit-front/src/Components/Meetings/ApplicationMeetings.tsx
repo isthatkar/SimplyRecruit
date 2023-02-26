@@ -4,10 +4,18 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Theme from "../../Styles/Theme";
 import { Meeting } from "../../Types/types";
 import MeetingListItem from "./MeetingListItem";
-import AddScheduledMeetingDialog from "./AddScheduledMeetingDialog";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ApplicationMeetings = (props: any) => {
   const [meetings, setMeetings] = React.useState<Meeting[]>([]);
+
+  const navigate = useNavigate();
+
+  const { applicationId } = useParams();
+
+  const handleClickAdd = () => {
+    navigate(`/application/${applicationId}/addMeeting`);
+  };
 
   const getMeetings = useCallback(async () => {
     const optionsDate = {
@@ -68,7 +76,9 @@ const ApplicationMeetings = (props: any) => {
           alignItems="center"
           spacing={3}
         >
-          <AddScheduledMeetingDialog></AddScheduledMeetingDialog>
+          <Button size="medium" variant="contained" onClick={handleClickAdd}>
+            Schedule a new meeting
+          </Button>{" "}
         </Stack>
       </Box>
 
