@@ -149,6 +149,17 @@ const Nav = () => {
                 ) : (
                   ""
                 )}
+                {isLoggedIn ? (
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href="/userMeetings"
+                  >
+                    <Typography textAlign="center">Meetings</Typography>
+                  </MenuItem>
+                ) : (
+                  ""
+                )}
               </Menu>
             </Box>
             <WorkOutlineIcon
@@ -213,6 +224,17 @@ const Nav = () => {
                   href="/userApplications"
                 >
                   My applications
+                </Button>
+              ) : (
+                ""
+              )}
+              {isLoggedIn ? (
+                <Button
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component="a"
+                  href="/userMeetings"
+                >
+                  Meetings
                 </Button>
               ) : (
                 ""

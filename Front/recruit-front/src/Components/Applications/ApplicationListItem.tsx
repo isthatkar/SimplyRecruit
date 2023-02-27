@@ -1,4 +1,9 @@
-import { ListItem, ListItemText, Typography } from "@mui/material";
+import {
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { Stage } from "../../Types/types";
 
@@ -32,6 +37,10 @@ const ApplicationListItem = (props: any) => {
           </React.Fragment>
         }
       />
+      <div>
+        {" "}
+        <ListItemButton>More details</ListItemButton>
+      </div>
     </ListItem>
   );
 };

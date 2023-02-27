@@ -1,5 +1,5 @@
 import React from "react";
-import { Chip } from "@mui/material";
+import { Chip, Stack } from "@mui/material";
 
 interface AttendeeListProps {
   attendees: string[];
@@ -7,7 +7,7 @@ interface AttendeeListProps {
 
 const AttendeeList: React.FC<AttendeeListProps> = ({ attendees }) => {
   return (
-    <div>
+    <Stack direction="row" justifyContent="center" alignItems="flex-start">
       {attendees.map((attendee, index) => (
         <Chip
           key={index}
@@ -15,7 +15,7 @@ const AttendeeList: React.FC<AttendeeListProps> = ({ attendees }) => {
           style={{ marginRight: "10px", marginBottom: "10px" }}
         />
       ))}
-    </div>
+    </Stack>
   );
 };
 

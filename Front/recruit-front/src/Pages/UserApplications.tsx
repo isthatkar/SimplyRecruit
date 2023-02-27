@@ -50,6 +50,7 @@ const UserApplications = () => {
           justifyContent="center"
           alignItems="center"
           spacing={1}
+          sx={{ mb: 8 }}
         >
           {allApplications.map((application) => (
             <ApplicationListItem

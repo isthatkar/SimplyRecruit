@@ -19,6 +19,7 @@ import ApplicationView from "./Pages/ApplicationView";
 import AddMeeting from "./Pages/AddMeeting";
 import MeetingView from "./Pages/MeetingView";
 import MeetingSchedulingPage from "./Pages/MeetingSchedulingPage";
+import UserMeetings from "./Pages/UserMeetings";
 
 const token = localStorage.getItem("accessToken");
 const isAuth = !(token === null);
@@ -115,6 +116,12 @@ function App() {
               path="/meetings/:meetingId/schedule"
               element={<MeetingSchedulingPage />}
             />
+          </Route>
+          <Route
+            path="/userMeetings"
+            element={<ProtectedRoute isAuth={isAuth} />}
+          >
+            <Route path="/userMeetings" element={<UserMeetings />} />
           </Route>
         </Routes>
       </BrowserRouter>

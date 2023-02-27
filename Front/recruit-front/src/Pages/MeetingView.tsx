@@ -72,17 +72,17 @@ const MeetingView = () => {
         }}
       >
         <Container sx={{ width: "100%", my: 8 }}>
+          <Typography align="center" variant="h2" component="h1" gutterBottom>
+            {meeting?.title}
+          </Typography>
+
           <Stack
             direction="row"
             justifyContent="center"
             alignItems="center"
             spacing={2}
+            sx={{ mb: 4 }}
           >
-            <MeetingStateChip value={meeting?.isFinalTime}></MeetingStateChip>
-
-            <Typography variant="h4" component="h1" gutterBottom>
-              {meeting?.title}
-            </Typography>
             {/* todo this only visible to employee who created meeting */}
             <IconButton color="secondary">
               <DeleteIcon />
@@ -106,10 +106,7 @@ const MeetingView = () => {
               </Typography>
             )}
             <Typography variant="subtitle1" gutterBottom>
-              Duration: {meeting?.duration} minutes
-            </Typography>
-            <Typography variant="subtitle1" gutterBottom>
-              Attendees:
+              The meeting will take {meeting?.duration} minutes
             </Typography>
             <AttendeeList attendees={meeting.attendees} />
 
