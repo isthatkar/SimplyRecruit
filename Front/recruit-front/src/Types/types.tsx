@@ -113,6 +113,7 @@ export enum JobLocation {
   Berlin,
   Warsaw,
   WashingtonDC,
+  All,
 }
 
 export enum WorkTime {
@@ -141,4 +142,5 @@ export enum Field {
   QA,
   Risk,
   Sales,
+  All,
 }
