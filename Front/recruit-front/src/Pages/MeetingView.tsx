@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  IconButton,
   Stack,
   ThemeProvider,
   Typography,
@@ -14,6 +15,8 @@ import AttendeeList from "../Components/Meetings/AttendeesList";
 import MeetingStateChip from "../Components/Meetings/MeetingStateChip";
 import Theme from "../Styles/Theme";
 import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const MeetingView = () => {
   const [showCopyLinkDialog, setShowCopyLinkDialog] = useState(false);
@@ -25,7 +28,7 @@ const MeetingView = () => {
     finalTime: "2023-03-01T09:30:00Z",
     duration: 60,
     isFinalTime: false,
-    schedulingUrl: "https://randomurl.com",
+    schedulingUrl: `/meetings/1/schedule`,
     attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
     meetingTimes: [
       {
@@ -53,7 +56,7 @@ const MeetingView = () => {
   };
 
   const handleGoToLink = () => {
-    navigate(`randomUrl`);
+    navigate("schedule");
   };
 
   const handleCloseCopyLinkDialog = () => {
@@ -75,10 +78,18 @@ const MeetingView = () => {
             alignItems="center"
             spacing={2}
           >
+            <MeetingStateChip value={meeting?.isFinalTime}></MeetingStateChip>
+
             <Typography variant="h4" component="h1" gutterBottom>
               {meeting?.title}
             </Typography>
-            <MeetingStateChip value={meeting?.isFinalTime}></MeetingStateChip>
+            {/* todo this only visible to employee who created meeting */}
+            <IconButton color="secondary">
+              <DeleteIcon />
+            </IconButton>
+            <IconButton color="secondary">
+              <EditIcon />
+            </IconButton>
           </Stack>
           <Stack
             direction="column"
@@ -125,6 +136,7 @@ const MeetingView = () => {
                 </>
               )}
             </Box>
+
             <CopyLinkDialog
               open={showCopyLinkDialog}
               onClose={handleCloseCopyLinkDialog}

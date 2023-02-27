@@ -21,6 +21,7 @@ const CopyLinkDialog: React.FC<CopyLinkDialogProps> = ({
 }) => {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(link);
+    onClose();
   };
 
   return (
