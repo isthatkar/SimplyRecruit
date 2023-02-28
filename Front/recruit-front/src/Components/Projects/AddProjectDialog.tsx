@@ -15,10 +15,10 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Stack,
   ThemeProvider,
 } from "@mui/material";
 import Theme from "../../Styles/Theme";
-import ValidEmailTextField from "../ValidEmailTextField";
 import { NordProduct } from "../../Types/types";
 import axios from "axios";
 
@@ -27,10 +27,10 @@ const AddProjectDialog = () => {
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [selectedProduct, setSelectedProduct] = React.useState("0");
+  const [selectedProduct, setSelectedProduct] = React.useState(0);
 
   const productChanged = (event: SelectChangeEvent) => {
-    setSelectedProduct(event.target.value as string);
+    setSelectedProduct(parseInt(event.target.value));
   };
 
   const handleClickOpen = () => {
@@ -61,9 +61,7 @@ const AddProjectDialog = () => {
     const response = await axios.post("projects", projectDto);
 
     console.log(response);
-    if (response.status === 201) {
-      location.reload();
-    } else {
+    if (response.status !== 201) {
       toast.error("Failed to add collection!", {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -72,88 +70,75 @@ const AddProjectDialog = () => {
 
   return (
     <ThemeProvider theme={Theme}>
-      <div>
-        <ToastContainer />
+      <ToastContainer />
 
-        <Button variant="contained" onClick={handleClickOpen}>
-          Add new project
-        </Button>
-        <Dialog open={open} onClose={handleClose}>
+      <Button variant="contained" onClick={handleClickOpen}>
+        Add new project
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <Box onSubmit={handleAdd} component="form" autoComplete="off">
           <DialogTitle>Add new project</DialogTitle>
           <DialogContent>
-            <DialogContentText>
+            <DialogContentText sx={{ mb: 3 }}>
               Please enter the projects information
             </DialogContentText>
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "50ch" },
-              }}
+            <Stack
+              direction="column"
+              justifyContent="center"
+              alignItems="stretch"
+              spacing={2}
+              width="500px"
             >
-              <div>
-                <TextField
-                  onChange={(e) => setName(e.target.value)}
+              <TextField
+                onChange={(e) => setName(e.target.value)}
+                required
+                id="outlined-name-input"
+                label="Name"
+                type="text"
+              />{" "}
+              <TextField
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                id="outlined-description-input"
+                label="Description"
+                type="text"
+              />
+              <FormControl sx={{ m: 1 }}>
+                <InputLabel id="demo-simple-select-label">Product *</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={selectedProduct.toString()}
                   required
-                  id="outlined-name-input"
-                  label="Name"
-                  type="text"
-                />{" "}
-              </div>
-
-              <div>
-                <TextField
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                  id="outlined-description-input"
-                  label="Description"
-                  type="text"
-                />
-              </div>
-              <div>
-                <FormControl sx={{ m: 1, width: 0.966 }}>
-                  <InputLabel id="demo-simple-select-label">
-                    Product *
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={selectedProduct}
-                    required
-                    label="Product"
-                    onChange={productChanged}
-                  >
-                    {nordProducts.map((product) => (
-                      <MenuItem
-                        key={product}
-                        value={Object.values(NordProduct).indexOf(product)}
-                      >
-                        {product}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
-              <div>
-                <ValidEmailTextField
-                  value=""
-                  onChange={(e: any) => setEmail(e.target.value)}
-                  required
-                  id="outlined-email-input"
-                  label="Responsible employee email"
-                  type="email"
-                  fieldName={""}
-                />
-              </div>
-            </Box>
+                  label="Product"
+                  onChange={productChanged}
+                >
+                  {nordProducts.map((product) => (
+                    <MenuItem
+                      key={product}
+                      value={Object.values(NordProduct).indexOf(product)}
+                    >
+                      {product}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TextField
+                value={email}
+                onChange={(e: any) => setEmail(e.target.value)}
+                required
+                id="outlined-email-input"
+                label="Responsible employee email"
+                type="email"
+              />
+            </Stack>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleAdd}>Add</Button>
+            <Button type="submit">Add</Button>
           </DialogActions>
-        </Dialog>
-      </div>
+        </Box>
+      </Dialog>
     </ThemeProvider>
   );
 };

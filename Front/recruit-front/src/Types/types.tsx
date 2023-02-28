@@ -83,6 +83,7 @@ export interface Application {
 export enum TaskStatus {
   Assigned,
   Completed,
+  DeadLinePassed,
 }
 
 export enum Stage {

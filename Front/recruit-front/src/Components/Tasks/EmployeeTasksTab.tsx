@@ -4,6 +4,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Theme from "../../Styles/Theme";
 import { Task } from "../../Types/types";
 import EmployeeTaskListItem from "./EmployeeTaskListItem";
+import AddTaskDialog from "./AddTaskDialog";
 
 const EmployeeTasksTab = (props: any) => {
   const [tasks, setTasks] = React.useState<Task[]>([]);
@@ -48,6 +49,25 @@ const EmployeeTasksTab = (props: any) => {
         state: 1,
         deadline: new Date(),
       },
+      {
+        id: 2,
+        title: "Create a Facebook Advertising Campaign",
+        goal: "Drive traffic to the company website and increase conversions for a specific product",
+        instructions: `Develop a Facebook advertising campaign that targets a specific audience and promotes a specific product or service; 
+        Create ad copy and visuals that are engaging and compelling, and that align with the company's brand messaging and marketing goals;
+        Set up conversion tracking on the company website to measure the success of the campaign in driving conversions;
+        Launch the campaign and monitor performance metrics (e.g. impressions, clicks, conversion rates);
+        Optimize the campaign based on performance data to improve results (e.g. adjust targeting, ad creative, bidding strategy)`,
+        deliverables: `A Facebook advertising campaign that includes ad copy, visuals, targeting, and bidding strategy;
+        A report on campaign performance, including key metrics and insights, and recommendations for optimizing the campaign`,
+        criteriaForEval: `Ability to develop an effective Facebook advertising campaign that aligns with business objectives and target audience;
+        Creativity in ad copy and visuals;
+        Attention to detail in setting up conversion tracking and monitoring performance metrics;
+        Analytical skills in interpreting data and making data-driven decisions to optimize the campaign;
+        Communication skills in presenting the campaign and performance report, and providing recommendations for improvement.`,
+        state: 2,
+        deadline: new Date(),
+      },
     ];
 
     setTasks(applicationTasks);
@@ -71,7 +91,7 @@ const EmployeeTasksTab = (props: any) => {
           alignItems="center"
           spacing={3}
         >
-          <Button variant="contained">Add a new task for candidate</Button>
+          <AddTaskDialog />
         </Stack>
       </Box>
 
