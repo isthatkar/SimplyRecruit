@@ -88,15 +88,12 @@ export enum TaskStatus {
 
 export enum Stage {
   New,
-  Introduced,
-  WaitingFirstInterview,
-  TaskSent,
-  TaskReceived,
-  TaskGraded,
-  WaitingSecondInterview,
-  InConsideration,
-  OfferSent,
-  Inactive,
+  PhoneScreen,
+  FirstInterview,
+  TechTask,
+  TechnicalInterview,
+  FinalInterview,
+  Offer,
   Hired,
 }
 

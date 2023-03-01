@@ -34,7 +34,7 @@ const TaskStateChip = ({ value }: Props) => {
         );
     }
   }
-  return <Chip icon={<QuestionMarkIcon />} label="Unknown" />; // or a default icon
+  return <Chip icon={<QuestionMarkIcon />} label="Unknown" />;
 };
 
 export default TaskStateChip;

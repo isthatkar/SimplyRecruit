@@ -26,6 +26,7 @@ import { Application, Stage } from "../Types/types";
 import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
 import ReviewsTab from "../Components/Reviews/ReviewsTab";
 import EmployeeTasksTab from "../Components/Tasks/EmployeeTasksTab";
+import GetStateLabel from "../Helpers/ApplicationStateToText";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -161,11 +162,8 @@ const ApplicationView = () => {
             >
               <Typography variant="h5">Current stage:</Typography>
               <Typography variant="h6">
-                {application ? Object.values(Stage)[application.stage] : ""}
+                {application ? GetStateLabel(application.stage) : ""}
               </Typography>
-              <IconButton color="secondary" aria-label="add an alarm">
-                <EditIcon />
-              </IconButton>
             </Stack>
             <Button>
               <DownloadIcon></DownloadIcon>
