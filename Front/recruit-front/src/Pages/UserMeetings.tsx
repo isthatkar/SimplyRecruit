@@ -5,6 +5,7 @@ import Theme from "../Styles/Theme";
 import { Meeting } from "../Types/types";
 import { useNavigate, useParams } from "react-router-dom";
 import MeetingListItem from "../Components/Meetings/MeetingListItem";
+import MeetingCalendar from "../Components/Meetings/MeetingsCalendar";
 
 const UserMeetings = (props: any) => {
   const [meetings, setMeetings] = React.useState<Meeting[]>([]);
@@ -75,7 +76,7 @@ const UserMeetings = (props: any) => {
         meetingTimes: [
           {
             id: 1,
-            time: "2023-03-01T09:30:00Z",
+            time: "2023-03-02T09:30:00Z",
             selectedAttendees: ["Bob", "Alice"],
           },
           {
@@ -160,6 +161,8 @@ const UserMeetings = (props: any) => {
           </Typography>
         </Stack>
       )}
+
+      <MeetingCalendar meetings={meetings}></MeetingCalendar>
     </ThemeProvider>
   );
 };
