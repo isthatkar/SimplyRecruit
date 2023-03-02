@@ -7,7 +7,6 @@ import {
   ListItemText,
   Button,
   Tooltip,
-  Badge,
 } from "@mui/material";
 import { MeetingTime } from "../../Types/types";
 
@@ -52,7 +51,6 @@ const MeetingsList: React.FC<MeetingsListProps> = ({
       <List>
         {meetingTimes.map((meetingTime) => {
           const labelId = `checkbox-list-label-${meetingTime.time}`;
-
           return (
             <ListItem
               key={meetingTime.id}

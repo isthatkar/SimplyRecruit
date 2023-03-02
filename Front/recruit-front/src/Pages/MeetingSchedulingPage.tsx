@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Meeting, MeetingTime } from "../Types/types";
-import Theme from "../Styles/Theme";
+import { Theme } from "../Styles/Theme";
 import PersonIcon from "@mui/icons-material/Person";
 import GetFormatedDate from "../Helpers/DateFormater";
 

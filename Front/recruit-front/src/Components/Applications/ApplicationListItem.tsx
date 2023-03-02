@@ -5,20 +5,13 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useStyles } from "../../Styles/Theme";
 import { Stage } from "../../Types/types";
 
 const ApplicationListItem = (props: any) => {
+  const classes = useStyles();
   return (
-    <ListItem
-      alignItems="flex-start"
-      sx={{
-        width: "100%",
-        borderRadius: 2,
-        "&:hover": {
-          backgroundColor: "#e0e2f2",
-        },
-      }}
-    >
+    <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
       <ListItemText
         disableTypography
         primary={
@@ -38,7 +31,6 @@ const ApplicationListItem = (props: any) => {
         }
       />
       <div>
-        {" "}
         <ListItemButton>More details</ListItemButton>
       </div>
     </ListItem>

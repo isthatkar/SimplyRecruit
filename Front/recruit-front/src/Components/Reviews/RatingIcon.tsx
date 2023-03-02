@@ -33,15 +33,15 @@ const RatingIcon = ({ value, selected, onClick }: Props) => {
 const getBackgroundColor = (value: number): string => {
   switch (value) {
     case 1:
-      return "#ff3838";
+      return "#e3e6fd";
     case 2:
-      return "#ff9338";
+      return "#d1d6fb";
     case 3:
-      return "#fff338";
+      return "#a5adf5";
     case 4:
-      return "#d2ff38";
+      return "#6c7bf0";
     case 5:
-      return "#82ff38";
+      return "#3446fd";
     default:
       return "";
   }

@@ -1,10 +1,10 @@
-import { Box, Button, Stack, ThemeProvider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import Theme from "../../Styles/Theme";
-import { Meeting, Review } from "../../Types/types";
+import { Review } from "../../Types/types";
 import ReviewListItem from "./ReviewListItem";
 import AddReviewDialog from "./AddReviewDialog";
+import { ColumnStackCenter, RowStackCenter } from "../../Styles/Theme";
 
 const ReviewsTab = (props: any) => {
   const [reviews, setReviews] = React.useState<Review[]>([]);
@@ -50,7 +50,7 @@ const ReviewsTab = (props: any) => {
     getReviews();
   }, []);
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           display: "flex",
@@ -58,14 +58,7 @@ const ReviewsTab = (props: any) => {
           mb: 5,
         }}
       >
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={3}
-        >
-          <AddReviewDialog></AddReviewDialog>
-        </Stack>
+        <AddReviewDialog></AddReviewDialog>
       </Box>
 
       {reviews.length > 0 ? (
@@ -76,7 +69,7 @@ const ReviewsTab = (props: any) => {
             alignItems: "center",
           }}
         >
-          <Stack
+          <ColumnStackCenter
             sx={{
               width: "80%",
               maxWidth: "900",
@@ -84,9 +77,6 @@ const ReviewsTab = (props: any) => {
                 width: "100%",
               },
             }}
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
             spacing={1}
           >
             <Typography align="center" variant="h5" sx={{ mb: 5 }}>
@@ -100,22 +90,17 @@ const ReviewsTab = (props: any) => {
                 email={review.userEmail}
               ></ReviewListItem>
             ))}
-          </Stack>
+          </ColumnStackCenter>
         </Box>
       ) : (
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
+        <RowStackCenter spacing={1}>
           <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
           <Typography align="center" variant="h5">
             NO REVIEWS ADDED YET
           </Typography>
-        </Stack>
+        </RowStackCenter>
       )}
-    </ThemeProvider>
+    </div>
   );
 };
 

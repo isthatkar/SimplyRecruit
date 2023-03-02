@@ -15,14 +15,12 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Stack,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
-import Theme from "../../Styles/Theme";
 import { Field, JobLocation, WorkTime } from "../../Types/types";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { CenteredContainer, ColumnStackCenter } from "../../Styles/Theme";
 
 const AddPositionPage = (props: any) => {
   const navigate = useNavigate();
@@ -97,9 +95,8 @@ const AddPositionPage = (props: any) => {
   };
 
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <ToastContainer />
-
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -117,157 +114,142 @@ const AddPositionPage = (props: any) => {
           >
             Add a new position
           </Typography>
+          <Typography
+            component="h1"
+            variant="subtitle1"
+            align="center"
+            color="text.secondary"
+            gutterBottom
+          >
+            For bullet points in multiline fields separate the sentances with ;
+          </Typography>
         </Container>
       </Box>
-      <Container sx={{ py: 1 }} maxWidth="md">
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          maxWidth="md"
-          sx={{ pb: 6 }}
-        >
+      <CenteredContainer sx={{ py: 1 }} maxWidth="sm">
+        <ColumnStackCenter maxWidth="md" sx={{ pb: 6 }}>
           <Box
             component="form"
-            autoComplete="off"
+            onSubmit={handleAdd}
             sx={{
               "& .MuiTextField-root": {
                 m: 1,
-                width: "50ch",
+                width: "70ch",
               },
             }}
           >
-            <div>
-              <TextField
-                onChange={(e) => setName(e.target.value)}
-                required
-                id="outlined-name-input"
-                label="Name"
-                type="text"
-              />{" "}
-            </div>
+            <TextField
+              onChange={(e) => setName(e.target.value)}
+              required
+              id="outlined-name-input"
+              label="Name"
+              type="text"
+            />
 
-            <div>
-              <TextField
-                onChange={(e) => setDescription(e.target.value)}
+            <TextField
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              id="outlined-description-input"
+              label="Description"
+              multiline
+              maxRows={4}
+              type="text"
+            />
+            <TextField
+              onChange={(e) => setSalary(e.target.value)}
+              required
+              id="outlined-salary-input"
+              label="Gross salary range"
+              type="text"
+            />
+            <TextField
+              onChange={(e) => setDuties(e.target.value)}
+              required
+              id="outlined-duties-input"
+              label="Duties"
+              multiline
+              rows={3}
+              type="text"
+            />
+            <TextField
+              onChange={(e) => setExpectations(e.target.value)}
+              required
+              id="outlined-expectations-input"
+              label="Expectations"
+              multiline
+              rows={3}
+              type="text"
+            />
+            <TextField
+              onChange={(e) => setOffers(e.target.value)}
+              required
+              id="outlined-offers-input"
+              label="Offers"
+              multiline
+              rows={3}
+              type="text"
+            />
+            <FormControl sx={{ m: 1, width: "70ch" }}>
+              <InputLabel id="field-select-label">Field *</InputLabel>
+              <Select
+                labelId="field-select-label"
+                id="field-simple-select"
+                value={selectedField}
                 required
-                id="outlined-description-input"
-                label="Description"
-                multiline
-                maxRows={4}
-                type="text"
-              />
-            </div>
-            <div>
-              <TextField
-                onChange={(e) => setSalary(e.target.value)}
-                required
-                id="outlined-salary-input"
-                label="Gross salary range"
-                type="text"
-              />
-            </div>
-            <div>
-              <TextField
-                onChange={(e) => setDuties(e.target.value)}
-                required
-                id="outlined-duties-input"
-                label="Duties"
-                multiline
-                maxRows={4}
-                type="text"
-              />
-            </div>
-            <div>
-              <TextField
-                onChange={(e) => setExpectations(e.target.value)}
-                required
-                id="outlined-expectations-input"
-                label="Expectations"
-                multiline
-                maxRows={4}
-                type="text"
-              />
-            </div>
-            <div>
-              <TextField
-                onChange={(e) => setOffers(e.target.value)}
-                required
-                id="outlined-offers-input"
-                label="Offers"
-                multiline
-                maxRows={4}
-                type="text"
-              />
-            </div>
-            <div>
-              <FormControl sx={{ m: 1, width: "50ch" }}>
-                <InputLabel id="field-select-label">Field *</InputLabel>
-                <Select
-                  labelId="field-select-label"
-                  id="field-simple-select"
-                  value={selectedField}
-                  required
-                  label="Field"
-                  onChange={fieldChanged}
-                >
-                  {nordFields.map((field) => (
-                    <MenuItem
-                      key={field}
-                      value={Object.values(Field).indexOf(field)}
-                    >
-                      {field}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
+                label="Field"
+                onChange={fieldChanged}
+              >
+                {nordFields.map((field) => (
+                  <MenuItem
+                    key={field}
+                    value={Object.values(Field).indexOf(field)}
+                  >
+                    {field}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-            <div>
-              <FormControl sx={{ m: 1, width: "50ch" }}>
-                <InputLabel id="location-select-label">Location *</InputLabel>
-                <Select
-                  labelId="location-select-label"
-                  id="location-simple-select"
-                  value={selectedLocation}
-                  required
-                  label="Location"
-                  onChange={locationChanged}
-                >
-                  {locations.map((location) => (
-                    <MenuItem
-                      key={location}
-                      value={Object.values(JobLocation).indexOf(location)}
-                    >
-                      {location}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
+            <FormControl sx={{ m: 1, width: "70ch" }}>
+              <InputLabel id="location-select-label">Location *</InputLabel>
+              <Select
+                labelId="location-select-label"
+                id="location-simple-select"
+                value={selectedLocation}
+                required
+                label="Location"
+                onChange={locationChanged}
+              >
+                {locations.map((location) => (
+                  <MenuItem
+                    key={location}
+                    value={Object.values(JobLocation).indexOf(location)}
+                  >
+                    {location}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-            <div>
-              <FormControl sx={{ m: 1, width: "50ch" }}>
-                <InputLabel id="worktime-select-label">Work time *</InputLabel>
-                <Select
-                  labelId="worktime-select-label"
-                  id="worktime-select"
-                  value={selectedWorkTime}
-                  required
-                  label="Work time"
-                  onChange={worktimeChanged}
-                >
-                  {workTimes.map((time) => (
-                    <MenuItem
-                      key={time}
-                      value={Object.values(WorkTime).indexOf(time)}
-                    >
-                      {time}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
+            <FormControl sx={{ m: 1, width: "70ch" }}>
+              <InputLabel id="worktime-select-label">Work time *</InputLabel>
+              <Select
+                labelId="worktime-select-label"
+                id="worktime-select"
+                value={selectedWorkTime}
+                required
+                label="Work time"
+                onChange={worktimeChanged}
+              >
+                {workTimes.map((time) => (
+                  <MenuItem
+                    key={time}
+                    value={Object.values(WorkTime).indexOf(time)}
+                  >
+                    {time}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
@@ -278,13 +260,17 @@ const AddPositionPage = (props: any) => {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ mt: 3, mb: 4, ml: 1 }}
+            >
+              Add position
+            </Button>
           </Box>
-          <Button variant="contained" onClick={handleAdd} sx={{ mt: 3, mb: 4 }}>
-            Add position
-          </Button>
-        </Stack>
-      </Container>
-    </ThemeProvider>
+        </ColumnStackCenter>
+      </CenteredContainer>
+    </div>
   );
 };
 

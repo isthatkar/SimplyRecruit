@@ -1,5 +1,6 @@
 import React from "react";
-import { Chip, Stack } from "@mui/material";
+import { Chip } from "@mui/material";
+import { RowStackCenter } from "../../Styles/Theme";
 
 interface AttendeeListProps {
   attendees: string[];
@@ -7,7 +8,7 @@ interface AttendeeListProps {
 
 const AttendeeList: React.FC<AttendeeListProps> = ({ attendees }) => {
   return (
-    <Stack direction="row" justifyContent="center" alignItems="flex-start">
+    <RowStackCenter>
       {attendees.map((attendee, index) => (
         <Chip
           key={index}
@@ -15,7 +16,7 @@ const AttendeeList: React.FC<AttendeeListProps> = ({ attendees }) => {
           style={{ marginRight: "10px", marginBottom: "10px" }}
         />
       ))}
-    </Stack>
+    </RowStackCenter>
   );
 };
 

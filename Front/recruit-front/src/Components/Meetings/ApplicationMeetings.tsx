@@ -1,7 +1,7 @@
 import { Box, Button, Stack, ThemeProvider, Typography } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import Theme from "../../Styles/Theme";
+import { ColumnStackCenter, RowStackCenter, Theme } from "../../Styles/Theme";
 import { Meeting } from "../../Types/types";
 import MeetingListItem from "./MeetingListItem";
 import { useNavigate, useParams } from "react-router-dom";
@@ -109,16 +109,11 @@ const ApplicationMeetings = (props: any) => {
           mb: 5,
         }}
       >
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={3}
-        >
+        <RowStackCenter spacing={3}>
           <Button size="medium" variant="contained" onClick={handleClickAdd}>
             Schedule a new meeting
           </Button>{" "}
-        </Stack>
+        </RowStackCenter>
       </Box>
 
       {meetings.length > 0 ? (
@@ -129,7 +124,7 @@ const ApplicationMeetings = (props: any) => {
             alignItems: "center",
           }}
         >
-          <Stack
+          <ColumnStackCenter
             sx={{
               width: "80%",
               maxWidth: "900",
@@ -137,38 +132,23 @@ const ApplicationMeetings = (props: any) => {
                 width: "100%",
               },
             }}
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
             spacing={1}
           >
             <Typography align="center" variant="h5" sx={{ mb: 5 }}>
               UPCOMING MEETINGS
             </Typography>
             {meetings.map((meet) => (
-              <MeetingListItem
-                id={meet.id}
-                key={meet.id}
-                title={meet.title}
-                description={meet.description}
-                time={meet.isFinalTime ? meet.dateString : ""}
-                final={meet.isFinalTime}
-              ></MeetingListItem>
+              <MeetingListItem meet={meet} key={meet.id}></MeetingListItem>
             ))}
-          </Stack>
+          </ColumnStackCenter>
         </Box>
       ) : (
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
+        <RowStackCenter spacing={1}>
           <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
           <Typography align="center" variant="h5">
             NO UPCOMING MEETINGS FOR THIS APPLICATION
           </Typography>
-        </Stack>
+        </RowStackCenter>
       )}
     </ThemeProvider>
   );

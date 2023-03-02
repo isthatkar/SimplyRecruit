@@ -16,7 +16,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import PositionListItem from "../Components/Positions/PositionListItem";
-import Theme from "../Styles/Theme";
 import {
   JobLocation,
   NordProduct,
@@ -82,7 +81,7 @@ const Projects = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -173,7 +172,7 @@ const Projects = () => {
           ))}
         </Stack>
       </Container>
-    </ThemeProvider>
+    </div>
   );
 };
 

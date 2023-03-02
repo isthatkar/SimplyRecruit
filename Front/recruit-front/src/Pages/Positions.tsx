@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import PositionListItem from "../Components/Positions/PositionListItem";
-import Theme from "../Styles/Theme";
+import { Theme } from "../Styles/Theme";
 import { Field, JobLocation, Position, WorkTime } from "../Types/types";
 
 const Positions = () => {

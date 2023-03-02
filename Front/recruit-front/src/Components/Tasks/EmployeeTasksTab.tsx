@@ -1,10 +1,10 @@
-import { Box, Button, Stack, ThemeProvider, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import Theme from "../../Styles/Theme";
 import { Task } from "../../Types/types";
 import EmployeeTaskListItem from "./EmployeeTaskListItem";
 import AddTaskDialog from "./AddTaskDialog";
+import { ColumnStackCenter, RowStackCenter } from "../../Styles/Theme";
 
 const EmployeeTasksTab = (props: any) => {
   const [tasks, setTasks] = React.useState<Task[]>([]);
@@ -77,7 +77,7 @@ const EmployeeTasksTab = (props: any) => {
     getTasks();
   }, []);
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           display: "flex",
@@ -103,7 +103,7 @@ const EmployeeTasksTab = (props: any) => {
             alignItems: "center",
           }}
         >
-          <Stack
+          <ColumnStackCenter
             sx={{
               width: "80%",
               maxWidth: "900",
@@ -111,9 +111,6 @@ const EmployeeTasksTab = (props: any) => {
                 width: "100%",
               },
             }}
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
             spacing={1}
           >
             <Typography align="center" variant="h5" sx={{ mb: 5 }}>
@@ -128,22 +125,17 @@ const EmployeeTasksTab = (props: any) => {
                 time={task.deadline}
               ></EmployeeTaskListItem>
             ))}
-          </Stack>
+          </ColumnStackCenter>
         </Box>
       ) : (
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
+        <RowStackCenter spacing={1}>
           <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
           <Typography align="center" variant="h5">
             NO TASKS ADDED YET
           </Typography>
-        </Stack>
+        </RowStackCenter>
       )}
-    </ThemeProvider>
+    </div>
   );
 };
 

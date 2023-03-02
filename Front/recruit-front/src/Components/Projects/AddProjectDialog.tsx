@@ -16,9 +16,7 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-  ThemeProvider,
 } from "@mui/material";
-import Theme from "../../Styles/Theme";
 import { NordProduct } from "../../Types/types";
 import axios from "axios";
 
@@ -69,7 +67,7 @@ const AddProjectDialog = () => {
   };
 
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <ToastContainer />
 
       <Button variant="contained" onClick={handleClickOpen}>
@@ -139,7 +137,7 @@ const AddProjectDialog = () => {
           </DialogActions>
         </Box>
       </Dialog>
-    </ThemeProvider>
+    </div>
   );
 };
 

@@ -1,16 +1,16 @@
 import React from "react";
-import { PathRouteProps, Outlet } from "react-router";
+import { PathRouteProps, Navigate, Outlet } from "react-router";
+import ProtectedRouteMessage from "./ProtectedRouteMessage";
 
 interface Props extends PathRouteProps {
   isEmployee: boolean;
 }
 
-const ProtectedRoute = ({ isEmployee, ...routeProps }: Props) => {
-  console.log(isEmployee);
+const ProtectedRouteEmployee = ({ isEmployee, ...routeProps }: Props) => {
   if (isEmployee) {
     return <Outlet />;
   }
-  return <div>ONLY EMPLOYEES CAN SEE THIS</div>;
+  return <ProtectedRouteMessage></ProtectedRouteMessage>;
 };
 
-export default ProtectedRoute;
+export default ProtectedRouteEmployee;

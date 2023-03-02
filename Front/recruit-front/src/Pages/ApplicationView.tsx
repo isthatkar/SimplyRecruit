@@ -4,7 +4,6 @@ import {
   Card,
   Container,
   Grid,
-  IconButton,
   Stack,
   Tab,
   Tabs,
@@ -14,13 +13,12 @@ import {
 
 import TaskIcon from "@mui/icons-material/Task";
 import DownloadIcon from "@mui/icons-material/Download";
-import EditIcon from "@mui/icons-material/Edit";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Theme from "../Styles/Theme";
+import { Theme } from "../Styles/Theme";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { Application, Stage } from "../Types/types";
 import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";

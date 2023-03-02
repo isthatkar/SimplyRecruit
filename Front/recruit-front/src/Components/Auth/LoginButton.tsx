@@ -5,13 +5,11 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert/Alert";
-import { useCookies } from "react-cookie";
 import axios from "axios";
 
 export default function LoginButton() {
   const navigate = useNavigate();
   const [failed, setFailed] = useState(false);
-  const [cookies, setCookie] = useCookies(["refreshToken"]);
 
   const onSuccess = async (credentialResponse: CredentialResponse) => {
     setFailed(false);
@@ -32,7 +30,6 @@ export default function LoginButton() {
 
     if (response.status == 200) {
       const token = response.data;
-      const expires = new Date();
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${token.accessToken}`;
@@ -43,11 +40,6 @@ export default function LoginButton() {
       localStorage.setItem("email", token.email);
       console.log("refreshtoken");
       console.log(token.refreshToken);
-      expires.setTime(expires.getTime() + 5 * 60 * 60 * 1000);
-      setCookie("refreshToken", token.refreshToken, {
-        path: "/",
-        expires,
-      });
       return navigate("/");
     } else {
       setFailed(true);

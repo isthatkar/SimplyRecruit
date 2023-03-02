@@ -6,8 +6,10 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useStyles } from "../../Styles/Theme";
 
 const PositionListItem = (props: any) => {
+  const classes = useStyles();
   const navigate = useNavigate();
 
   function openPositionPage() {
@@ -16,16 +18,7 @@ const PositionListItem = (props: any) => {
   }
 
   return (
-    <ListItem
-      alignItems="flex-start"
-      sx={{
-        width: "100%",
-        borderRadius: 2,
-        "&:hover": {
-          backgroundColor: "#e0e2f2",
-        },
-      }}
-    >
+    <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
       <ListItemText
         disableTypography
         primary={

@@ -22,7 +22,6 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import Theme from "../Styles/Theme";
 import { Field, JobLocation, Position, WorkTime } from "../Types/types";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -121,7 +120,7 @@ const EditPositions = (props: any) => {
   };
 
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <ToastContainer />
 
       <Box
@@ -329,7 +328,7 @@ const EditPositions = (props: any) => {
           </Button>
         </Stack>
       </Container>
-    </ThemeProvider>
+    </div>
   );
 };
 

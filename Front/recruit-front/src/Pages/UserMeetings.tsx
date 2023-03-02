@@ -1,14 +1,13 @@
-import { Box, Button, Stack, ThemeProvider, Typography } from "@mui/material";
+import { Box, ThemeProvider, Typography } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import Theme from "../Styles/Theme";
+import { ColumnStackCenter, RowStackCenter, Theme } from "../Styles/Theme";
 import { Meeting } from "../Types/types";
-import { useNavigate, useParams } from "react-router-dom";
 import MeetingListItem from "../Components/Meetings/MeetingListItem";
 import MeetingCalendar from "../Components/Meetings/MeetingsCalendar";
 
 const UserMeetings = (props: any) => {
-  const [meetings, setMeetings] = React.useState<Meeting[]>([
+  const meetings = [
     {
       id: 1,
       title: "Team Meeting",
@@ -67,101 +66,10 @@ const UserMeetings = (props: any) => {
       dateString: "",
       timeString: "",
     },
-  ]);
+  ];
 
-  const navigate = useNavigate();
-
-  const { applicationId } = useParams();
-
-  const handleClickAdd = () => {
-    navigate(`/application/${applicationId}/addMeeting`);
-  };
-
-  const getMeetings = useCallback(async () => {
-    const optionsDate = {
-      weekday: "long" as const,
-      year: "numeric" as const,
-      month: "long" as const,
-      day: "numeric" as const,
-    };
-
-    const optionsTime = {
-      hour: "numeric" as const,
-      minute: "numeric" as const,
-      hour12: true,
-    };
-
-    const date = new Date("2023-03-01T09:30:00Z");
-
-    const upcomingMeetings: Meeting[] = [
-      {
-        id: 1,
-        title: "Team Meeting",
-        description: "Discuss team progress",
-        finalTime: "2023-03-01T09:30:00Z",
-        duration: 60,
-        schedulingUrl: "https://randomurl.com",
-        isFinalTime: false,
-        attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
-        meetingTimes: [
-          {
-            id: 1,
-            time: "2023-03-01T09:30:00Z",
-            selectedAttendees: ["Bob", "Alice"],
-          },
-          {
-            id: 2,
-            time: "2023-03-01T09:30:00Z",
-            selectedAttendees: [],
-          },
-          {
-            id: 3,
-            time: "2023-03-01T09:30:00Z",
-            selectedAttendees: ["Bob"],
-          },
-        ],
-        dateString: date.toLocaleDateString("en-US", optionsDate),
-        timeString: date.toLocaleTimeString("en-US", optionsTime),
-      },
-      {
-        id: 2,
-        title: "Team Meeting",
-        description: "Discuss team progress",
-        finalTime: "2023-03-01T09:30:00Z",
-        duration: 60,
-        schedulingUrl: "https://randomurl.com",
-        isFinalTime: true,
-        attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
-        meetingTimes: [
-          {
-            id: 1,
-            time: "2023-03-02T09:30:00Z",
-            selectedAttendees: ["Bob", "Alice"],
-          },
-          {
-            id: 1,
-            time: "2023-03-01T09:30:00Z",
-            selectedAttendees: [],
-          },
-          {
-            id: 1,
-            time: "2023-03-01T09:30:00Z",
-            selectedAttendees: ["Bob"],
-          },
-        ],
-        dateString: date.toLocaleDateString("en-US", optionsDate),
-        timeString: date.toLocaleTimeString("en-US", optionsTime),
-      },
-    ];
-
-    setMeetings(upcomingMeetings);
-  }, []);
-
-  useEffect(() => {
-    getMeetings();
-  }, []);
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           display: "flex",
@@ -180,7 +88,7 @@ const UserMeetings = (props: any) => {
             alignItems: "center",
           }}
         >
-          <Stack
+          <ColumnStackCenter
             sx={{
               width: "80%",
               maxWidth: "900",
@@ -188,38 +96,23 @@ const UserMeetings = (props: any) => {
                 width: "100%",
               },
             }}
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
             spacing={1}
           >
             <Typography align="center" variant="h2" sx={{ mb: 5 }}>
               Upcoming meetings
             </Typography>
             {meetings.map((meet) => (
-              <MeetingListItem
-                id={meet.id}
-                key={meet.id}
-                title={meet.title}
-                description={meet.description}
-                time={meet.isFinalTime ? meet.dateString : ""}
-                final={meet.isFinalTime}
-              ></MeetingListItem>
+              <MeetingListItem meet={meet} key={meet.id}></MeetingListItem>
             ))}
-          </Stack>
+          </ColumnStackCenter>
         </Box>
       ) : (
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
+        <RowStackCenter spacing={1}>
           <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
           <Typography align="center" variant="h5">
             NO UPCOMING MEETINGS FOR THIS APPLICATION
           </Typography>
-        </Stack>
+        </RowStackCenter>
       )}
       <Box
         sx={{
@@ -231,7 +124,7 @@ const UserMeetings = (props: any) => {
       >
         <MeetingCalendar meetings={meetings}></MeetingCalendar>
       </Box>
-    </ThemeProvider>
+    </div>
   );
 };
 

@@ -1,6 +1,4 @@
 import * as React from "react";
-import { ThemeProvider } from "@mui/material/styles";
-import Theme from "../Styles/Theme";
 import { Application, Position, Stage } from "../Types/types";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
@@ -77,99 +75,96 @@ export default function EnhancedTable() {
   };
 
   return (
-    <ThemeProvider theme={Theme}>
-      <Box sx={{ overflowX: "auto", mt: 8 }}>
-        <Stack justifyContent="center" alignItems="center">
-          <Typography variant="h2" align="center" gutterBottom>
-            {position?.name} Applicants
-          </Typography>
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Stack
-              direction="row"
-              justifyContent="center"
-              spacing={1}
-              sx={{ my: 4, height: "auto" }}
-            >
-              {Object.values(Stage)
-                .filter((x) => parseInt(x as string) >= 0)
-                .map((stageIndex: any) => (
-                  <Grid item key={stageIndex}>
-                    <Paper sx={{ p: 1, width: 160 }}>
-                      <Box sx={{ height: "60px" }}>
-                        <Typography variant="h6" gutterBottom>
-                          {GetStateLabel(stageIndex)}
-                        </Typography>
-                      </Box>
+    <Box sx={{ overflowX: "auto", mt: 8 }}>
+      <Stack>
+        <Typography variant="h2" align="center" gutterBottom>
+          {position?.name} Applicants
+        </Typography>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ my: 4, height: "auto", mx: "auto" }}
+          >
+            {Object.values(Stage)
+              .filter((x) => parseInt(x as string) >= 0)
+              .map((stageIndex: any) => (
+                <Grid item key={stageIndex}>
+                  <Paper sx={{ p: 1, width: 160 }}>
+                    <Box sx={{ height: "60px" }}>
+                      <Typography variant="h6" gutterBottom>
+                        {GetStateLabel(stageIndex)}
+                      </Typography>
+                    </Box>
 
-                      <Droppable droppableId={stageIndex.toString()}>
-                        {(provided: any, snapshot: any) => (
-                          <Box
-                            ref={provided.innerRef}
-                            sx={{
-                              backgroundColor: snapshot.isDraggingOver
-                                ? "#e0e2f2"
-                                : "grey.100",
-                              minHeight: "50vh",
-                            }}
-                            {...provided.droppableProps}
-                          >
-                            {allApplications
-                              .filter((app) => app.stage === stageIndex)
-                              .map((app, index) => (
-                                <Draggable
-                                  key={app.id.toString()}
-                                  draggableId={app.id.toString()}
-                                  index={index}
-                                >
-                                  {(provided: any, snapshot: any) => (
-                                    <Paper
-                                      component={Link}
-                                      to={`/application/${app.id}`}
-                                      sx={{
+                    <Droppable droppableId={stageIndex.toString()}>
+                      {(provided: any, snapshot: any) => (
+                        <Box
+                          ref={provided.innerRef}
+                          sx={{
+                            backgroundColor: snapshot.isDraggingOver
+                              ? "#e0e2f2"
+                              : "grey.100",
+                            minHeight: "50vh",
+                          }}
+                          {...provided.droppableProps}
+                        >
+                          {allApplications
+                            .filter((app) => app.stage === stageIndex)
+                            .map((app, index) => (
+                              <Draggable
+                                key={app.id.toString()}
+                                draggableId={app.id.toString()}
+                                index={index}
+                              >
+                                {(provided: any, snapshot: any) => (
+                                  <Paper
+                                    component={Link}
+                                    to={`/application/${app.id}`}
+                                    sx={{
+                                      textDecoration: "none",
+                                      "&:hover": {
                                         textDecoration: "none",
-                                        "&:hover": {
-                                          textDecoration: "none",
-                                        },
+                                      },
+                                    }}
+                                  >
+                                    <Box
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      sx={{
+                                        mb: 1,
+                                        minHeight: "60px",
+                                        borderRadius: 1,
+
+                                        backgroundColor: snapshot.isDragging
+                                          ? "#6c7bf0"
+                                          : "#a5adf5",
+                                        ...provided.draggableProps.style,
                                       }}
                                     >
-                                      <Box
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        sx={{
-                                          mb: 1,
-                                          minHeight: "60px",
-                                          borderRadius: 1,
-
-                                          backgroundColor: snapshot.isDragging
-                                            ? "#6c7bf0"
-                                            : "#a5adf5",
-                                          ...provided.draggableProps.style,
-                                        }}
+                                      <PersonIcon />
+                                      <Typography
+                                        variant="body1"
+                                        sx={{ my: 1 }}
                                       >
-                                        <PersonIcon />
-                                        <Typography
-                                          variant="body1"
-                                          sx={{ my: 1 }}
-                                        >
-                                          {app.fullName}
-                                        </Typography>
-                                      </Box>
-                                    </Paper>
-                                  )}
-                                </Draggable>
-                              ))}
-                            {provided.placeholder}
-                          </Box>
-                        )}
-                      </Droppable>
-                    </Paper>
-                  </Grid>
-                ))}
-            </Stack>
-          </DragDropContext>
-        </Stack>
-      </Box>
-    </ThemeProvider>
+                                        {app.fullName}
+                                      </Typography>
+                                    </Box>
+                                  </Paper>
+                                )}
+                              </Draggable>
+                            ))}
+                          {provided.placeholder}
+                        </Box>
+                      )}
+                    </Droppable>
+                  </Paper>
+                </Grid>
+              ))}
+          </Stack>
+        </DragDropContext>
+      </Stack>
+    </Box>
   );
 }

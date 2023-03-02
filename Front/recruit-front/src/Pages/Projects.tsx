@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import EditProjectDialog from "../Components/Projects/EditProjectDialog";
 import projectImages from "../img/Projects/projectImages";
-import Theme from "../Styles/Theme";
+import { Theme } from "../Styles/Theme";
 import { NordProduct, Project } from "../Types/types";
 
 const Projects = () => {

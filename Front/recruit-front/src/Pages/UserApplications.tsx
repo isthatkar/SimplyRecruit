@@ -8,7 +8,6 @@ import {
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import ApplicationListItem from "../Components/Applications/ApplicationListItem";
-import Theme from "../Styles/Theme";
 import { Application } from "../Types/types";
 
 const UserApplications = () => {
@@ -24,7 +23,7 @@ const UserApplications = () => {
     getUserApplications();
   }, []);
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -62,7 +61,7 @@ const UserApplications = () => {
           ))}
         </Stack>
       </Container>
-    </ThemeProvider>
+    </div>
   );
 };
 

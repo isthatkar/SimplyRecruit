@@ -10,12 +10,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
 import { ThemeProvider } from "@mui/material";
-import Theme from "../../Styles/Theme";
+import { Theme } from "../../Styles/Theme";
 import { Project } from "../../Types/types";
 import axios from "axios";
 
 const EditProjectDialog = (props: any) => {
-  const [projectId, setProjectId] = React.useState(props.projectId);
+  const projectId = props.projectId;
   const [project, setProject] = React.useState<Project>();
 
   const [open, setOpen] = React.useState(false);

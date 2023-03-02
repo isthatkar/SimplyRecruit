@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import Theme from "../Styles/Theme";
+import { Theme } from "../Styles/Theme";
 
 type MeetingFormData = {
   title: string;

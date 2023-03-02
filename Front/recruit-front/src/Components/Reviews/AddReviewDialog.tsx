@@ -10,7 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
 import { ThemeProvider } from "@mui/material";
-import Theme from "../../Styles/Theme";
+import { Theme } from "../../Styles/Theme";
 import IconSelector from "./RatingSelector";
 
 const AddReviewDialog = (props: any) => {

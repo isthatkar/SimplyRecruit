@@ -6,11 +6,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
-import { ThemeProvider } from "@mui/material";
-import Theme from "../../Styles/Theme";
 
 const AddTaskDialog = (props: any) => {
   const [open, setOpen] = React.useState(false);
@@ -28,7 +26,7 @@ const AddTaskDialog = (props: any) => {
   };
 
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <ToastContainer />
 
       <Button size="medium" variant="contained" onClick={handleClickOpen}>
@@ -101,7 +99,7 @@ const AddTaskDialog = (props: any) => {
           </DialogActions>
         </Box>
       </Dialog>
-    </ThemeProvider>
+    </div>
   );
 };
 
