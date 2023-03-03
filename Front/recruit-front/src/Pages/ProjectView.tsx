@@ -154,7 +154,7 @@ const Projects = () => {
           ></Stack>
         </Container>
       </Box>
-      <Container sx={{ py: 1 }} maxWidth="md">
+      <Container sx={{ py: 1, mb: 8 }} maxWidth="md">
         <Stack
           direction="column"
           justifyContent="center"

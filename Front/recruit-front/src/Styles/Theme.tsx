@@ -94,6 +94,13 @@ export const ColumnStackCenter = styled(Stack)({
   alignItems: "center",
 });
 
+export const ColumnStackStrech = styled(Stack)({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "strech",
+});
+
 export const CenteredContainer = styled(Container)({
   display: "flex",
   justifyContent: "center",

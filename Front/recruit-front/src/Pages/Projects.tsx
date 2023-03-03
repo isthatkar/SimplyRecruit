@@ -1,22 +1,16 @@
-import { Skeleton, ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
-import EditProjectDialog from "../Components/Projects/EditProjectDialog";
+import ProjectListItem from "../Components/Projects/ProjectListItem";
 import projectImages from "../img/Projects/projectImages";
-import { Theme } from "../Styles/Theme";
-import { NordProduct, Project } from "../Types/types";
+import { ColumnStackStrech, Theme } from "../Styles/Theme";
+import { Project } from "../Types/types";
 
 const Projects = () => {
   const navigate = useNavigate();
@@ -43,13 +37,8 @@ const Projects = () => {
     const isEmployee = roles?.includes("Employee");
     setIsEmployee(isEmployee ? isEmployee : false);
   }, []);
-
-  const onView = (ColId: number) => {
-    return navigate(`/projects/${ColId}`);
-  };
-
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -87,70 +76,15 @@ const Projects = () => {
         </Container>
       </Box>
       <Container sx={{ py: 8 }} maxWidth="md">
-        <Grid container spacing={4}>
-          {allProjects.map((card) => (
-            <Grid item key={card.id} xs={12} sm={6} md={4}>
-              <Card
-                sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  sx={{
-                    pt: "5%",
-
-                    height: "250px", // set the height of the CardMedia component
-                    objectFit: "cover", // set the object-fit property to cover the image
-                  }}
-                  image={card.image}
-                  alt="random"
-                  onLoad={(e) => {
-                    e.currentTarget.style.opacity = "1"; // set the opacity to 1 when the image is loaded
-                  }}
-                  style={{ opacity: 0 }} // set the opacity to 0 initially
-                />
-
-                {card.image ? null : (
-                  <Skeleton
-                    variant="rectangular"
-                    sx={{ height: 250, borderRadius: "10px" }}
-                  />
-                )}
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h1">
-                    {NordProduct[card.product]}
-                  </Typography>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {card.name}
-                  </Typography>
-                  <Typography>{card.description}</Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    color="primary"
-                    onClick={() => onView(card.id)}
-                  >
-                    View
-                  </Button>
-                  {isEmployee ? (
-                    <EditProjectDialog
-                      projectId={card.id}
-                      email={card.responsiblePersonEmail}
-                    ></EditProjectDialog>
-                  ) : (
-                    ""
-                  )}
-                </CardActions>
-              </Card>
-            </Grid>
+        <ColumnStackStrech spacing={3} alignItems="strech">
+          {allProjects.map((pr) => (
+            <div key={pr.id}>
+              <ProjectListItem project={pr} key={pr.id}></ProjectListItem>
+            </div>
           ))}
-        </Grid>
+        </ColumnStackStrech>
       </Container>
-    </ThemeProvider>
+    </div>
   );
 };
 

@@ -20,7 +20,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Theme } from "../Styles/Theme";
 import ReviewsIcon from "@mui/icons-material/Reviews";
-import { Application, Stage } from "../Types/types";
+import { Application, Resume } from "../Types/types";
 import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
 import ReviewsTab from "../Components/Reviews/ReviewsTab";
 import EmployeeTasksTab from "../Components/Tasks/EmployeeTasksTab";
@@ -55,15 +55,53 @@ function TabPanel(props: TabPanelProps) {
 const ApplicationView = () => {
   const { applicationId } = useParams();
   const [application, setApplication] = useState<Application>();
+  const [resume, setResume] = useState<Resume>();
   const getApplication = useCallback(async () => {
     const response = await axios.get(`applications/${applicationId}`);
     const applications = response.data;
     setApplication(applications);
   }, []);
 
+  const getResume = useCallback(async () => {
+    try {
+      const response = await axios.get(`applications/${applicationId}/resume`);
+
+      if (response.status === 200) {
+        const resume = response.data;
+        setResume(resume);
+      } else {
+        console.error("Error downloading file:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  }, []);
+
+  const downloadFile = () => {
+    if (resume) {
+      const filename = resume.fileName;
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(
+        new Blob([resume.file], { type: "application/octet-stream" })
+      );
+      downloadLink.download = filename;
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+
+      downloadLink.click();
+
+      document.body.removeChild(downloadLink);
+    }
+  };
+
   useEffect(() => {
     getApplication();
+    getResume();
   }, []);
+
+  const handleDownloadClick = () => {
+    downloadFile();
+  };
 
   const [value, setValue] = React.useState(0);
 
@@ -163,7 +201,7 @@ const ApplicationView = () => {
                 {application ? GetStateLabel(application.stage) : ""}
               </Typography>
             </Stack>
-            <Button>
+            <Button disabled={!resume} onClick={handleDownloadClick}>
               <DownloadIcon></DownloadIcon>
               Download resume
             </Button>

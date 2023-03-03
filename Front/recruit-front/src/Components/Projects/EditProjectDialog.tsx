@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
-import { ThemeProvider } from "@mui/material";
+import { ListItemButton, ThemeProvider } from "@mui/material";
 import { Theme } from "../../Styles/Theme";
 import { Project } from "../../Types/types";
 import axios from "axios";
@@ -72,9 +72,7 @@ const EditProjectDialog = (props: any) => {
     <ThemeProvider theme={Theme}>
       <ToastContainer />
 
-      <Button size="small" onClick={handleClickOpen}>
-        Edit
-      </Button>
+      <ListItemButton onClick={handleClickOpen}>Edit</ListItemButton>
       <Dialog open={open} onClose={handleClose}>
         <Box
           component="form"

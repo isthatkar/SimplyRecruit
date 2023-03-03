@@ -80,6 +80,11 @@ export interface Application {
   positionName: string;
 }
 
+export interface Resume {
+  file: Uint8Array;
+  fileName: string;
+}
+
 export enum TaskStatus {
   Assigned,
   Completed,
