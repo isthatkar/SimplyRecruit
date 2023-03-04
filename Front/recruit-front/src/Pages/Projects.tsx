@@ -6,7 +6,6 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import ProjectListItem from "../Components/Projects/ProjectListItem";
-import projectImages from "../img/Projects/projectImages";
 import { ColumnStackStrech } from "../Styles/Theme";
 import { Project } from "../Types/types";
 

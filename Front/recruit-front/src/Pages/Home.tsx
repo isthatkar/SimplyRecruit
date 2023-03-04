@@ -1,28 +1,63 @@
-import { Grid, Typography, Button } from "@mui/material";
+import { Grid, Typography, Button, Box, Stack } from "@mui/material";
 import React from "react";
-import { useStyles } from "../Styles/Theme";
-import image from "../img/Projects/project4.png";
+import image from "../img/Projects/homepage.jpg";
 
 const Home = () => {
-  const classes = useStyles();
-
   return (
-    <Grid container>
-      <Grid item xs={12} md={6} className={classes.imageContainer}>
-        <img src={image} alt="background" className={classes.image} />
+    <Grid
+      container
+      component="main"
+      sx={{ minHeight: "90vh", overflowX: "auto" }}
+    >
+      <Grid xs={false} sm={false} md={7} alignItems="bottom" sx={{ mt: 20 }}>
+        <Stack alignItems="bottom">
+          <img src={image}></img>
+        </Stack>
       </Grid>
-      <Grid item xs={12} md={6} className={classes.contentContainer}>
-        <Typography variant="h4" component="h1" className={classes.title}>
-          Welcome to our recruiting website!
-        </Typography>
-        <Typography variant="body1" color="textSecondary" align="center">
-          We help connect top talent with leading companies. Whether youre an
-          employer looking to hire, or a job seeker looking for your next
-          opportunity, were here to help.
-        </Typography>
-        <Button variant="contained" color="primary" className={classes.button}>
-          Learn More
-        </Button>
+      <Grid item xs={12} sm={12} md={5} justifyContent="center" container>
+        <Stack
+          direction="column"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box
+            sx={{
+              width: "auto",
+              mt: 16,
+              heigt: "*",
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "left",
+            }}
+          >
+            <Typography component="h2" variant="h1">
+              Recruit simply.
+            </Typography>
+            <Typography variant="subtitle1" sx={{ mt: 8 }}>
+              Searching for a job or recruiting top talent can be a
+              time-consuming and frustrating process. Our platform simplifies
+              the process, making it easy for job seekers to find and apply for
+              jobs and for employers to find and hire top talent. Say goodbye to
+              the hassle with SimplyRecruit.
+            </Typography>
+            <Button sx={{ mt: 4 }} size="large" variant="outlined">
+              Login
+            </Button>
+          </Box>
+
+          <Box
+            sx={{
+              width: "auto",
+              heigt: "*",
+              mx: "auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "bottom",
+            }}
+          ></Box>
+        </Stack>
       </Grid>
     </Grid>
   );

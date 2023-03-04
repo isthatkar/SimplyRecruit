@@ -8,13 +8,14 @@ import Typography from "@mui/material/Typography";
 import image from "../img/Projects/project9.png";
 import LoginButton from "../Components/Auth/LoginButton";
 import personsImage from "../img/Projects/persons.png";
+import { Stack } from "@mui/material";
 
 const Login = () => {
   return (
     <Grid
       container
       component="main"
-      sx={{ minHeight: "95vh", overflowX: "auto" }}
+      sx={{ minHeight: "90vh", overflowX: "auto" }}
     >
       <CssBaseline />
       <Grid
@@ -29,41 +30,45 @@ const Login = () => {
           backgroundPosition: "center",
         }}
       />
-      <Grid item xs={12} sm={12} md={5} container>
-        <Box
-          sx={{
-            width: "auto",
-            mt: 16,
-            heigt: "*",
-            mx: "auto",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "top",
-          }}
+      <Grid item xs={12} sm={12} md={5} justifyContent="center" container>
+        <Stack
+          direction="column"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <Avatar sx={{ m: 1, backgroundColor: "#1a237e" }}>
-            <LockOpenIcon />
-          </Avatar>
-          <Typography component="h1" variant="h3">
-            Sign in
-          </Typography>
-          <LoginButton></LoginButton>
-        </Box>
-        <Box
-          sx={{
-            width: "auto",
-            mt: 16,
-            heigt: "*",
-            mx: "auto",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "bottom",
-          }}
-        >
-          <img src={personsImage}></img>
-        </Box>
+          <Box
+            sx={{
+              width: "auto",
+              mt: 16,
+              heigt: "*",
+              mx: "auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ m: 1, backgroundColor: "#1a237e" }}>
+              <LockOpenIcon />
+            </Avatar>
+            <Typography component="h1" variant="h3">
+              Sign in
+            </Typography>
+            <LoginButton></LoginButton>
+          </Box>
+          <Box
+            sx={{
+              width: "auto",
+              heigt: "*",
+              mx: "auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "bottom",
+            }}
+          >
+            <img height="350px" src={personsImage}></img>
+          </Box>
+        </Stack>
       </Grid>
     </Grid>
   );
