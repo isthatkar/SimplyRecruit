@@ -53,8 +53,7 @@ const ProjectListItem = (props: any) => {
       />
       <div>
         <ListItemButton onClick={openProjectPage}>More details</ListItemButton>
-      </div>
-      <div>
+
         {isEmployee ? (
           <EditProjectDialog
             projectId={props.project.id}

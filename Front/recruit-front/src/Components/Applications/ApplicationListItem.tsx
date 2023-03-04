@@ -5,10 +5,16 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useStyles } from "../../Styles/Theme";
 import { Stage } from "../../Types/types";
 
 const ApplicationListItem = (props: any) => {
+  const navigate = useNavigate();
+
+  const handleMoreDetails = () => {
+    return navigate(`/candidateApplication/${props.id}`);
+  };
   const classes = useStyles();
   return (
     <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
@@ -31,7 +37,9 @@ const ApplicationListItem = (props: any) => {
         }
       />
       <div>
-        <ListItemButton>More details</ListItemButton>
+        <ListItemButton onClick={handleMoreDetails}>
+          More details
+        </ListItemButton>
       </div>
     </ListItem>
   );

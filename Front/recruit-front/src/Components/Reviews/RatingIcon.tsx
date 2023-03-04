@@ -1,12 +1,6 @@
 import React from "react";
 import { Avatar } from "@mui/material";
-import {
-  MoodBadOutlined as MoodBadOutlinedIcon,
-  SentimentDissatisfiedOutlined as SentimentDissatisfiedOutlinedIcon,
-  SentimentNeutralOutlined as SentimentNeutralOutlinedIcon,
-  SentimentSatisfiedOutlined as SentimentSatisfiedOutlinedIcon,
-  SentimentVerySatisfiedOutlined as SentimentVerySatisfiedOutlinedIcon,
-} from "@mui/icons-material";
+import { MoodBadOutlined as MoodBadOutlinedIcon } from "@mui/icons-material";
 
 type Props = {
   value: number;
@@ -24,7 +18,11 @@ const RatingIcon = ({ value, selected, onClick }: Props) => {
   const backgroundColor = selected ? "#3f51b5" : getBackgroundColor(value);
 
   return (
-    <Avatar sx={{ backgroundColor }} onClick={handleClick}>
+    <Avatar
+      className="avatar"
+      sx={{ backgroundColor, height: "50px", width: "50px" }}
+      onClick={handleClick}
+    >
       {getIcon(value)}
     </Avatar>
   );
@@ -33,13 +31,13 @@ const RatingIcon = ({ value, selected, onClick }: Props) => {
 const getBackgroundColor = (value: number): string => {
   switch (value) {
     case 1:
-      return "#e3e6fd";
+      return "#a4bdff";
     case 2:
-      return "#d1d6fb";
+      return "#8facff";
     case 3:
-      return "#a5adf5";
+      return "#7a9bff";
     case 4:
-      return "#6c7bf0";
+      return "#5375ff";
     case 5:
       return "#3446fd";
     default:
@@ -50,15 +48,15 @@ const getBackgroundColor = (value: number): string => {
 const getIcon = (value: number) => {
   switch (value) {
     case 1:
-      return <MoodBadOutlinedIcon />;
+      return <i className="fa-solid fa-face-grimace"></i>;
     case 2:
-      return <SentimentDissatisfiedOutlinedIcon />;
+      return <i className="fa-solid fa-face-rolling-eyes"></i>;
     case 3:
-      return <SentimentNeutralOutlinedIcon />;
+      return <i className="fa-solid fa-face-meh-blank"></i>;
     case 4:
-      return <SentimentSatisfiedOutlinedIcon />;
+      return <i className="fa-solid fa-face-grin-tongue-wink"></i>;
     case 5:
-      return <SentimentVerySatisfiedOutlinedIcon />;
+      return <i className="fa-regular fa-face-grin-hearts"></i>;
     default:
       return <MoodBadOutlinedIcon />;
   }

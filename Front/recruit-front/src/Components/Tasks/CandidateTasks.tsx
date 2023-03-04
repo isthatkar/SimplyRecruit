@@ -1,12 +1,10 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Task } from "../../Types/types";
-import EmployeeTaskListItem from "./EmployeeTaskListItem";
-import AddTaskDialog from "./AddTaskDialog";
-import { ColumnStackCenter, RowStackCenter } from "../../Styles/Theme";
+import { ColumnStackCenter } from "../../Styles/Theme";
+import CandidateTaskListItem from "./CandidateTaskListItem";
 
-const EmployeeTasksTab = (props: any) => {
+const CandidateTasks = (props: any) => {
   const [tasks, setTasks] = React.useState<Task[]>([]);
 
   const getTasks = useCallback(async () => {
@@ -16,8 +14,8 @@ const EmployeeTasksTab = (props: any) => {
         title: "Create a Facebook Advertising Campaign",
         goal: "Drive traffic to the company website and increase conversions for a specific product",
         state: 0,
-        fileName: "",
-        url: "",
+        fileName: "sdws",
+        url: "https://google.com",
         fileData: undefined,
         deadline: new Date(),
       },
@@ -27,7 +25,7 @@ const EmployeeTasksTab = (props: any) => {
         goal: "Drive traffic to the company website and increase conversions for a specific product",
         state: 1,
         fileName: "",
-        url: "",
+        url: "sdsdsd",
         fileData: undefined,
         deadline: new Date(),
       },
@@ -35,9 +33,9 @@ const EmployeeTasksTab = (props: any) => {
         id: 2,
         title: "Create a Facebook Advertising Campaign",
         goal: "Drive traffic to the company website and increase conversions for a specific product",
-        state: 3,
+        state: 2,
         fileName: "",
-        url: "",
+        url: "asdsad",
         fileData: undefined,
         deadline: new Date(),
       },
@@ -51,26 +49,10 @@ const EmployeeTasksTab = (props: any) => {
   }, []);
   return (
     <div>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          mb: 5,
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={3}
-        >
-          <AddTaskDialog />
-        </Stack>
-      </Box>
-
       {tasks.length > 0 ? (
         <Box
           sx={{
+            mt: 6,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -86,30 +68,22 @@ const EmployeeTasksTab = (props: any) => {
             }}
             spacing={1}
           >
-            <Typography align="center" variant="h5" sx={{ mb: 5 }}>
-              Candidate tasks
+            <Typography variant="h5" sx={{ mb: 5 }}>
+              Your tasks for this position
             </Typography>
             {tasks.map((task) => (
-              <EmployeeTaskListItem
+              <CandidateTaskListItem
                 key={task.id}
-                title={task.title}
-                description={task.goal}
-                state={task.state}
-                time={task.deadline}
-              ></EmployeeTaskListItem>
+                task={task}
+              ></CandidateTaskListItem>
             ))}
           </ColumnStackCenter>
         </Box>
       ) : (
-        <RowStackCenter spacing={1}>
-          <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
-          <Typography align="center" variant="h5">
-            NO TASKS ADDED YET
-          </Typography>
-        </RowStackCenter>
+        ""
       )}
     </div>
   );
 };
 
-export default EmployeeTasksTab;
+export default CandidateTasks;

@@ -7,7 +7,7 @@ const ReviewListItem = (props: any) => {
   const classes = useStyles();
   return (
     <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
-      <ListItemAvatar>
+      <ListItemAvatar sx={{ mr: 2 }}>
         <RatingIcon value={props.rating} selected={false} />
       </ListItemAvatar>
       <ListItemText primary={props.comment} secondary={props.email} />

@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -75,7 +74,7 @@ const Projects = () => {
           </Stack>
         </Container>
       </Box>
-      <Container sx={{ py: 8 }} maxWidth="md">
+      <Container>
         <ColumnStackStrech spacing={3} alignItems="strech">
           {allProjects.map((pr) => (
             <div key={pr.id}>

@@ -54,18 +54,19 @@ export interface Task {
   id: number;
   title: string;
   goal: string;
-  instructions: string;
-  deliverables: string;
-  criteriaForEval: string;
   state: TaskStatus;
   deadline: Date;
+  fileName: string | undefined;
+  url: string | undefined;
+  fileData: Uint8Array | undefined;
 }
 
 export interface TaskAnswer {
   id: number;
-  comment: string;
-  fileName: string;
+  comment: string | undefined;
+  fileName: string | undefined;
   url: string | undefined;
+  fileData: Uint8Array | undefined;
 }
 
 export interface Application {

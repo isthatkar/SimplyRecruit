@@ -1,10 +1,6 @@
 import {
   Box,
-  Button,
-  Card,
   Container,
-  Grid,
-  Stack,
   Tab,
   Tabs,
   ThemeProvider,
@@ -12,7 +8,6 @@ import {
 } from "@mui/material";
 
 import TaskIcon from "@mui/icons-material/Task";
-import DownloadIcon from "@mui/icons-material/Download";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
@@ -24,7 +19,7 @@ import { Application, Resume } from "../Types/types";
 import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
 import ReviewsTab from "../Components/Reviews/ReviewsTab";
 import EmployeeTasksTab from "../Components/Tasks/EmployeeTasksTab";
-import GetStateLabel from "../Helpers/ApplicationStateToText";
+import ApplicationCard from "../Components/Applications/ApplicationCard";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,8 +49,10 @@ function TabPanel(props: TabPanelProps) {
 
 const ApplicationView = () => {
   const { applicationId } = useParams();
+  const [value, setValue] = React.useState(0);
   const [application, setApplication] = useState<Application>();
   const [resume, setResume] = useState<Resume>();
+
   const getApplication = useCallback(async () => {
     const response = await axios.get(`applications/${applicationId}`);
     const applications = response.data;
@@ -77,33 +74,10 @@ const ApplicationView = () => {
     }
   }, []);
 
-  const downloadFile = () => {
-    if (resume) {
-      const filename = resume.fileName;
-      const downloadLink = document.createElement("a");
-      downloadLink.href = URL.createObjectURL(
-        new Blob([resume.file], { type: "application/octet-stream" })
-      );
-      downloadLink.download = filename;
-      downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink);
-
-      downloadLink.click();
-
-      document.body.removeChild(downloadLink);
-    }
-  };
-
   useEffect(() => {
     getApplication();
     getResume();
   }, []);
-
-  const handleDownloadClick = () => {
-    downloadFile();
-  };
-
-  const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -132,81 +106,10 @@ const ApplicationView = () => {
         </Container>
       </Box>
       <TabPanel value={value} index={0}>
-        <Card>
-          <Typography align="center" variant="h4" sx={{ mt: 6 }}>
-            {application?.positionName}
-          </Typography>
-          <Stack
-            direction="row"
-            justifyContent="space-evenly"
-            alignItems="stretch"
-            spacing={{ xs: 2, sm: 2, md: 4 }}
-            sx={{ flexWrap: "wrap", my: 6 }}
-          >
-            <Grid alignItems="center">
-              <Typography variant="subtitle2">Full name</Typography>
-              <Typography variant="body1">{application?.fullName}</Typography>
-            </Grid>
-
-            <Grid
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Typography variant="subtitle2">Contact email</Typography>
-              <Typography variant="body1">
-                {application?.contactEmail}
-              </Typography>
-            </Grid>
-            <Grid>
-              <Typography variant="subtitle2">Phone number</Typography>
-              <Typography variant="body1">
-                {application?.phoneNumber}
-              </Typography>
-            </Grid>
-            <Grid>
-              <Typography variant="subtitle2">Profile URL</Typography>
-              <Typography variant="body1">
-                {application?.profileUrl ? application?.profileUrl : "-"}
-              </Typography>
-            </Grid>
-          </Stack>
-
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mb: 8 }}
-          >
-            <Typography variant="h5">Cover letter</Typography>
-            <Typography>{application?.coverLetter}</Typography>
-          </Grid>
-
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-around"
-            alignItems="stretch"
-            sx={{ mb: 8 }}
-          >
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <Typography variant="h5">Current stage:</Typography>
-              <Typography variant="h6">
-                {application ? GetStateLabel(application.stage) : ""}
-              </Typography>
-            </Stack>
-            <Button disabled={!resume} onClick={handleDownloadClick}>
-              <DownloadIcon></DownloadIcon>
-              Download resume
-            </Button>
-          </Grid>
-        </Card>
+        <ApplicationCard
+          application={application}
+          resume={resume}
+        ></ApplicationCard>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ApplicationMeetings></ApplicationMeetings>

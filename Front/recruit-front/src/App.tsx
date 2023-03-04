@@ -23,6 +23,7 @@ import UserMeetings from "./Pages/UserMeetings";
 import { ThemeProvider } from "@emotion/react";
 import { Theme } from "./Styles/Theme";
 import ProtectedRouteEmployee from "./Components/ProtectedRouteEmployee";
+import CandidateApplicationView from "./Components/Applications/CandidateApplicationView";
 
 const token = localStorage.getItem("accessToken");
 const roles = localStorage.getItem("roles");
@@ -134,6 +135,15 @@ function App() {
               element={<ProtectedRoute isAuth={isAuth} />}
             >
               <Route path="/userMeetings" element={<UserMeetings />} />
+            </Route>
+            <Route
+              path="/candidateApplication/:applicationId"
+              element={<ProtectedRoute isAuth={isAuth} />}
+            >
+              <Route
+                path="/candidateApplication/:applicationId"
+                element={<CandidateApplicationView />}
+              />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -55,6 +55,7 @@ const UserApplications = () => {
             <ApplicationListItem
               key={application.id}
               email={application.contactEmail}
+              id={application.id}
               stage={application.stage}
               positionName={application.positionName}
             ></ApplicationListItem>

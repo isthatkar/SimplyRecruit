@@ -11,7 +11,6 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
-import { ThemeProvider } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 const Nav = () => {
@@ -131,7 +130,7 @@ const Nav = () => {
                   component="a"
                   href="/positions"
                 >
-                  <Typography textAlign="center">Positions</Typography>
+                  <Typography textAlign="center"> open Positions</Typography>
                 </MenuItem>
               ) : (
                 ""
@@ -153,7 +152,7 @@ const Nav = () => {
                   component="a"
                   href="/userMeetings"
                 >
-                  <Typography textAlign="center">Meetings</Typography>
+                  <Typography textAlign="center">my Meetings</Typography>
                 </MenuItem>
               ) : (
                 ""
@@ -210,7 +209,7 @@ const Nav = () => {
                 component="a"
                 href="/positions"
               >
-                Positions
+                open Positions
               </Button>
             ) : (
               ""
@@ -232,7 +231,7 @@ const Nav = () => {
                 component="a"
                 href="/userMeetings"
               >
-                Meetings
+                my Meetings
               </Button>
             ) : (
               ""

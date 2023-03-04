@@ -7,10 +7,15 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useStyles } from "../../Styles/Theme";
-import { TaskStatus } from "../../Types/types";
+import { Task, TaskStatus } from "../../Types/types";
+import AddTaskAnswerDialog from "./AddTaskAnswerDialog";
 import TaskStateChip from "./TaskStateChip";
+import TaskViewModal from "./TaskViewModal";
 
-const EmployeeTaskListItem = (props: any) => {
+interface taskListItemProps {
+  task: Task;
+}
+const CandidateTaskListItem = ({ task }: taskListItemProps) => {
   const classes = useStyles();
   return (
     <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
@@ -25,9 +30,9 @@ const EmployeeTaskListItem = (props: any) => {
               spacing={1}
             >
               <Typography sx={{ mb: 2 }} variant="h5" color="text.primary">
-                {props.title}
+                {task.title}
               </Typography>
-              <TaskStateChip value={props.state}></TaskStateChip>
+              <TaskStateChip value={task.state}></TaskStateChip>
             </Stack>
           </React.Fragment>
         }
@@ -38,21 +43,17 @@ const EmployeeTaskListItem = (props: any) => {
               variant="subtitle1"
               color="text.primary"
             >
-              {props.description}
-            </Typography>
-            <Typography
-              sx={{ mx: 4, display: "inline" }}
-              variant="subtitle1"
-              color="text.primary"
-            >
-              {props.deadline}
+              Due till {task.deadline.toDateString()}
             </Typography>
           </React.Fragment>
         }
       />
       <div>
-        {props.state === TaskStatus.Completed ? (
-          <ListItemButton>View answer</ListItemButton>
+        {task.state === TaskStatus.Assigned ? (
+          <div>
+            <TaskViewModal task={task}></TaskViewModal>
+            <AddTaskAnswerDialog task={task}></AddTaskAnswerDialog>
+          </div>
         ) : (
           ""
         )}
@@ -61,4 +62,4 @@ const EmployeeTaskListItem = (props: any) => {
   );
 };
 
-export default EmployeeTaskListItem;
+export default CandidateTaskListItem;
