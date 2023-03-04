@@ -10,7 +10,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
 import { ThemeProvider } from "@mui/material";
-import { Theme } from "../../Styles/Theme";
 import IconSelector from "./RatingSelector";
 
 const AddReviewDialog = (props: any) => {
@@ -42,48 +41,46 @@ const AddReviewDialog = (props: any) => {
   }, []);
 
   return (
-    <ThemeProvider theme={Theme}>
-      <div>
-        <ToastContainer />
+    <div>
+      <ToastContainer />
 
-        <Button size="medium" variant="contained" onClick={handleClickOpen}>
-          Add a review
-        </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Add a review</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please be honest when reviewing this candidate
-            </DialogContentText>
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "50ch" },
-              }}
-            >
-              <IconSelector onIconClick={handleIconClick} />
+      <Button size="medium" variant="contained" onClick={handleClickOpen}>
+        Add a review
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add a review</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please be honest when reviewing this candidate
+          </DialogContentText>
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "50ch" },
+            }}
+          >
+            <IconSelector onIconClick={handleIconClick} />
 
-              <TextField
-                onChange={(e) => setComment(e.target.value)}
-                multiline
-                required
-                rows={4}
-                value={comment}
-                id="outlined-title-input"
-                label="Comment"
-                type="text"
-              />
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSave}>Save</Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    </ThemeProvider>
+            <TextField
+              onChange={(e) => setComment(e.target.value)}
+              multiline
+              required
+              rows={4}
+              value={comment}
+              id="outlined-title-input"
+              label="Comment"
+              type="text"
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 };
 

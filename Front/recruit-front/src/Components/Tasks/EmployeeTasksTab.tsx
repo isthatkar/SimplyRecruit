@@ -16,8 +16,8 @@ const EmployeeTasksTab = (props: any) => {
         title: "Create a Facebook Advertising Campaign",
         goal: "Drive traffic to the company website and increase conversions for a specific product",
         state: 0,
-        fileName: "",
-        url: "",
+        fileName: "asdsa",
+        url: "https://google.com",
         fileData: undefined,
         deadline: new Date(),
       },
@@ -35,7 +35,7 @@ const EmployeeTasksTab = (props: any) => {
         id: 2,
         title: "Create a Facebook Advertising Campaign",
         goal: "Drive traffic to the company website and increase conversions for a specific product",
-        state: 3,
+        state: 2,
         fileName: "",
         url: "",
         fileData: undefined,
@@ -92,10 +92,7 @@ const EmployeeTasksTab = (props: any) => {
             {tasks.map((task) => (
               <EmployeeTaskListItem
                 key={task.id}
-                title={task.title}
-                description={task.goal}
-                state={task.state}
-                time={task.deadline}
+                task={task}
               ></EmployeeTaskListItem>
             ))}
           </ColumnStackCenter>

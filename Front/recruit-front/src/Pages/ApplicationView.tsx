@@ -84,7 +84,7 @@ const ApplicationView = () => {
   };
 
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           pb: 6,
@@ -120,7 +120,7 @@ const ApplicationView = () => {
       <TabPanel value={value} index={3}>
         <EmployeeTasksTab></EmployeeTasksTab>
       </TabPanel>
-    </ThemeProvider>
+    </div>
   );
 };
 

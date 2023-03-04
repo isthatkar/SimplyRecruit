@@ -4,17 +4,23 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ListItemButton, ThemeProvider } from "@mui/material";
+import { ListItemButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import { Task } from "../../Types/types";
+import { TaskAnswer } from "../../Types/types";
 
-interface TaskViewModalProps {
-  task: Task;
+interface TaskAnswerViewModalProps {
+  taskId: number;
 }
-const TaskViewModal = ({ task }: TaskViewModalProps) => {
+const TaskAnswerViewModal = ({ taskId }: TaskAnswerViewModalProps) => {
   const [open, setOpen] = React.useState(false);
+  const [answer, setAnswer] = React.useState<TaskAnswer>({
+    id: 5,
+    comment: "this is task comment",
+    fileName: "file",
+    url: "https://google.com",
+    fileData: undefined,
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -26,27 +32,25 @@ const TaskViewModal = ({ task }: TaskViewModalProps) => {
 
   return (
     <div>
-      <ToastContainer />
-
-      <ListItemButton onClick={handleClickOpen}>View task</ListItemButton>
+      <ListItemButton onClick={handleClickOpen}>View answer</ListItemButton>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{task.title}</DialogTitle>
+        <DialogTitle>Submited task answer</DialogTitle>
         <DialogContent>
-          <DialogContentText>{task.goal}</DialogContentText>
-          {task.url ? (
+          <DialogContentText>{answer?.comment}</DialogContentText>
+          {answer?.url ? (
             <DialogContentText sx={{ my: 4 }}>
-              View the full task here:{" "}
-              <a href={task.url} target="_blank" rel="noopener noreferrer">
-                {task.url}
+              View the task answer here:{" "}
+              <a href={answer?.url} target="_blank" rel="noopener noreferrer">
+                {answer.url}
               </a>
             </DialogContentText>
           ) : (
             ""
           )}
-          {task.fileName ? (
+          {answer?.fileName ? (
             <Button>
               <DownloadIcon></DownloadIcon>
-              Download task
+              Download answer
             </Button>
           ) : (
             ""
@@ -57,4 +61,4 @@ const TaskViewModal = ({ task }: TaskViewModalProps) => {
   );
 };
 
-export default TaskViewModal;
+export default TaskAnswerViewModal;

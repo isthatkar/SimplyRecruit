@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import { Theme } from "../Styles/Theme";
 
 type MeetingFormData = {
   title: string;
@@ -104,7 +103,7 @@ const AddMeeting = () => {
     console.log(formData);
   };
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -279,7 +278,7 @@ const AddMeeting = () => {
           </Box>
         </Container>
       </Box>
-    </ThemeProvider>
+    </div>
   );
 };
 

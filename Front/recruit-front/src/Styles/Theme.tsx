@@ -76,6 +76,39 @@ export const useStyles = makeStyles(() =>
         backgroundColor: "#e0e2f2",
       },
     },
+    root: {
+      flexGrow: 1,
+      height: "100vh",
+    },
+    imageContainer: {
+      height: "100%",
+      [Theme.breakpoints.up("md")]: {
+        flexBasis: "40%",
+      },
+    },
+    image: {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    },
+    contentContainer: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: Theme.spacing(2),
+      [Theme.breakpoints.up("md")]: {
+        flexBasis: "60%",
+      },
+    },
+    title: {
+      fontWeight: "bold",
+      marginBottom: Theme.spacing(2),
+      textAlign: "center",
+    },
+    button: {
+      marginTop: Theme.spacing(2),
+    },
   })
 );
 

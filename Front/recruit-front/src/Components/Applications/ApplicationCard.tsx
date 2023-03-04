@@ -3,6 +3,8 @@ import DownloadIcon from "@mui/icons-material/Download";
 import React from "react";
 import { Application, Resume } from "../../Types/types";
 import GetStateLabel from "../../Helpers/ApplicationStateToText";
+import ArchiveApplicationButton from "./ArchiveApplicationButton";
+import { RowStackCenter } from "../../Styles/Theme";
 
 interface CardProps {
   application: Application | undefined;
@@ -87,6 +89,8 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
           alignItems="center"
           spacing={2}
         >
+          <ArchiveApplicationButton></ArchiveApplicationButton>
+
           <Typography variant="h5">Current stage:</Typography>
           <Typography variant="h6">
             {application ? GetStateLabel(application.stage) : ""}

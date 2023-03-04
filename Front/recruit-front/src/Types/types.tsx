@@ -4,7 +4,6 @@ export interface Project {
   description: string;
   responsiblePersonEmail: string;
   product: NordProduct;
-  image: string;
 }
 
 export interface Position {
