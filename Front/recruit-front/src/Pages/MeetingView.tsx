@@ -46,8 +46,9 @@ const MeetingView = () => {
         selectedAttendees: ["Bob"],
       },
     ],
-    dateString: "",
-    timeString: "",
+
+    meetingUrl: "uri",
+    isCanceled: false,
   });
 
   const handleCopyLink = () => {

@@ -47,8 +47,8 @@ const MeetingSchedulingPage = () => {
         selectedAttendees: ["rugile.karengaite@nordsec.com"],
       },
     ],
-    dateString: "",
-    timeString: "",
+    isCanceled: false,
+    meetingUrl: "",
   });
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
 

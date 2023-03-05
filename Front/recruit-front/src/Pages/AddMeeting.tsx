@@ -12,11 +12,13 @@ import {
   InputLabel,
   Stack,
   TextField,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 type MeetingFormData = {
   title: string;
@@ -40,6 +42,8 @@ const initialMeetingFormData: MeetingFormData = {
 
 const AddMeeting = () => {
   const [formData, setFormData] = useState(initialMeetingFormData);
+  const { applicationId } = useParams();
+  const navigate = useNavigate();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -97,13 +101,47 @@ const AddMeeting = () => {
     });
   };
 
+  const addMeeting = async (): Promise<void> => {
+    const attendees = formData.attendees.join(";");
+    const meetingDto = {
+      title: formData.title,
+      description: formData.description,
+      meetingUrl: "https://google.com", //TODO WITH GOOGLE MEETS INTEGRATION
+      schedulingUrl: "https://google.com", //TODO
+      isFinal: formData.isFinalTime,
+      durationMinutes: formData.duration,
+      atendees: attendees,
+      meetingTimes: {
+        times: formData.meetingTimes,
+      },
+    };
+
+    console.log(meetingDto);
+    const response = await axios.post(
+      `applications/${applicationId}/meetings`,
+      meetingDto
+    );
+
+    console.log(response);
+    if (response.status === 201) {
+      return navigate(`/application/${applicationId}`);
+    } else {
+      toast.error("Failed to add meeting!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    addMeeting();
     console.log(new Date(formData.meetingTimes[0]));
     console.log(formData);
   };
   return (
     <div>
+      <ToastContainer />
+
       <Box
         sx={{
           bgcolor: "background.paper",

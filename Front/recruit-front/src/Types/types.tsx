@@ -32,8 +32,8 @@ export interface Meeting {
   meetingTimes: MeetingTime[];
   duration: number;
   schedulingUrl: string;
-  timeString: string | undefined;
-  dateString: string | undefined;
+  meetingUrl: string;
+  isCanceled: boolean;
 }
 
 export interface MeetingTime {
@@ -78,6 +78,7 @@ export interface Application {
   stage: Stage;
   positionId: number;
   positionName: string;
+  isArchived: boolean;
 }
 
 export interface Resume {
