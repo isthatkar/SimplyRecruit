@@ -17,20 +17,27 @@ import { Theme } from "../Styles/Theme";
 import PersonIcon from "@mui/icons-material/Person";
 import GetFormatedDate from "../Helpers/DateFormater";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MeetingSchedulingPage = () => {
   const [meeting, setMeeting] = useState<Meeting>();
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
   const { meetingId } = useParams();
+  const navigate = useNavigate();
 
   function handleTimeClick(timeId: number) {
-    setSelectedTimes((prevSelected) =>
-      prevSelected.includes(timeId)
-        ? prevSelected.filter((id) => id !== timeId)
-        : [...prevSelected, timeId]
-    );
+    setSelectedTimes((prevSelectedTimes) => {
+      if (prevSelectedTimes.includes(timeId)) {
+        return prevSelectedTimes.filter((id) => id !== timeId);
+      } else {
+        return [...prevSelectedTimes, timeId];
+      }
+    });
   }
+
+  useEffect(() => {
+    console.log(selectedTimes);
+  }, [selectedTimes]);
 
   const getMeeting = useCallback(async () => {
     const response = await axios.get(`/meetings/${meetingId}`);
@@ -46,10 +53,22 @@ const MeetingSchedulingPage = () => {
     getMeeting();
   }, []);
 
-  function handleSaveClick() {
-    // TODO: Implement save logic
-  }
+  const handleSaveClick = async () => {
+    await selectTimes();
+  };
 
+  const selectTimes = useCallback(async () => {
+    console.log(selectedTimes);
+    const response = await axios.put(`/meetingTimes/select`, {
+      ids: selectedTimes,
+    });
+
+    if (response.status === 200) {
+      navigate(`meetings/${meetingId}`);
+    } else {
+      console.log("not success");
+    }
+  }, [selectedTimes]);
   return (
     <ThemeProvider theme={Theme}>
       <Box
@@ -105,9 +124,6 @@ const MeetingSchedulingPage = () => {
                               .map((attendee, index) => (
                                 <React.Fragment key={attendee}>
                                   <PersonIcon />
-                                  {index !==
-                                    time.selectedAttendees.split(";").length -
-                                      1 && ", "}
                                 </React.Fragment>
                               ))}
                       </div>

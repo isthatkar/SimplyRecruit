@@ -1,7 +1,6 @@
 import React from "react";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
-import Register from "./Pages/Register";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Nav from "./Components/Nav";
@@ -39,7 +38,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route
               path="/projects"
               element={<ProtectedRouteEmployee isEmployee={isEmployee} />}

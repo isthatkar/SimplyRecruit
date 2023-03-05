@@ -1,7 +1,6 @@
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import Button from "@mui/material/Button";
 import React, { useEffect, useState } from "react";
-import LogoutButton from "./Auth/LogoutButton";
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -102,17 +101,6 @@ const Nav = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {!isLoggedIn ? (
-                <MenuItem
-                  onClick={handleCloseNavMenu}
-                  component="a"
-                  href="/login"
-                >
-                  <Typography textAlign="center">Login</Typography>
-                </MenuItem>
-              ) : (
-                ""
-              )}
               {isEmployee ? (
                 <MenuItem
                   onClick={handleCloseNavMenu}
@@ -181,17 +169,6 @@ const Nav = () => {
             SimplyRecruit
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {!isLoggedIn ? (
-              <Button
-                sx={{ my: 2, color: "white", display: "block" }}
-                component="a"
-                href="/login"
-              >
-                Login
-              </Button>
-            ) : (
-              ""
-            )}
             {isEmployee ? (
               <Button
                 sx={{ my: 2, color: "white", display: "block" }}
@@ -237,14 +214,6 @@ const Nav = () => {
               ""
             )}
           </Box>
-
-          {isLoggedIn ? (
-            <Box sx={{ flexGrow: 0 }}>
-              <LogoutButton></LogoutButton>
-            </Box>
-          ) : (
-            ""
-          )}
         </Toolbar>
       </Container>
     </AppBar>

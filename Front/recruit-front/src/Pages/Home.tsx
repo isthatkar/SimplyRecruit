@@ -1,8 +1,19 @@
 import { Grid, Typography, Button, Box, Stack } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import image from "../img/Projects/homepage.jpg";
 
 const Home = () => {
+  const token = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
+
+  const handleLoginClick = () => {
+    return navigate("/login");
+  };
+
+  const handlePositionsClick = () => {
+    navigate("/positions");
+  };
   return (
     <Grid
       container
@@ -41,9 +52,25 @@ const Home = () => {
               jobs and for employers to find and hire top talent. Say goodbye to
               the hassle with SimplyRecruit.
             </Typography>
-            <Button sx={{ mt: 4 }} size="large" variant="outlined">
-              Login
-            </Button>
+            {token ? (
+              <Button
+                sx={{ mt: 4 }}
+                size="large"
+                variant="outlined"
+                onClick={handlePositionsClick}
+              >
+                See open positions
+              </Button>
+            ) : (
+              <Button
+                sx={{ mt: 4 }}
+                size="large"
+                variant="outlined"
+                onClick={handleLoginClick}
+              >
+                Login
+              </Button>
+            )}
           </Box>
 
           <Box
