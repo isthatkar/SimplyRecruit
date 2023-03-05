@@ -27,7 +27,9 @@ const MeetingListItem = (props: any) => {
               <Typography sx={{ mb: 2 }} variant="h5" color="text.primary">
                 {props.meet.title}
               </Typography>
-              <MeetingStateChip value={props.meet.final}></MeetingStateChip>
+              <MeetingStateChip
+                value={props.meet.isFinalTime}
+              ></MeetingStateChip>
             </Stack>
           </React.Fragment>
         }

@@ -72,7 +72,7 @@ namespace SimplyRecruitAPI.Controllers
                SchedullingUrl = createMeetingDto.SchedulingUrl,
                IsFinal = createMeetingDto.IsFinal,
                DurationMinutes = createMeetingDto.DurationMinutes,
-               FinalTime = new DateTime(),
+               FinalTime = createMeetingDto.IsFinal ? createMeetingDto.FinalTime : new DateTime(),
                IsCanceled = false,
                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
                Atendees = createMeetingDto.Atendees,
@@ -85,11 +85,6 @@ namespace SimplyRecruitAPI.Controllers
                 StartTime = t,
                 Meeting = meeting
             });
-
-            if (createMeetingDto.IsFinal)
-            {
-                meeting.FinalTime = meetingTimes.First().StartTime;
-            }
 
             await _meetingsRepository.CreateAsync(meeting);
             foreach(MeetingTimes time in meetingTimes)

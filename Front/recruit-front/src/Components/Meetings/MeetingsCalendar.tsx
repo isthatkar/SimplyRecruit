@@ -9,25 +9,27 @@ import { Button } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { Theme, useStyles } from "../../Styles/Theme";
 
-const MeetingCalendar = (props: any) => {
+interface CalendarProps {
+  meetings: Meeting[];
+}
+
+const MeetingCalendar = ({ meetings }: CalendarProps) => {
   const classes = useStyles();
 
-  const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [eventSources, setEventSources] = useState<EventSourceInput[]>();
 
   useEffect(() => {
-    const storedMeetings = props.meetings;
-    console.log(storedMeetings);
-
-    setMeetings(storedMeetings);
+    const storedMeetings = meetings;
     const mappedMeetings = storedMeetings.map(convertToEventInput);
     const eventSourcesm = [
       {
         events: mappedMeetings,
       },
     ];
+    console.log(storedMeetings);
+    console.log(eventSourcesm);
     setEventSources(eventSourcesm);
-  }, []);
+  }, [meetings]);
 
   const convertToEventInput = (meeting: Meeting) => {
     const start = new Date(meeting.finalTime);

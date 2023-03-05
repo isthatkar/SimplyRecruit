@@ -1,72 +1,26 @@
-import { Box, ThemeProvider, Typography } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { ColumnStackCenter, RowStackCenter, Theme } from "../Styles/Theme";
+import { ColumnStackCenter, RowStackCenter } from "../Styles/Theme";
 import { Meeting } from "../Types/types";
 import MeetingListItem from "../Components/Meetings/MeetingListItem";
 import MeetingCalendar from "../Components/Meetings/MeetingsCalendar";
+import axios from "axios";
 
-const UserMeetings = (props: any) => {
-  const meetings = [
-    {
-      id: 1,
-      title: "Team Meeting",
-      description: "Discuss team progress",
-      finalTime: "2023-03-01T09:30:00Z",
-      duration: 60,
-      schedulingUrl: "https://randomurl.com",
-      isFinalTime: false,
-      attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
-      meetingTimes: [
-        {
-          id: 1,
-          time: "2023-03-01T09:30:00Z",
-          selectedAttendees: ["Bob", "Alice"],
-        },
-        {
-          id: 2,
-          time: "2023-03-01T09:30:00Z",
-          selectedAttendees: [],
-        },
-        {
-          id: 3,
-          time: "2023-03-01T09:30:00Z",
-          selectedAttendees: ["Bob"],
-        },
-      ],
-      dateString: "",
-      timeString: "",
-    },
-    {
-      id: 2,
-      title: "Team Meeting",
-      description: "Discuss team progress",
-      finalTime: "2023-03-01T09:30:00Z",
-      duration: 60,
-      schedulingUrl: "https://randomurl.com",
-      isFinalTime: true,
-      attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
-      meetingTimes: [
-        {
-          id: 1,
-          time: "2023-03-02T09:30:00Z",
-          selectedAttendees: ["Bob", "Alice"],
-        },
-        {
-          id: 1,
-          time: "2023-03-01T09:30:00Z",
-          selectedAttendees: [],
-        },
-        {
-          id: 1,
-          time: "2023-03-01T09:30:00Z",
-          selectedAttendees: ["Bob"],
-        },
-      ],
-      dateString: "",
-      timeString: "",
-    },
-  ];
+const UserMeetings = () => {
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
+
+  const getMeetings = useCallback(async () => {
+    const response = await axios.get(`/meetings`);
+    console.log(response);
+    const upcomingMeetings = response.data;
+    console.log(upcomingMeetings);
+    setMeetings(upcomingMeetings);
+  }, []);
+
+  useEffect(() => {
+    getMeetings();
+  }, []);
 
   return (
     <div>
@@ -110,7 +64,7 @@ const UserMeetings = (props: any) => {
         <RowStackCenter spacing={1}>
           <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
           <Typography align="center" variant="h5">
-            NO UPCOMING MEETINGS FOR THIS APPLICATION
+            NO UPCOMING MEETINGS
           </Typography>
         </RowStackCenter>
       )}

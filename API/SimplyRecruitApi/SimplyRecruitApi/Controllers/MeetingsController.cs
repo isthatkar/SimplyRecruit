@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
+using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
 using System.Security.Claims;
 
 namespace SimplyRecruitAPI.Controllers
 {
-    //[Authorize] SITA NEPAMIRSTTTTT
     [ApiController]
     [Route("api/meetings")]
     public class MeetingsController : ControllerBase
@@ -25,7 +25,7 @@ namespace SimplyRecruitAPI.Controllers
             _userManager = userManager;
         }
 
-       /* [HttpGet]
+        [HttpGet]
         [Authorize]
         public async Task<IEnumerable<MeetingDto>> GetUsersMany()
         {
@@ -34,17 +34,26 @@ namespace SimplyRecruitAPI.Controllers
 
             var userMeetings = await _meetingsRepository.GetUsersManyAsync(user.Email);
 
-            return userMeetings.Select(m => new MeetingDto(
-                m.Id, 
+            IEnumerable<MeetingDto> meetingsDto = new List<MeetingDto>();
+            foreach(var m in userMeetings)
+            {
+                IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(m.Id);
+                meetingsDto = meetingsDto.Append(new MeetingDto(
+                m.Id,
                 m.Title,
                 m.Description,
-                m.MeetingUrl,
-                m.SchedullingUrl,
+                m.FinalTime,
                 m.IsFinal,
-                m.DurationMinutes,
-                m.IsCanceled,
                 m.Atendees,
-                m.Application.Id));
-        }*/
+                meetTimes.ToArray(),
+                m.DurationMinutes,
+                m.SchedullingUrl,
+                m.MeetingUrl,
+                m.IsCanceled
+               ));
+            }
+
+            return meetingsDto;
+        }
     }
 }

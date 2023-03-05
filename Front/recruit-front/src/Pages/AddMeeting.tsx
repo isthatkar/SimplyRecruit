@@ -36,7 +36,7 @@ const initialMeetingFormData: MeetingFormData = {
   finalTime: "",
   isFinalTime: false,
   attendees: [],
-  meetingTimes: [""],
+  meetingTimes: [],
   duration: 60,
 };
 
@@ -102,7 +102,13 @@ const AddMeeting = () => {
   };
 
   const addMeeting = async (): Promise<void> => {
-    const attendees = formData.attendees.join(";");
+    const userEmail = localStorage.getItem("email");
+    let attendees = formData.attendees.join(";");
+
+    if (userEmail) {
+      attendees = attendees + ";" + userEmail;
+    }
+
     const meetingDto = {
       title: formData.title,
       description: formData.description,
@@ -135,7 +141,6 @@ const AddMeeting = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     addMeeting();
-    console.log(new Date(formData.meetingTimes[0]));
     console.log(formData);
   };
   return (
@@ -186,6 +191,7 @@ const AddMeeting = () => {
                     <Box display="flex" alignItems="center" key={index}>
                       <TextField
                         fullWidth
+                        required
                         label={`Attendee ${index + 1} Email`}
                         value={attendee.email}
                         onChange={(event) =>
@@ -277,6 +283,7 @@ const AddMeeting = () => {
                           variant="outlined"
                           fullWidth
                           required
+                          value={formData.meetingTimes[index]}
                           InputLabelProps={{
                             shrink: true,
                           }}
