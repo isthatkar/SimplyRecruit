@@ -12,8 +12,8 @@ using SimplyRecruitAPI.Data;
 namespace SimplyRecruitAPI.Migrations
 {
     [DbContext(typeof(SimplyRecruitDbContext))]
-    [Migration("20230305093449_meetings and fixes")]
-    partial class meetingsandfixes
+    [Migration("20230305164020_meetings")]
+    partial class meetings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,7 +345,7 @@ namespace SimplyRecruitAPI.Migrations
                     b.Property<int>("MeetingId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SelectedAtendees")
+                    b.Property<string>("SelectedAttendees")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartTime")

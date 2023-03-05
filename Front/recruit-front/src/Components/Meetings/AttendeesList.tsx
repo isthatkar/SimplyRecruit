@@ -3,13 +3,14 @@ import { Chip } from "@mui/material";
 import { RowStackCenter } from "../../Styles/Theme";
 
 interface AttendeeListProps {
-  attendees: string[];
+  attendees: string;
 }
 
 const AttendeeList: React.FC<AttendeeListProps> = ({ attendees }) => {
+  const attendeesArray = attendees.split(";");
   return (
     <RowStackCenter>
-      {attendees.map((attendee, index) => (
+      {attendeesArray.map((attendee, index) => (
         <Chip
           key={index}
           label={attendee}

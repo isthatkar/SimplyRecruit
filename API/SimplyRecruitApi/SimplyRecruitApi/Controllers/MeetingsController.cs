@@ -55,5 +55,29 @@ namespace SimplyRecruitAPI.Controllers
 
             return meetingsDto;
         }
+
+        [HttpGet]
+        [Route("{meetingId}", Name = "GetMeeting")]
+        [Authorize]
+        public async Task<MeetingDto> GetMeeting(int meetingId)
+        {
+
+            var meeting = await _meetingsRepository.GetAsync(meetingId);
+            
+            IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(meeting.Id);
+           return new MeetingDto(
+                meeting.Id,
+                meeting.Title,
+                meeting.Description,
+                meeting.FinalTime,
+                meeting.IsFinal,
+                meeting.Atendees,
+                meetTimes.ToArray(),
+                meeting.DurationMinutes,
+                meeting.SchedullingUrl,
+                meeting.MeetingUrl,
+                meeting.IsCanceled
+               );
+        }
     }
 }

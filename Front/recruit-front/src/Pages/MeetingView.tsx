@@ -7,49 +7,22 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Meeting } from "../Types/types";
 import React from "react";
 import CopyLinkDialog from "../Components/Meetings/CopyLinkDialog";
 import AttendeeList from "../Components/Meetings/AttendeesList";
 import { Theme } from "../Styles/Theme";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import axios from "axios";
 
 const MeetingView = () => {
   const [showCopyLinkDialog, setShowCopyLinkDialog] = useState(false);
   const navigate = useNavigate();
-  const [meeting, setMeeting] = useState<Meeting>({
-    id: 1,
-    title: "Team Meeting",
-    description: "Discuss team progress",
-    finalTime: "2023-03-01T09:30:00Z",
-    duration: 60,
-    isFinalTime: false,
-    schedulingUrl: `/meetings/1/schedule`,
-    attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
-    meetingTimes: [
-      {
-        id: 1,
-        time: "2023-03-01T09:30:00Z",
-        selectedAttendees: ["Bob", "Alice"],
-      },
-      {
-        id: 2,
-        time: "2023-03-01T09:30:00Z",
-        selectedAttendees: [],
-      },
-      {
-        id: 3,
-        time: "2023-03-01T09:30:00Z",
-        selectedAttendees: ["Bob"],
-      },
-    ],
-
-    meetingUrl: "uri",
-    isCanceled: false,
-  });
+  const { meetingId } = useParams();
+  const [meeting, setMeeting] = useState<Meeting>();
 
   const handleCopyLink = () => {
     setShowCopyLinkDialog(true);
@@ -62,6 +35,18 @@ const MeetingView = () => {
   const handleCloseCopyLinkDialog = () => {
     setShowCopyLinkDialog(false);
   };
+
+  const getMeeting = useCallback(async () => {
+    const response = await axios.get(`/meetings/${meetingId}`);
+    console.log(response);
+    const meeting = response.data;
+    console.log(meeting);
+    setMeeting(meeting);
+  }, []);
+
+  useEffect(() => {
+    getMeeting();
+  }, []);
 
   return (
     <ThemeProvider theme={Theme}>
@@ -108,7 +93,7 @@ const MeetingView = () => {
             <Typography variant="subtitle1" gutterBottom>
               The meeting will take {meeting?.duration} minutes
             </Typography>
-            <AttendeeList attendees={meeting.attendees} />
+            {meeting ? <AttendeeList attendees={meeting?.attendees} /> : ""}
 
             <Box mt={2}>
               {meeting?.isFinalTime ? (
@@ -137,7 +122,7 @@ const MeetingView = () => {
             <CopyLinkDialog
               open={showCopyLinkDialog}
               onClose={handleCloseCopyLinkDialog}
-              link={meeting.schedulingUrl}
+              link={meeting?.schedulingUrl as string}
             />
           </Stack>
         </Container>

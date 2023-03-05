@@ -20,14 +20,14 @@ const MeetingCalendar = ({ meetings }: CalendarProps) => {
 
   useEffect(() => {
     const storedMeetings = meetings;
-    const mappedMeetings = storedMeetings.map(convertToEventInput);
+    const mappedMeetings = storedMeetings
+      .filter((m) => !m.isCanceled && m.isFinalTime) //only not canceled and final time meetings
+      .map(convertToEventInput);
     const eventSourcesm = [
       {
         events: mappedMeetings,
       },
     ];
-    console.log(storedMeetings);
-    console.log(eventSourcesm);
     setEventSources(eventSourcesm);
   }, [meetings]);
 

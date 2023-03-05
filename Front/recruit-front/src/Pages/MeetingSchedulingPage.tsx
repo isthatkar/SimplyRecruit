@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -16,41 +16,13 @@ import { Meeting, MeetingTime } from "../Types/types";
 import { Theme } from "../Styles/Theme";
 import PersonIcon from "@mui/icons-material/Person";
 import GetFormatedDate from "../Helpers/DateFormater";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const MeetingSchedulingPage = () => {
-  const [meeting, setMeeting] = useState<Meeting>({
-    id: 1,
-    title: "Team Meeting",
-    description: "Discuss team progress",
-    finalTime: "2023-03-01T09:30:00Z",
-    duration: 60,
-    isFinalTime: false,
-    schedulingUrl: `/meetings/1/schedule`,
-    attendees: ["rugile.karengaite@nordsec.com", "blablabla@gmail.com"],
-    meetingTimes: [
-      {
-        id: 1,
-        time: "2023-03-01T09:30:00Z",
-        selectedAttendees: [
-          "rugile.karengaite@nordsec.com",
-          "blablabla@gmail.com",
-        ],
-      },
-      {
-        id: 2,
-        time: "2023-03-01T09:30:00Z",
-        selectedAttendees: [],
-      },
-      {
-        id: 3,
-        time: "2023-03-01T09:30:00Z",
-        selectedAttendees: ["rugile.karengaite@nordsec.com"],
-      },
-    ],
-    isCanceled: false,
-    meetingUrl: "",
-  });
+  const [meeting, setMeeting] = useState<Meeting>();
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
+  const { meetingId } = useParams();
 
   function handleTimeClick(timeId: number) {
     setSelectedTimes((prevSelected) =>
@@ -59,6 +31,20 @@ const MeetingSchedulingPage = () => {
         : [...prevSelected, timeId]
     );
   }
+
+  const getMeeting = useCallback(async () => {
+    const response = await axios.get(`/meetings/${meetingId}`);
+    console.log(response);
+    const responseMeeting = response.data as Meeting;
+    console.log(responseMeeting);
+    console.log(responseMeeting.meetingTimes);
+    setMeeting(responseMeeting);
+    console.log(meeting);
+  }, []);
+
+  useEffect(() => {
+    getMeeting();
+  }, []);
 
   function handleSaveClick() {
     // TODO: Implement save logic
@@ -80,39 +66,58 @@ const MeetingSchedulingPage = () => {
             spacing={3}
           >
             <Typography variant="h3" align="center">
-              {meeting.title}{" "}
+              {meeting?.title}{" "}
             </Typography>
             <Typography variant="body1" align="center">
-              {meeting.description}
+              {meeting?.description}
             </Typography>
 
             <Typography variant="body1" align="center">
-              The meeting will take {meeting.duration} minutes
+              The meeting will take {meeting?.duration} minutes
             </Typography>
 
             <Typography variant="h6">
               Select the times when you are available:
             </Typography>
-            <List>
-              {meeting.meetingTimes.map((time: MeetingTime) => (
-                <ListItem
-                  key={time.id}
-                  button
-                  selected={selectedTimes.includes(time.id)}
-                  onClick={() => handleTimeClick(time.id)}
-                >
-                  <ListItemText primary={GetFormatedDate(time.time)} />
+            {meeting ? (
+              <List>
+                {meeting.meetingTimes.map((time: MeetingTime) => (
+                  <ListItem
+                    key={time.id}
+                    button
+                    selected={selectedTimes.includes(time.id)}
+                    onClick={() => handleTimeClick(time.id)}
+                  >
+                    <ListItemText primary={GetFormatedDate(time.startTime)} />
 
-                  <Tooltip title={time.selectedAttendees.join(", ")}>
-                    <div>
-                      {time.selectedAttendees.map((atendee) => (
-                        <PersonIcon key={atendee}></PersonIcon>
-                      ))}
-                    </div>
-                  </Tooltip>
-                </ListItem>
-              ))}
-            </List>
+                    <Tooltip
+                      title={
+                        time.selectedAttendees.length === 0
+                          ? "No attendees selected"
+                          : time.selectedAttendees.split(";").join(", ")
+                      }
+                    >
+                      <div>
+                        {time.selectedAttendees.length === 0
+                          ? ""
+                          : time.selectedAttendees
+                              .split(";")
+                              .map((attendee, index) => (
+                                <React.Fragment key={attendee}>
+                                  <PersonIcon />
+                                  {index !==
+                                    time.selectedAttendees.split(";").length -
+                                      1 && ", "}
+                                </React.Fragment>
+                              ))}
+                      </div>
+                    </Tooltip>
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              ""
+            )}
           </Stack>
           <Button variant="contained" onClick={handleSaveClick} sx={{ my: 3 }}>
             Save

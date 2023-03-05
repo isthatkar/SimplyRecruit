@@ -40,9 +40,9 @@ const MeetingsList: React.FC<MeetingsListProps> = ({
     onSave(selectedTimes);
   };
 
-  const renderAttendeesTooltip = (attendees: string[]) => (
-    <Tooltip title={<span>{attendees.join(", ")}</span>}>
-      <span>{attendees.length}</span>
+  const renderAttendeesTooltip = (attendees: string) => (
+    <Tooltip title={<span>{attendees.split(";").join(", ")}</span>}>
+      <span>{attendees.split(";").length}</span>
     </Tooltip>
   );
 
@@ -50,7 +50,7 @@ const MeetingsList: React.FC<MeetingsListProps> = ({
     <>
       <List>
         {meetingTimes.map((meetingTime) => {
-          const labelId = `checkbox-list-label-${meetingTime.time}`;
+          const labelId = `checkbox-list-label-${meetingTime.startTime}`;
           return (
             <ListItem
               key={meetingTime.id}
@@ -63,7 +63,8 @@ const MeetingsList: React.FC<MeetingsListProps> = ({
                   edge="start"
                   checked={
                     selectedTimes.findIndex(
-                      (selectedTime) => selectedTime.time === meetingTime.time
+                      (selectedTime) =>
+                        selectedTime.startTime === meetingTime.startTime
                     ) !== -1
                   }
                   tabIndex={-1}
@@ -73,7 +74,7 @@ const MeetingsList: React.FC<MeetingsListProps> = ({
               </ListItemIcon>
               <ListItemText
                 id={labelId}
-                primary={meetingTime.time}
+                primary={meetingTime.startTime}
                 secondary={renderAttendeesTooltip(
                   meetingTime.selectedAttendees
                 )}

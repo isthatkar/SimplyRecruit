@@ -342,7 +342,7 @@ namespace SimplyRecruitAPI.Migrations
                     b.Property<int>("MeetingId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SelectedAtendees")
+                    b.Property<string>("SelectedAttendees")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartTime")

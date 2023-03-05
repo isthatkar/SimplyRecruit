@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SimplyRecruitAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class meetingsandfixes : Migration
+    public partial class meetings : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,7 +54,7 @@ namespace SimplyRecruitAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SelectedAtendees = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SelectedAttendees = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MeetingId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

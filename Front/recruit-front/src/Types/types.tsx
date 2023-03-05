@@ -28,7 +28,7 @@ export interface Meeting {
   description: string;
   finalTime: string;
   isFinalTime: boolean;
-  attendees: string[];
+  attendees: string;
   meetingTimes: MeetingTime[];
   duration: number;
   schedulingUrl: string;
@@ -38,8 +38,9 @@ export interface Meeting {
 
 export interface MeetingTime {
   id: number;
-  time: string;
-  selectedAttendees: string[];
+  startTime: string;
+  selectedAttendees: string;
+  meeting: Meeting;
 }
 
 export interface Review {

@@ -81,7 +81,7 @@ namespace SimplyRecruitAPI.Controllers
 
             IEnumerable<MeetingTimes> meetingTimes = createMeetingDto.meetingTimes.times.Select(t => new MeetingTimes()
             {
-                SelectedAtendees = string.Empty,
+                SelectedAttendees = string.Empty,
                 StartTime = t,
                 Meeting = meeting
             });

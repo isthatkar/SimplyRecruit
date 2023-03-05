@@ -6,7 +6,7 @@
 
         public DateTime StartTime { get; set; }
 
-        public string? SelectedAtendees { get; set; }
+        public string? SelectedAttendees { get; set; }
 
         public Meeting Meeting { get; set; }
     }

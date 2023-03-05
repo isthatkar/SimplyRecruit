@@ -36,7 +36,7 @@ const initialMeetingFormData: MeetingFormData = {
   finalTime: "",
   isFinalTime: false,
   attendees: [],
-  meetingTimes: [],
+  meetingTimes: [""],
   duration: 60,
 };
 
@@ -64,20 +64,16 @@ const AddMeeting = () => {
     });
   };
 
-  interface Attendee {
-    email: string;
-  }
-
-  const [attendees, setAttendees] = useState<Attendee[]>([{ email: "" }]);
+  const [attendees, setAttendees] = useState<string[]>([]);
 
   const handleAttendeeEmailChange = (event: any, index: number) => {
     const newAttendees = [...attendees];
-    newAttendees[index].email = event.target.value;
+    newAttendees[index] = event.target.value;
     setAttendees(newAttendees);
   };
 
   const handleAddAttendee = () => {
-    setAttendees((prevAttendees) => [...prevAttendees, { email: "" }]);
+    setAttendees((prevAttendees) => [...prevAttendees, ""]);
   };
 
   const handleRemoveAttendee = (index: number) => {
@@ -103,10 +99,17 @@ const AddMeeting = () => {
 
   const addMeeting = async (): Promise<void> => {
     const userEmail = localStorage.getItem("email");
-    let attendees = formData.attendees.join(";");
+    let attendeesNew = "";
+    if (attendees.length > 1) {
+      attendeesNew = attendees.join(";");
+    } else {
+      attendeesNew = attendees[0];
+    }
 
+    console.log("aaaaaaa");
+    console.log(attendeesNew);
     if (userEmail) {
-      attendees = attendees + ";" + userEmail;
+      attendeesNew = attendeesNew + ";" + userEmail;
     }
 
     const meetingDto = {
@@ -116,7 +119,7 @@ const AddMeeting = () => {
       schedulingUrl: "https://google.com", //TODO
       isFinal: formData.isFinalTime,
       durationMinutes: formData.duration,
-      atendees: attendees,
+      atendees: attendeesNew,
       meetingTimes: {
         times: formData.meetingTimes,
       },
@@ -193,7 +196,7 @@ const AddMeeting = () => {
                         fullWidth
                         required
                         label={`Attendee ${index + 1} Email`}
-                        value={attendee.email}
+                        value={attendee}
                         onChange={(event) =>
                           handleAttendeeEmailChange(event, index)
                         }
