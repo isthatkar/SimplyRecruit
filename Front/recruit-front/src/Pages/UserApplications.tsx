@@ -8,7 +8,6 @@ import {
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import ApplicationListItem from "../Components/Applications/ApplicationListItem";
-import Theme from "../Styles/Theme";
 import { Application } from "../Types/types";
 
 const UserApplications = () => {
@@ -24,7 +23,7 @@ const UserApplications = () => {
     getUserApplications();
   }, []);
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -50,18 +49,20 @@ const UserApplications = () => {
           justifyContent="center"
           alignItems="center"
           spacing={1}
+          sx={{ mb: 8 }}
         >
           {allApplications.map((application) => (
             <ApplicationListItem
               key={application.id}
               email={application.contactEmail}
+              id={application.id}
               stage={application.stage}
               positionName={application.positionName}
             ></ApplicationListItem>
           ))}
         </Stack>
       </Container>
-    </ThemeProvider>
+    </div>
   );
 };
 

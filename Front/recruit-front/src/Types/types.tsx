@@ -4,7 +4,6 @@ export interface Project {
   description: string;
   responsiblePersonEmail: string;
   product: NordProduct;
-  image: string;
 }
 
 export interface Position {
@@ -23,6 +22,53 @@ export interface Position {
   offers: string;
 }
 
+export interface Meeting {
+  id: number;
+  title: string;
+  description: string;
+  finalTime: string;
+  isFinalTime: boolean;
+  attendees: string;
+  meetingTimes: MeetingTime[];
+  duration: number;
+  schedulingUrl: string;
+  meetingUrl: string;
+  isCanceled: boolean;
+}
+
+export interface MeetingTime {
+  id: number;
+  startTime: string;
+  selectedAttendees: string;
+  meeting: Meeting;
+}
+
+export interface Review {
+  id: number;
+  userEmail: string;
+  rating: number;
+  comment: string;
+}
+
+export interface Task {
+  id: number;
+  title: string;
+  goal: string;
+  state: TaskStatus;
+  deadline: Date;
+  fileName: string | undefined;
+  url: string | undefined;
+  fileData: Uint8Array | undefined;
+}
+
+export interface TaskAnswer {
+  id: number;
+  comment: string | undefined;
+  fileName: string | undefined;
+  url: string | undefined;
+  fileData: Uint8Array | undefined;
+}
+
 export interface Application {
   id: number;
   fullName: string;
@@ -33,19 +79,28 @@ export interface Application {
   stage: Stage;
   positionId: number;
   positionName: string;
+  isArchived: boolean;
+}
+
+export interface Resume {
+  file: Uint8Array;
+  fileName: string;
+}
+
+export enum TaskStatus {
+  Assigned,
+  Completed,
+  DeadLinePassed,
 }
 
 export enum Stage {
   New,
-  Introduced,
-  WaitingFirstInterview,
-  TaskSent,
-  TaskReceived,
-  TaskGraded,
-  WaitingSecondInterview,
-  InConsideration,
-  OfferSent,
-  Inactive,
+  PhoneScreen,
+  FirstInterview,
+  TechTask,
+  TechnicalInterview,
+  FinalInterview,
+  Offer,
   Hired,
 }
 
@@ -63,6 +118,7 @@ export enum JobLocation {
   Berlin,
   Warsaw,
   WashingtonDC,
+  All,
 }
 
 export enum WorkTime {
@@ -91,4 +147,5 @@ export enum Field {
   QA,
   Risk,
   Sales,
+  All,
 }

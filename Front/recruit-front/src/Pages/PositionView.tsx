@@ -17,7 +17,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ApplicationForm from "../Components/Applications/ApplicationForm";
-import Theme from "../Styles/Theme";
 import { Position } from "../Types/types";
 
 const PositionView = () => {
@@ -89,7 +88,7 @@ const PositionView = () => {
     setOpen(false);
   };
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -223,7 +222,7 @@ const PositionView = () => {
           </Stack>
         </Container>
       </Box>
-    </ThemeProvider>
+    </div>
   );
 };
 

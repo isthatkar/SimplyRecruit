@@ -43,7 +43,8 @@ namespace SimplyRecruitAPI.Controllers
                 a.ContactEmail,
                 a.Stage,
                 a.UserId,
-                a.PositionName));
+                a.PositionName,
+                a.IsArchived));
             return Ok(applicationsDto);
         }
 
@@ -68,7 +69,8 @@ namespace SimplyRecruitAPI.Controllers
                 Stage = Stage.New,
                 Position = position,
                 UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
-                PositionName = position.Name
+                PositionName = position.Name,
+                IsArchived = false
             };
     
             await _applicationsRepository.CreateAsync(application);
@@ -84,7 +86,8 @@ namespace SimplyRecruitAPI.Controllers
                 application.Stage,
                 application.PositionId,
                 application.UserId,
-                application.PositionName
+                application.PositionName,
+                application.IsArchived
                ));
         }
     }

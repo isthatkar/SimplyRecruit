@@ -36,7 +36,8 @@ namespace SimplyRecruitAPI.Controllers
                 a.Stage,
                 a.PositionId,
                 a.UserId,
-                a.PositionName));
+                a.PositionName,
+                a.IsArchived));
         }
 
         [HttpGet]
@@ -61,7 +62,8 @@ namespace SimplyRecruitAPI.Controllers
                 application.Stage,
                 application.PositionId,
                 application.UserId,
-                application.PositionName);
+                application.PositionName,
+                application.IsArchived);
         }
 
         [HttpGet]
@@ -81,7 +83,8 @@ namespace SimplyRecruitAPI.Controllers
                 a.Stage,
                 a.PositionId,
                 a.UserId,
-                a.PositionName));
+                a.PositionName, 
+                a.IsArchived));
         }
 
         [HttpPut]
@@ -102,6 +105,7 @@ namespace SimplyRecruitAPI.Controllers
             application.CoverLetter = updateApplicationDto.CoverLetter is null ? application.CoverLetter : updateApplicationDto.CoverLetter;
             application.ContactEmail = updateApplicationDto.ContactEmail is null ? application.ContactEmail : updateApplicationDto.ContactEmail;
             application.Stage = (Stage)(updateApplicationDto.Stage is null ? application.Stage : updateApplicationDto.Stage);
+            application.IsArchived = (bool)(updateApplicationDto.isArchived is null ? application.IsArchived : updateApplicationDto.isArchived);
 
             await _applicationsRepository.UpdateAsync(application);
 
@@ -115,7 +119,8 @@ namespace SimplyRecruitAPI.Controllers
                 application.Stage,
                 application.PositionId,
                 application.UserId, 
-                application.PositionName));
+                application.PositionName,
+                application.IsArchived));
         }
 
         [HttpDelete]

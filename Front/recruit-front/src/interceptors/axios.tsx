@@ -4,6 +4,14 @@ axios.defaults.baseURL = "https://localhost:7108/api/";
 
 let refresh = false;
 
+const cleanLocalStorage = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("roles");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("email");
+};
+
 axios.interceptors.response.use(
   (resp) => resp,
   async (error) => {
@@ -15,28 +23,31 @@ axios.interceptors.response.use(
         accessToken: accessToken,
         refreshToken: refreshToken,
       });
-      const response = await axios.post("refresh-token", body, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      try {
+        const response = await axios.post("refresh-token", body, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(response);
 
-      if (response.status === 200) {
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response.data.accessToken}`;
+        if (response.status === 200) {
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${response.data.accessToken}`;
 
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.refreshToken);
-        return axios(error.config);
+          localStorage.setItem("accessToken", response.data.accessToken);
+          localStorage.setItem("refreshToken", response.data.refreshToken);
+          return axios(error.config);
+        } else {
+          cleanLocalStorage();
+        }
+      } catch {
+        cleanLocalStorage();
+        return error;
+      } finally {
+        refresh = false;
       }
-
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("roles");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("email");
-      refresh = false;
       return error;
     }
   }

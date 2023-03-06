@@ -1,20 +1,16 @@
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import Button from "@mui/material/Button";
 import React, { useEffect, useState } from "react";
-import LogoutButton from "./Auth/LogoutButton";
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
+import LogoutButton from "./Auth/LogoutButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { ThemeProvider } from "@mui/material";
-import Theme from "../Styles/Theme";
 import { useLocation } from "react-router-dom";
 
 const Nav = () => {
@@ -53,190 +49,182 @@ const Nav = () => {
   }, [location]);
 
   return (
-    <ThemeProvider theme={Theme}>
-      <AppBar position="sticky" color="primary">
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <WorkOutlineIcon
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-            />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              SimplyRecruit
-            </Typography>
+    <AppBar position="sticky" color="primary">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <WorkOutlineIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            SimplyRecruit
+          </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                {!isLoggedIn ? (
-                  <MenuItem
-                    onClick={handleCloseNavMenu}
-                    component="a"
-                    href="/login"
-                  >
-                    <Typography textAlign="center">Login</Typography>
-                  </MenuItem>
-                ) : (
-                  ""
-                )}
-                {isEmployee ? (
-                  <MenuItem
-                    onClick={handleCloseNavMenu}
-                    component="a"
-                    href="/projects"
-                  >
-                    <Typography textAlign="center">Projects</Typography>
-                  </MenuItem>
-                ) : (
-                  ""
-                )}
-                {isLoggedIn ? (
-                  <MenuItem
-                    onClick={handleCloseNavMenu}
-                    component="a"
-                    href="/positions"
-                  >
-                    <Typography textAlign="center">Positions</Typography>
-                  </MenuItem>
-                ) : (
-                  ""
-                )}
-                {isCandidate ? (
-                  <MenuItem
-                    onClick={handleCloseNavMenu}
-                    component="a"
-                    href="/userApplications"
-                  >
-                    <Typography textAlign="center">My applications</Typography>
-                  </MenuItem>
-                ) : (
-                  ""
-                )}
-              </Menu>
-            </Box>
-            <WorkOutlineIcon
-              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-            />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href=""
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
               sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
+                display: { xs: "block", md: "none" },
               }}
             >
-              SimplyRecruit
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {!isLoggedIn ? (
-                <Button
-                  sx={{ my: 2, color: "white", display: "block" }}
-                  component="a"
-                  href="/login"
-                >
-                  Login
-                </Button>
-              ) : (
-                ""
-              )}
               {isEmployee ? (
-                <Button
-                  sx={{ my: 2, color: "white", display: "block" }}
+                <MenuItem
+                  onClick={handleCloseNavMenu}
                   component="a"
                   href="/projects"
                 >
-                  Projects
-                </Button>
+                  <Typography textAlign="center">Projects</Typography>
+                </MenuItem>
               ) : (
                 ""
               )}
               {isLoggedIn ? (
-                <Button
-                  sx={{ my: 2, color: "white", display: "block" }}
+                <MenuItem
+                  onClick={handleCloseNavMenu}
                   component="a"
                   href="/positions"
                 >
-                  Positions
-                </Button>
+                  <Typography textAlign="center"> open Positions</Typography>
+                </MenuItem>
               ) : (
                 ""
               )}
               {isCandidate ? (
-                <Button
-                  sx={{ my: 2, color: "white", display: "block" }}
+                <MenuItem
+                  onClick={handleCloseNavMenu}
                   component="a"
                   href="/userApplications"
                 >
-                  My applications
-                </Button>
+                  <Typography textAlign="center">My applications</Typography>
+                </MenuItem>
               ) : (
                 ""
               )}
-            </Box>
-
-            {isLoggedIn ? (
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Logout">
-                  <IconButton sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" />
-                  </IconButton>
-                </Tooltip>
-                <LogoutButton></LogoutButton>
-              </Box>
+              {isLoggedIn ? (
+                <MenuItem
+                  onClick={handleCloseNavMenu}
+                  component="a"
+                  href="/userMeetings"
+                >
+                  <Typography textAlign="center">my Meetings</Typography>
+                </MenuItem>
+              ) : (
+                ""
+              )}
+            </Menu>
+          </Box>
+          <WorkOutlineIcon
+            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+          />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            SimplyRecruit
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {isEmployee ? (
+              <Button
+                sx={{ my: 2, color: "white", display: "block" }}
+                component="a"
+                href="/projects"
+              >
+                Projects
+              </Button>
             ) : (
               ""
             )}
-          </Toolbar>
-        </Container>
-      </AppBar>
-    </ThemeProvider>
+            {isLoggedIn ? (
+              <Button
+                sx={{ my: 2, color: "white", display: "block" }}
+                component="a"
+                href="/positions"
+              >
+                open Positions
+              </Button>
+            ) : (
+              ""
+            )}
+            {isCandidate ? (
+              <Button
+                sx={{ my: 2, color: "white", display: "block" }}
+                component="a"
+                href="/userApplications"
+              >
+                My applications
+              </Button>
+            ) : (
+              ""
+            )}
+            {isLoggedIn ? (
+              <Button
+                sx={{ my: 2, color: "white", display: "block" }}
+                component="a"
+                href="/userMeetings"
+              >
+                my Meetings
+              </Button>
+            ) : (
+              ""
+            )}
+          </Box>
+          {isLoggedIn ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <LogoutButton></LogoutButton>
+            </Box>
+          ) : (
+            ""
+          )}
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 

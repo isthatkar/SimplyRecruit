@@ -1,23 +1,12 @@
-import {
-  Box,
-  Button,
-  Stack,
-  TextField,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
-import isEmail from "validator/lib/isEmail";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
-import Theme from "../../Styles/Theme";
-import ValidEmailTextField from "../ValidEmailTextField";
 import { toast, ToastContainer } from "react-toastify";
 
 const ApplicationForm = (props: any) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filename, setFilename] = useState("");
   const [name, setName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
   const [coveringLetter, setCoveringLetter] = useState("");
@@ -34,19 +23,6 @@ const ApplicationForm = (props: any) => {
 
   const handleAdd = async () => {
     await addApplication();
-  };
-
-  function handleEmailChange(value: string) {
-    setContactEmail(value);
-  }
-
-  const requiredFieldsHaveValue = () => {
-    return (
-      name !== "" &&
-      contactEmail !== "" &&
-      isEmail(contactEmail) &&
-      phoneNumber !== ""
-    );
   };
 
   const addResume = async (applicationId: number) => {
@@ -72,18 +48,13 @@ const ApplicationForm = (props: any) => {
   };
 
   const addApplication = async (): Promise<void> => {
-    if (!requiredFieldsHaveValue()) {
-      toast.error("Check if the form is filled correctly!", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      return;
-    }
+    const userEmail = localStorage.getItem("email");
     const applicationDto = {
       fullName: name,
       phoneNumber: phoneNumber,
       profileUrl: profileUrl,
       coverLetter: coveringLetter,
-      contactEmail: contactEmail,
+      contactEmail: userEmail ? userEmail : "",
     };
 
     const response = await axios.post(
@@ -91,7 +62,6 @@ const ApplicationForm = (props: any) => {
       applicationDto
     );
 
-    console.log(response);
     if (response.status === 201) {
       const applicationId = response.data.id;
       addResume(applicationId);
@@ -105,17 +75,18 @@ const ApplicationForm = (props: any) => {
     }
   };
   return (
-    <ThemeProvider theme={Theme}>
+    <div>
       <ToastContainer />
 
       <Box
+        component="form"
+        onSubmit={handleAdd}
         sx={{
           bgcolor: "background.paper",
           pt: 4,
           pb: 2,
         }}
       >
-        {" "}
         <Typography variant="h5" color="text.primary" sx={{ mb: 4 }}>
           Apply now!
         </Typography>
@@ -127,15 +98,6 @@ const ApplicationForm = (props: any) => {
             id="outlined-name-input"
             label="Full name"
             type="text"
-          />
-          <ValidEmailTextField
-            onChange={handleEmailChange}
-            required
-            value={contactEmail}
-            id="outlined-email-input"
-            label="Contact email *"
-            type="text"
-            fieldName={""}
           />
           <TextField
             required
@@ -178,15 +140,11 @@ const ApplicationForm = (props: any) => {
           </Button>
           <Typography sx={{ ml: 3 }}>{filename}</Typography>
         </Stack>
-        <Button
-          variant="contained"
-          sx={{ width: 1, my: 4 }}
-          onClick={handleAdd}
-        >
+        <Button variant="contained" type="submit" sx={{ width: 1, my: 4 }}>
           Send application
         </Button>
       </Box>
-    </ThemeProvider>
+    </div>
   );
 };
 

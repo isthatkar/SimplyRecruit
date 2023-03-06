@@ -16,5 +16,6 @@ namespace SimplyRecruitAPI.Data.Entities
         public int PositionId { get; set; }
         public string UserId { get; set; }
         public string PositionName { get; set; }
+        public bool IsArchived { get; set; }
     }
 }
