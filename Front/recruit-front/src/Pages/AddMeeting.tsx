@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -35,7 +35,7 @@ const initialMeetingFormData: MeetingFormData = {
   description: "",
   finalTime: "",
   isFinalTime: false,
-  attendees: [],
+  attendees: [""],
   meetingTimes: [""],
   duration: 60,
 };
@@ -76,6 +76,11 @@ const AddMeeting = () => {
     setAttendees((prevAttendees) => [...prevAttendees, ""]);
   };
 
+  useEffect(() => {
+    console.log(window.history.state);
+    setAttendees([window.history.state.usr?.prop]);
+  }, []);
+
   const handleRemoveAttendee = (index: number) => {
     setAttendees((prevAttendees) =>
       prevAttendees.filter((_, i) => i !== index)
@@ -105,9 +110,6 @@ const AddMeeting = () => {
     } else {
       attendeesNew = attendees[0];
     }
-
-    console.log("aaaaaaa");
-    console.log(attendeesNew);
     if (userEmail) {
       attendeesNew = attendeesNew + ";" + userEmail;
     }
@@ -120,9 +122,14 @@ const AddMeeting = () => {
       isFinal: formData.isFinalTime,
       durationMinutes: formData.duration,
       atendees: attendeesNew,
-      meetingTimes: {
-        times: formData.meetingTimes,
-      },
+      meetingTimes: formData.isFinalTime
+        ? null
+        : {
+            times: formData.meetingTimes,
+          },
+      finalTime: formData.isFinalTime
+        ? new Date(formData.finalTime)
+        : new Date(),
     };
 
     console.log(meetingDto);

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Container,
-  Tab,
-  Tabs,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Tab, Tabs, Typography } from "@mui/material";
 
 import TaskIcon from "@mui/icons-material/Task";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
@@ -13,7 +6,6 @@ import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Theme } from "../Styles/Theme";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { Application, Resume } from "../Types/types";
 import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
@@ -112,7 +104,9 @@ const ApplicationView = () => {
         ></ApplicationCard>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ApplicationMeetings></ApplicationMeetings>
+        <ApplicationMeetings
+          candidateEmail={application?.contactEmail}
+        ></ApplicationMeetings>
       </TabPanel>
       <TabPanel value={value} index={2}>
         <ReviewsTab></ReviewsTab>

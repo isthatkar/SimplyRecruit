@@ -64,7 +64,7 @@ const MeetingSchedulingPage = () => {
     });
 
     if (response.status === 200) {
-      navigate(`meetings/${meetingId}`);
+      navigate(`/meetings/${meetingId}`);
     } else {
       console.log("not success");
     }

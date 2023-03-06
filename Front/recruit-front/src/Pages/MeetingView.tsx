@@ -5,6 +5,7 @@ import {
   IconButton,
   Stack,
   ThemeProvider,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
@@ -14,9 +15,9 @@ import CopyLinkDialog from "../Components/Meetings/CopyLinkDialog";
 import AttendeeList from "../Components/Meetings/AttendeesList";
 import { Theme } from "../Styles/Theme";
 import { useNavigate, useParams } from "react-router-dom";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
+import CancelMeetingDialog from "../Components/Meetings/CancelMeetingDialog";
 
 const MeetingView = () => {
   const [showCopyLinkDialog, setShowCopyLinkDialog] = useState(false);
@@ -69,12 +70,12 @@ const MeetingView = () => {
             sx={{ mb: 4 }}
           >
             {/* todo this only visible to employee who created meeting */}
-            <IconButton color="secondary">
-              <DeleteIcon />
-            </IconButton>
-            <IconButton color="secondary">
-              <EditIcon />
-            </IconButton>
+            <Tooltip title="Edit">
+              <IconButton color="secondary">
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <CancelMeetingDialog></CancelMeetingDialog>
           </Stack>
           <Stack
             direction="column"

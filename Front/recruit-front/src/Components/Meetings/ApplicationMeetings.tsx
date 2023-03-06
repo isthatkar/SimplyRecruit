@@ -15,7 +15,9 @@ const ApplicationMeetings = (props: any) => {
   const { applicationId } = useParams();
 
   const handleClickAdd = () => {
-    navigate(`/application/${applicationId}/addMeeting`);
+    navigate(`/application/${applicationId}/addMeeting`, {
+      state: { prop: props.candidateEmail },
+    });
   };
 
   const getMeetings = useCallback(async () => {

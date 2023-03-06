@@ -6,6 +6,7 @@ using System.Security.Claims;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
 using Microsoft.IdentityModel.JsonWebTokens;
+using System.Collections.Generic;
 
 namespace SimplyRecruitAPI.Controllers
 {
@@ -79,18 +80,24 @@ namespace SimplyRecruitAPI.Controllers
                Application = application
             };
 
-            IEnumerable<MeetingTimes> meetingTimes = createMeetingDto.meetingTimes.times.Select(t => new MeetingTimes()
-            {
-                SelectedAttendees = string.Empty,
-                StartTime = t,
-                Meeting = meeting
-            });
-
             await _meetingsRepository.CreateAsync(meeting);
-            foreach(MeetingTimes time in meetingTimes)
+
+            IEnumerable<MeetingTimes> meetingTimes = new List<MeetingTimes>();
+            if (!createMeetingDto.IsFinal)
             {
-                await _meetingTimesRepository.CreateAsync(time);
+                meetingTimes = createMeetingDto.meetingTimes.times.Select(t => new MeetingTimes()
+                {
+                    SelectedAttendees = string.Empty,
+                    StartTime = t,
+                    Meeting = meeting
+                });
+
+                foreach (MeetingTimes time in meetingTimes)
+                {
+                    await _meetingTimesRepository.CreateAsync(time);
+                }
             }
+          
 
             //201
             return Created("", new MeetingDtoWithTimes(
