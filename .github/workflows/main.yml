@@ -15,10 +15,10 @@ jobs:
       with:
         dotnet-version: '6.0.x'
     - name: Install dependencies
-      working-directory: ../../API/SimplyRecruitAPI/SimplyRecruitAPI
+      working-directory: ..\..\API\SimplyRecruitAPI\SimplyRecruitAPI
       run: dotnet restore
     - name: Build
-      working-directory: ../../API/SimplyRecruitAPI/SimplyRecruitAPI
+      working-directory: ..\..\API\SimplyRecruitAPI\SimplyRecruitAPI
       run: dotnet build --configuration Release
 
   test:
