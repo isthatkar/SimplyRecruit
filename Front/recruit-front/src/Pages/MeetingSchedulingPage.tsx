@@ -22,6 +22,8 @@ import { useNavigate, useParams } from "react-router-dom";
 const MeetingSchedulingPage = () => {
   const [meeting, setMeeting] = useState<Meeting>();
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
+  const [userHasSelectedTimes, setUserHasSelectedTimes] =
+    useState<boolean>(false);
   const { meetingId } = useParams();
   const navigate = useNavigate();
 
@@ -35,18 +37,25 @@ const MeetingSchedulingPage = () => {
     });
   }
 
-  useEffect(() => {
-    console.log(selectedTimes);
-  }, [selectedTimes]);
-
   const getMeeting = useCallback(async () => {
     const response = await axios.get(`/meetings/${meetingId}`);
-    console.log(response);
     const responseMeeting = response.data as Meeting;
-    console.log(responseMeeting);
-    console.log(responseMeeting.meetingTimes);
     setMeeting(responseMeeting);
-    console.log(meeting);
+    if (responseMeeting?.isFinalTime) {
+      navigate(`/meetings/${responseMeeting.id}`);
+    }
+    const userEmail = localStorage.getItem("email");
+    const hasSelected = responseMeeting.selectedAtendees.includes(
+      userEmail as string
+    );
+    setUserHasSelectedTimes(hasSelected);
+    if (hasSelected) {
+      const userSelectedTimes = responseMeeting.meetingTimes
+        .filter((time) => time.selectedAttendees.includes(userEmail as string))
+        .map((time) => time.id);
+
+      setSelectedTimes(userSelectedTimes);
+    }
   }, []);
 
   useEffect(() => {
@@ -60,6 +69,7 @@ const MeetingSchedulingPage = () => {
   const selectTimes = useCallback(async () => {
     console.log(selectedTimes);
     const response = await axios.put(`/meetingTimes/select`, {
+      meetingId: meeting?.id,
       ids: selectedTimes,
     });
 
@@ -96,7 +106,9 @@ const MeetingSchedulingPage = () => {
             </Typography>
 
             <Typography variant="h6">
-              Select the times when you are available:
+              {userHasSelectedTimes
+                ? "You have already selected the available times for this meeting"
+                : " Select the times when you are available:"}
             </Typography>
             {meeting ? (
               <List>
@@ -104,6 +116,7 @@ const MeetingSchedulingPage = () => {
                   <ListItem
                     key={time.id}
                     button
+                    disabled={userHasSelectedTimes}
                     selected={selectedTimes.includes(time.id)}
                     onClick={() => handleTimeClick(time.id)}
                   >
@@ -135,7 +148,12 @@ const MeetingSchedulingPage = () => {
               ""
             )}
           </Stack>
-          <Button variant="contained" onClick={handleSaveClick} sx={{ my: 3 }}>
+          <Button
+            variant="contained"
+            onClick={handleSaveClick}
+            sx={{ my: 3 }}
+            disabled={userHasSelectedTimes}
+          >
             Save
           </Button>
         </Container>

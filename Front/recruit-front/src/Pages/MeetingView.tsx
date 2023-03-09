@@ -61,6 +61,7 @@ const MeetingView = () => {
           <Typography align="center" variant="h2" component="h1" gutterBottom>
             {meeting?.title}
           </Typography>
+          {meeting ? <AttendeeList attendees={meeting?.attendees} /> : ""}
 
           <Stack
             direction="row"
@@ -94,7 +95,6 @@ const MeetingView = () => {
             <Typography variant="subtitle1" gutterBottom>
               The meeting will take {meeting?.duration} minutes
             </Typography>
-            {meeting ? <AttendeeList attendees={meeting?.attendees} /> : ""}
 
             <Box mt={2}>
               {meeting?.isFinalTime ? (

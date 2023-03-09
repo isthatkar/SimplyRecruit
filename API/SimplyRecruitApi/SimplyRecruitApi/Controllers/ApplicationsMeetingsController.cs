@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
-using static SimplyRecruitAPI.Data.Dtos.Applications.ApplicationsDtos;
 using System.Security.Claims;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
 using Microsoft.IdentityModel.JsonWebTokens;
-using System.Collections.Generic;
 using SimplyRecruitAPI.Helpers;
 
 namespace SimplyRecruitAPI.Controllers
@@ -45,6 +43,7 @@ namespace SimplyRecruitAPI.Controllers
                 m.FinalTime,
                 m.IsFinal,
                 m.Atendees,
+                m.SelectedAtendees,
                 new MeetingTimes[] {  },
                 m.DurationMinutes,
                 m.SchedullingUrl,
@@ -76,6 +75,7 @@ namespace SimplyRecruitAPI.Controllers
                DurationMinutes = createMeetingDto.DurationMinutes,
                FinalTime = createMeetingDto.IsFinal ? createMeetingDto.FinalTime : new DateTime(),
                IsCanceled = false,
+               SelectedAtendees = string.Empty,
                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
                Atendees = createMeetingDto.Atendees,
                Application = application
@@ -111,6 +111,7 @@ namespace SimplyRecruitAPI.Controllers
                 meeting.DurationMinutes,
                 meeting.IsCanceled,
                 meeting.Atendees,
+                meeting.SelectedAtendees,
                 applicationId,
                 meetingTimes.ToArray()
                ));

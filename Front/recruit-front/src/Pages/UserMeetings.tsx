@@ -6,16 +6,23 @@ import { Meeting } from "../Types/types";
 import MeetingListItem from "../Components/Meetings/MeetingListItem";
 import MeetingCalendar from "../Components/Meetings/MeetingsCalendar";
 import axios from "axios";
+import Loader from "../Components/Loading/Loader";
 
 const UserMeetings = () => {
-  const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [meetings, setMeetings] = useState<Meeting[]>();
+  const [upcomingMeetings, setUpcommingMeetings] = useState<Meeting[]>([]);
 
   const getMeetings = useCallback(async () => {
     const response = await axios.get(`/meetings`);
     console.log(response);
-    const upcomingMeetings = response.data;
-    console.log(upcomingMeetings);
-    setMeetings(upcomingMeetings);
+    const allMeetings = response.data;
+    setMeetings(allMeetings);
+    const now = new Date();
+
+    const upcommingMeetings = (allMeetings as Meeting[]).filter(
+      (s) => s.isFinalTime === false || new Date(s.finalTime) > now
+    );
+    setUpcommingMeetings(upcommingMeetings);
   }, []);
 
   useEffect(() => {
@@ -24,60 +31,62 @@ const UserMeetings = () => {
 
   return (
     <div>
-      <Box
-        sx={{
-          display: "flex",
-          background: "red",
-          justifyContent: "center",
-          mb: 5,
-          mt: 4,
-        }}
-      ></Box>
-
-      {meetings.length > 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <ColumnStackCenter
+      {meetings ? (
+        <>
+          {meetings.length > 0 ? (
+            <div>
+              <Box
+                sx={{
+                  display: "flex",
+                  mt: 8,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ColumnStackCenter
+                  sx={{
+                    width: "80%",
+                    maxWidth: "900",
+                    "@media (max-width: 900px)": {
+                      width: "100%",
+                    },
+                  }}
+                  spacing={1}
+                >
+                  <Typography align="center" variant="h2" sx={{ mb: 5 }}>
+                    Upcoming meetings
+                  </Typography>
+                  {upcomingMeetings.map((meet) => (
+                    <MeetingListItem
+                      meet={meet}
+                      key={meet.id}
+                    ></MeetingListItem>
+                  ))}
+                </ColumnStackCenter>
+              </Box>
+            </div>
+          ) : (
+            <RowStackCenter spacing={1} sx={{ mt: 8 }}>
+              <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
+              <Typography align="center" variant="h5">
+                NO UPCOMING MEETINGS
+              </Typography>
+            </RowStackCenter>
+          )}
+          <Box
             sx={{
-              width: "80%",
-              maxWidth: "900",
-              "@media (max-width: 900px)": {
-                width: "100%",
-              },
+              display: "flex",
+              justifyContent: "center",
+              mb: 8,
+              mt: 4,
             }}
-            spacing={1}
           >
-            <Typography align="center" variant="h2" sx={{ mb: 5 }}>
-              Upcoming meetings
-            </Typography>
-            {meetings.map((meet) => (
-              <MeetingListItem meet={meet} key={meet.id}></MeetingListItem>
-            ))}
-          </ColumnStackCenter>
-        </Box>
+            <MeetingCalendar meetings={meetings}></MeetingCalendar>
+          </Box>
+        </>
       ) : (
-        <RowStackCenter spacing={1}>
-          <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
-          <Typography align="center" variant="h5">
-            NO UPCOMING MEETINGS
-          </Typography>
-        </RowStackCenter>
+        <Loader></Loader>
       )}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          mb: 8,
-          mt: 4,
-        }}
-      >
-        <MeetingCalendar meetings={meetings}></MeetingCalendar>
-      </Box>
     </div>
   );
 };

@@ -14,11 +14,13 @@ namespace SimplyRecruitAPI.Controllers
     public class MeetingTimesController : ControllerBase
     {
         private readonly IMeetingTimesRepository _meetingTimesRepository;
+        private readonly IMeetingsRepository _meetingsRepository;
         private UserManager<SimplyUser> _userManager;
-        public MeetingTimesController(IMeetingTimesRepository meetingTimesRepository, UserManager<SimplyUser> userManager)
+        public MeetingTimesController(IMeetingTimesRepository meetingTimesRepository, UserManager<SimplyUser> userManager, IMeetingsRepository meetingsRepository)
         {
             _meetingTimesRepository = meetingTimesRepository;
             _userManager = userManager;
+            _meetingsRepository = meetingsRepository;
         }
 
         [HttpPut]
@@ -28,6 +30,14 @@ namespace SimplyRecruitAPI.Controllers
         {
             string userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
             var user = await _userManager.FindByIdAsync(userId);
+
+            var meet = await _meetingsRepository.GetAsync(dto.meetingId);
+            if(meet == null)
+            {
+                return NotFound();
+            }
+
+            meet.SelectedAtendees = meet.SelectedAtendees == "" ? user.Email : meet.SelectedAtendees + ";" + user.Email;
 
             foreach(var id in dto.Ids)
             {
