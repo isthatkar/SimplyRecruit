@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert/Alert";
@@ -10,6 +10,10 @@ import axios from "axios";
 export default function LoginButton() {
   const navigate = useNavigate();
   const [failed, setFailed] = useState(false);
+
+  const location = useLocation();
+  const from = location.state?.from.pathname ?? "/";
+  console.log(from);
 
   const onSuccess = async (credentialResponse: CredentialResponse) => {
     setFailed(false);
@@ -30,21 +34,24 @@ export default function LoginButton() {
 
     if (response.status == 200) {
       const token = response.data;
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${token.accessToken}`;
       localStorage.setItem("accessToken", token.accessToken);
       localStorage.setItem("refreshToken", token.refreshToken);
       localStorage.setItem("roles", token.roles);
       localStorage.setItem("userId", token.userId);
       localStorage.setItem("email", token.email);
-      console.log("refreshtoken");
-      console.log(token.refreshToken);
-      return navigate("/");
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${token.accessToken}`;
+
+      return await navigateToPage(from);
     } else {
       setFailed(true);
     }
   };
+
+  async function navigateToPage(to: string) {
+    return navigate(to);
+  }
   return (
     <Box
       sx={{

@@ -1,16 +1,23 @@
 import React from "react";
-import { PathRouteProps, Navigate, Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
+import { useLocation } from "react-router-dom";
 
-interface Props extends PathRouteProps {
-  isAuth: boolean;
-}
+const ProtectedRoute = () => {
+  const location = useLocation();
 
-const ProtectedRoute = ({ isAuth, ...routeProps }: Props) => {
-  console.log(isAuth);
-  if (isAuth) {
+  const token = localStorage.getItem("accessToken");
+  const isAuthent = !(token === null);
+  console.log(isAuthent);
+
+  const redirectToLogin = () => (
+    <Navigate to="/login" state={{ from: location }} replace />
+  );
+
+  console.log(isAuthent);
+  if (isAuthent) {
     return <Outlet />;
   }
-  return <Navigate to="/login"></Navigate>;
+  return redirectToLogin();
 };
 
 export default ProtectedRoute;

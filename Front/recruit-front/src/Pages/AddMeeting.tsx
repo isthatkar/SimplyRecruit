@@ -77,7 +77,6 @@ const AddMeeting = () => {
   };
 
   useEffect(() => {
-    console.log(window.history.state);
     setAttendees([window.history.state.usr?.prop]);
   }, []);
 

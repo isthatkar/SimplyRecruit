@@ -59,11 +59,16 @@ namespace SimplyRecruitAPI.Controllers
         [HttpGet]
         [Route("{meetingId}", Name = "GetMeeting")]
         [Authorize]
-        public async Task<MeetingDto> GetMeeting(int meetingId)
+        public async Task<ActionResult<MeetingDto>> GetMeeting(int meetingId)
         {
 
             var meeting = await _meetingsRepository.GetAsync(meetingId);
-            
+
+            if (meeting == null)
+            {
+                return NotFound();
+            }
+
             IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(meeting.Id);
            return new MeetingDto(
                 meeting.Id,
@@ -78,6 +83,35 @@ namespace SimplyRecruitAPI.Controllers
                 meeting.MeetingUrl,
                 meeting.IsCanceled
                );
+        }
+
+        [HttpGet]
+        [Route("url/{meetingUrl}", Name = "GetMeetingByUrl")]
+        [Authorize]
+        public async Task<ActionResult<MeetingDto>> GetMeetingByUrl(string meetingUrl)
+        {
+
+            var meeting = await _meetingsRepository.GetByUrlAsync(meetingUrl);
+
+            if(meeting == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(meeting.Id);
+            return new MeetingDto(
+                 meeting.Id,
+                 meeting.Title,
+                 meeting.Description,
+                 meeting.FinalTime,
+                 meeting.IsFinal,
+                 meeting.Atendees,
+                 meetTimes.ToArray(),
+                 meeting.DurationMinutes,
+                 meeting.SchedullingUrl,
+                 meeting.MeetingUrl,
+                 meeting.IsCanceled
+                );
         }
     }
 }

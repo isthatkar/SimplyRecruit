@@ -23,12 +23,10 @@ import { ThemeProvider } from "@emotion/react";
 import { Theme } from "./Styles/Theme";
 import ProtectedRouteEmployee from "./Components/ProtectedRouteEmployee";
 import CandidateApplicationView from "./Components/Applications/CandidateApplicationView";
+import MeetingSchedulingRedirect from "./Components/Meetings/MeetingSchedulinkRedirect";
 
-const token = localStorage.getItem("accessToken");
 const roles = localStorage.getItem("roles");
 const isEmployee = roles ? roles.includes("Employee") : false;
-const isAuth = !(token === null);
-console.log(isAuth);
 function App() {
   return (
     <GoogleOAuthProvider clientId="724152737023-qh4mjh84lm1r0buhsheotob3biugicgs.apps.googleusercontent.com">
@@ -50,10 +48,7 @@ function App() {
             >
               <Route path="/projects/:projectid" element={<ProjectView />} />
             </Route>
-            <Route
-              path="/positions"
-              element={<ProtectedRoute isAuth={isAuth} />}
-            >
+            <Route path="/positions" element={<ProtectedRoute />}>
               <Route path="/positions" element={<Positions />} />
             </Route>
             <Route
@@ -65,10 +60,7 @@ function App() {
                 element={<AddPositionPage />}
               />
             </Route>
-            <Route
-              path="/positions/:positionId"
-              element={<ProtectedRoute isAuth={isAuth} />}
-            >
+            <Route path="/positions/:positionId" element={<ProtectedRoute />}>
               <Route path="/positions/:positionId" element={<PositionView />} />
             </Route>
             <Route
@@ -80,10 +72,7 @@ function App() {
                 element={<EditPositions />}
               />
             </Route>
-            <Route
-              path="/userApplications"
-              element={<ProtectedRoute isAuth={isAuth} />}
-            >
+            <Route path="/userApplications" element={<ProtectedRoute />}>
               <Route path="/userApplications" element={<UserApplications />} />
             </Route>
             <Route
@@ -113,30 +102,33 @@ function App() {
                 element={<AddMeeting />}
               />
             </Route>
-            <Route
-              path="/meetings/:meetingId"
-              element={<ProtectedRoute isAuth={isAuth} />}
-            >
+            <Route path="/meetings/:meetingId" element={<ProtectedRoute />}>
               <Route path="/meetings/:meetingId" element={<MeetingView />} />
             </Route>
             <Route
               path="/meetings/:meetingId/schedule"
-              element={<ProtectedRoute isAuth={isAuth} />}
+              element={<ProtectedRoute />}
             >
               <Route
                 path="/meetings/:meetingId/schedule"
                 element={<MeetingSchedulingPage />}
               />
             </Route>
-            <Route
-              path="/userMeetings"
-              element={<ProtectedRoute isAuth={isAuth} />}
-            >
+            <Route path="/userMeetings" element={<ProtectedRoute />}>
               <Route path="/userMeetings" element={<UserMeetings />} />
             </Route>
             <Route
+              path="/activeShedule/:randomUrl"
+              element={<ProtectedRoute />}
+            >
+              <Route
+                path="/activeShedule/:randomUrl"
+                element={<MeetingSchedulingRedirect />}
+              />
+            </Route>
+            <Route
               path="/candidateApplication/:applicationId"
-              element={<ProtectedRoute isAuth={isAuth} />}
+              element={<ProtectedRoute />}
             >
               <Route
                 path="/candidateApplication/:applicationId"

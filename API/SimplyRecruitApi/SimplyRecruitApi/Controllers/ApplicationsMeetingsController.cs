@@ -7,6 +7,7 @@ using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Collections.Generic;
+using SimplyRecruitAPI.Helpers;
 
 namespace SimplyRecruitAPI.Controllers
 {
@@ -70,7 +71,7 @@ namespace SimplyRecruitAPI.Controllers
                Title = createMeetingDto.Title,
                Description = createMeetingDto.Description,
                MeetingUrl = createMeetingDto.MeetingUrl,
-               SchedullingUrl = createMeetingDto.SchedulingUrl,
+               SchedullingUrl = application.Id + RandomStringGenerator.GenerateRandomString(25),
                IsFinal = createMeetingDto.IsFinal,
                DurationMinutes = createMeetingDto.DurationMinutes,
                FinalTime = createMeetingDto.IsFinal ? createMeetingDto.FinalTime : new DateTime(),

@@ -123,7 +123,10 @@ const MeetingView = () => {
             <CopyLinkDialog
               open={showCopyLinkDialog}
               onClose={handleCloseCopyLinkDialog}
-              link={meeting?.schedulingUrl as string}
+              link={
+                ("http://localhost:3000/activeShedule/" +
+                  meeting?.schedulingUrl) as string
+              }
             />
           </Stack>
         </Container>

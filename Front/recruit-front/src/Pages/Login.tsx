@@ -9,8 +9,12 @@ import image from "../img/Projects/project9.png";
 import LoginButton from "../Components/Auth/LoginButton";
 import personsImage from "../img/Projects/persons.png";
 import { Stack } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const Login = () => {
+  const location = useLocation();
+
+  console.log(location);
   return (
     <Grid
       container
