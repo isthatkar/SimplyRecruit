@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
+using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
 using System.Security.Claims;
 
@@ -37,9 +38,24 @@ namespace SimplyRecruitAPI.Controllers
                 return NotFound();
             }
 
-            meet.SelectedAtendees = meet.SelectedAtendees == "" ? user.Email : meet.SelectedAtendees + ";" + user.Email;
+            if (meet.SelectedAtendees.Contains(user.Email)) //remove all user selected values if he has selected before
+            {
+                var meetingMeetingTimes = await _meetingTimesRepository.GetMeetingsManyAsync(dto.meetingId);
+               foreach (MeetingTimes meeting in meetingMeetingTimes)
+                {
+                    if(meeting.SelectedAttendees is not null)
+                    {
+                        meeting.SelectedAttendees = RemoveEmailFromString(meeting.SelectedAttendees, user.Email);
+                    }
+                }
+            }
 
-            foreach(var id in dto.Ids)
+            if (!meet.SelectedAtendees.Contains(user.Email)) //add user to selected atendees 
+            {
+                meet.SelectedAtendees = meet.SelectedAtendees == "" ? user.Email : meet.SelectedAtendees + ";" + user.Email;
+            }
+
+            foreach (var id in dto.Ids) //add all selected values 
             {
                var meeting = await _meetingTimesRepository.GetAsync(id);
                 if(meeting == null)
@@ -47,10 +63,10 @@ namespace SimplyRecruitAPI.Controllers
                     return NotFound();
                 }
 
-               if ( meeting.SelectedAttendees == ""){
+               if ( meeting.SelectedAttendees == "" || meeting.SelectedAttendees is null){
                     meeting.SelectedAttendees = meeting.SelectedAttendees += $"{user.Email}";
                 }
-                else
+                else if(!meeting.SelectedAttendees.Contains(user.Email))
                 {
                     meeting.SelectedAttendees = meeting.SelectedAttendees += $";{user.Email}";
                 }
@@ -58,6 +74,15 @@ namespace SimplyRecruitAPI.Controllers
             }
 
             return Ok();
+        }
+
+        private string RemoveEmailFromString(string attendiesList, string emailToRemove)
+        {
+            string[] emailArray = attendiesList.Split(';'); 
+            List<string> emailListWithoutRemoved = emailArray.ToList().Where(x => x != emailToRemove).ToList();
+            string updatedEmailList = string.Join(";", emailListWithoutRemoved);
+
+            return updatedEmailList;
         }
 
     }

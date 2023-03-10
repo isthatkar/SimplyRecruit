@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  IconButton,
   List,
   ListItem,
   ListItemText,
@@ -13,15 +14,17 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Meeting, MeetingTime } from "../Types/types";
-import { Theme } from "../Styles/Theme";
+import { RowStackLeft, Theme } from "../Styles/Theme";
 import PersonIcon from "@mui/icons-material/Person";
 import GetFormatedDate from "../Helpers/DateFormater";
 import axios from "axios";
+import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 
 const MeetingSchedulingPage = () => {
   const [meeting, setMeeting] = useState<Meeting>();
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
+  const userEmail = localStorage.getItem("email");
   const [userHasSelectedTimes, setUserHasSelectedTimes] =
     useState<boolean>(false);
   const { meetingId } = useParams();
@@ -35,6 +38,27 @@ const MeetingSchedulingPage = () => {
         return [...prevSelectedTimes, timeId];
       }
     });
+
+    const newMeeting = meeting;
+    console.log(newMeeting);
+    const selectedTime = meeting?.meetingTimes.find((t) => t.id === timeId);
+    const selectedTimeIndex = meeting?.meetingTimes.findIndex(
+      (t) => t.id === timeId
+    );
+    console.log(selectedTime);
+
+    if (
+      newMeeting &&
+      selectedTimeIndex !== undefined &&
+      selectedTimeIndex >= 0
+    ) {
+      newMeeting.meetingTimes[selectedTimeIndex].selectedAttendees =
+        updateEmails(
+          selectedTime?.selectedAttendees as string,
+          userEmail as string
+        );
+      setMeeting(newMeeting);
+    }
   }
 
   const getMeeting = useCallback(async () => {
@@ -44,7 +68,6 @@ const MeetingSchedulingPage = () => {
     if (responseMeeting?.isFinalTime) {
       navigate(`/meetings/${responseMeeting.id}`);
     }
-    const userEmail = localStorage.getItem("email");
     const hasSelected = responseMeeting.selectedAtendees.includes(
       userEmail as string
     );
@@ -58,12 +81,34 @@ const MeetingSchedulingPage = () => {
     }
   }, []);
 
+  function updateEmails(
+    atendeesString: string,
+    emailToAddOrRemove: string
+  ): string {
+    console.log(atendeesString);
+    console.log(emailToAddOrRemove);
+    const emails = atendeesString.split(";").filter((e) => e !== "");
+    const index = emails.indexOf(emailToAddOrRemove);
+
+    if (index === -1) {
+      emails.push(emailToAddOrRemove);
+    } else if (index !== -1) {
+      emails.splice(index, 1);
+    }
+
+    return emails.join(";");
+  }
+
   useEffect(() => {
     getMeeting();
   }, []);
 
   const handleSaveClick = async () => {
     await selectTimes();
+  };
+
+  const handleEditClick = async () => {
+    setUserHasSelectedTimes(false);
   };
 
   const selectTimes = useCallback(async () => {
@@ -105,11 +150,23 @@ const MeetingSchedulingPage = () => {
               The meeting will take {meeting?.duration} minutes
             </Typography>
 
-            <Typography variant="h6">
-              {userHasSelectedTimes
-                ? "You have already selected the available times for this meeting"
-                : " Select the times when you are available:"}
-            </Typography>
+            <RowStackLeft>
+              <Typography variant="h6">
+                {userHasSelectedTimes
+                  ? "You have already selected the available times for this meeting"
+                  : " Select the times when you are available:"}
+              </Typography>
+              {userHasSelectedTimes ? (
+                <Tooltip title="Edit selection">
+                  <IconButton sx={{ ml: 2 }} onClick={handleEditClick}>
+                    <EditIcon></EditIcon>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                ""
+              )}
+            </RowStackLeft>
+
             {meeting ? (
               <List>
                 {meeting.meetingTimes.map((time: MeetingTime) => (
@@ -152,7 +209,7 @@ const MeetingSchedulingPage = () => {
             variant="contained"
             onClick={handleSaveClick}
             sx={{ my: 3 }}
-            disabled={userHasSelectedTimes}
+            disabled={userHasSelectedTimes || selectedTimes.length <= 0}
           >
             Save
           </Button>
