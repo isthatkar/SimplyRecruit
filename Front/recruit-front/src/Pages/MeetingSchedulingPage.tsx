@@ -65,7 +65,7 @@ const MeetingSchedulingPage = () => {
     const response = await axios.get(`/meetings/${meetingId}`);
     const responseMeeting = response.data as Meeting;
     setMeeting(responseMeeting);
-    if (responseMeeting?.isFinalTime) {
+    if (responseMeeting?.isFinalTime || responseMeeting?.isCanceled) {
       navigate(`/meetings/${responseMeeting.id}`);
     }
     const hasSelected = responseMeeting.selectedAtendees.includes(
@@ -124,98 +124,97 @@ const MeetingSchedulingPage = () => {
       console.log("not success");
     }
   }, [selectedTimes]);
+
   return (
-    <ThemeProvider theme={Theme}>
-      <Box
-        sx={{
-          pb: 6,
-          width: 1,
-        }}
-      >
-        <Container sx={{ width: "100%", my: 8 }}>
-          <Stack
-            direction="column"
-            justifyContent="flex-start"
-            alignItems="stretch"
-            spacing={3}
-          >
-            <Typography variant="h3" align="center">
-              {meeting?.title}{" "}
+    <Box
+      sx={{
+        pb: 6,
+        width: 1,
+      }}
+    >
+      <Container sx={{ width: "100%", my: 8 }}>
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="stretch"
+          spacing={3}
+        >
+          <Typography variant="h3" align="center">
+            {meeting?.title}{" "}
+          </Typography>
+          <Typography variant="body1" align="center">
+            {meeting?.description}
+          </Typography>
+
+          <Typography variant="body1" align="center">
+            The meeting will take {meeting?.duration} minutes
+          </Typography>
+
+          <RowStackLeft>
+            <Typography variant="h6">
+              {userHasSelectedTimes
+                ? "You have already selected the available times for this meeting"
+                : " Select the times when you are available:"}
             </Typography>
-            <Typography variant="body1" align="center">
-              {meeting?.description}
-            </Typography>
-
-            <Typography variant="body1" align="center">
-              The meeting will take {meeting?.duration} minutes
-            </Typography>
-
-            <RowStackLeft>
-              <Typography variant="h6">
-                {userHasSelectedTimes
-                  ? "You have already selected the available times for this meeting"
-                  : " Select the times when you are available:"}
-              </Typography>
-              {userHasSelectedTimes ? (
-                <Tooltip title="Edit selection">
-                  <IconButton sx={{ ml: 2 }} onClick={handleEditClick}>
-                    <EditIcon></EditIcon>
-                  </IconButton>
-                </Tooltip>
-              ) : (
-                ""
-              )}
-            </RowStackLeft>
-
-            {meeting ? (
-              <List>
-                {meeting.meetingTimes.map((time: MeetingTime) => (
-                  <ListItem
-                    key={time.id}
-                    button
-                    disabled={userHasSelectedTimes}
-                    selected={selectedTimes.includes(time.id)}
-                    onClick={() => handleTimeClick(time.id)}
-                  >
-                    <ListItemText primary={GetFormatedDate(time.startTime)} />
-
-                    <Tooltip
-                      title={
-                        time.selectedAttendees.length === 0
-                          ? "No attendees selected"
-                          : time.selectedAttendees.split(";").join(", ")
-                      }
-                    >
-                      <div>
-                        {time.selectedAttendees.length === 0
-                          ? ""
-                          : time.selectedAttendees
-                              .split(";")
-                              .map((attendee, index) => (
-                                <React.Fragment key={attendee}>
-                                  <PersonIcon />
-                                </React.Fragment>
-                              ))}
-                      </div>
-                    </Tooltip>
-                  </ListItem>
-                ))}
-              </List>
+            {userHasSelectedTimes ? (
+              <Tooltip title="Edit selection">
+                <IconButton sx={{ ml: 2 }} onClick={handleEditClick}>
+                  <EditIcon></EditIcon>
+                </IconButton>
+              </Tooltip>
             ) : (
               ""
             )}
-          </Stack>
-          <Button
-            variant="contained"
-            onClick={handleSaveClick}
-            sx={{ my: 3 }}
-            disabled={userHasSelectedTimes || selectedTimes.length <= 0}
-          >
-            Save
-          </Button>
-        </Container>
-      </Box>
-    </ThemeProvider>
+          </RowStackLeft>
+
+          {meeting ? (
+            <List>
+              {meeting.meetingTimes.map((time: MeetingTime) => (
+                <ListItem
+                  key={time.id}
+                  button
+                  disabled={userHasSelectedTimes}
+                  selected={selectedTimes.includes(time.id)}
+                  onClick={() => handleTimeClick(time.id)}
+                >
+                  <ListItemText primary={GetFormatedDate(time.startTime)} />
+
+                  <Tooltip
+                    title={
+                      time.selectedAttendees.length === 0
+                        ? "No attendees selected"
+                        : time.selectedAttendees.split(";").join(", ")
+                    }
+                  >
+                    <div>
+                      {time.selectedAttendees.length === 0
+                        ? ""
+                        : time.selectedAttendees
+                            .split(";")
+                            .map((attendee, index) => (
+                              <React.Fragment key={attendee}>
+                                <PersonIcon />
+                              </React.Fragment>
+                            ))}
+                    </div>
+                  </Tooltip>
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            ""
+          )}
+        </Stack>
+        <Button
+          variant="contained"
+          onClick={handleSaveClick}
+          sx={{ my: 3 }}
+          disabled={userHasSelectedTimes || selectedTimes.length <= 0}
+        >
+          Save
+        </Button>
+      </Container>
+    </Box>
   );
 };
 

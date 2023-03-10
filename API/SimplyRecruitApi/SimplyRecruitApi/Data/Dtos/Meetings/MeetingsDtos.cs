@@ -7,4 +7,6 @@ namespace SimplyRecruitAPI.Data.Dtos.Meetings
     public record CreateMeetingTimesDto(DateTime[] times);
     public record CreateMeetingDto(string Title, string Description, string MeetingUrl, string SchedulingUrl, bool IsFinal, int DurationMinutes, string Atendees, CreateMeetingTimesDto? meetingTimes, DateTime? FinalTime);
     public record SelectMeetingTimesDto(int meetingId, int[] Ids);
+    public record UpdateMeetingDto(string? Title, string? Description, DateTime? FinalTime, bool? IsFinalTime, string? Attendees, MeetingTimes[]? NewMeetingTimes, int? Duration, string? MeetingUrl, bool? IsCanceled);
+
 }
