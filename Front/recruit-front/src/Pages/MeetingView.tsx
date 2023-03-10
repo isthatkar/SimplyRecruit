@@ -12,6 +12,8 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CancelMeetingDialog from "../Components/Meetings/CancelMeetingDialog";
 import { toast } from "react-toastify";
 import MeetingStateChip from "../Components/Meetings/MeetingStateChip";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import EditMeetingDialog from "../Components/Meetings/EditMeetingDialog";
 
 const MeetingView = () => {
   const navigate = useNavigate();
@@ -111,6 +113,11 @@ const MeetingView = () => {
             <>
               {!meeting?.isFinalTime ? (
                 <RowStackCenter>
+                  <Tooltip title={"Select final time"}>
+                    <IconButton>
+                      <EventAvailableIcon color="secondary" />
+                    </IconButton>
+                  </Tooltip>
                   <Tooltip title={"Copy scheduling link"}>
                     <IconButton onClick={handleCopyLink}>
                       <ContentCopyIcon color="secondary" />
@@ -126,11 +133,7 @@ const MeetingView = () => {
                 ""
               )}
             </>
-            <Tooltip title="Edit">
-              <IconButton color="secondary">
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
+            {meeting ? <EditMeetingDialog meeting={meeting} /> : ""}
             <CancelMeetingDialog meetingId={meeting?.id}></CancelMeetingDialog>
           </RowStackCenter>
         )}
