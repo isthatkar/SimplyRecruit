@@ -1,4 +1,11 @@
-import { Box, Container, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Meeting } from "../Types/types";
 import React from "react";
@@ -11,8 +18,8 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CancelMeetingDialog from "../Components/Meetings/CancelMeetingDialog";
 import { toast } from "react-toastify";
 import MeetingStateChip from "../Components/Meetings/MeetingStateChip";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EditMeetingDialog from "../Components/Meetings/EditMeetingDialog";
+import createMeeting from "../Helpers/googleMeetsHelper";
 
 const MeetingView = () => {
   const navigate = useNavigate();
@@ -74,6 +81,14 @@ const MeetingView = () => {
     const formattedTimeString = `${formattedStartDateTimeString} - ${formattedEndDateTimeString}`;
 
     return formattedTimeString;
+  };
+
+  const handleCreateGoogleMeets = async () => {
+    const accessToken = localStorage.getItem("gtoken"); //todo store this in DATABASE
+
+    if (meeting) {
+      const link = await createMeeting(meeting);
+    }
   };
 
   const hasMeetingPassed = () => {
@@ -143,6 +158,9 @@ const MeetingView = () => {
           {meeting ? <AttendeeList attendees={meeting?.attendees} /> : ""}
         </ColumnStackCenter>
       </Container>
+      <Button onClick={handleCreateGoogleMeets}>
+        Create google meets meeting
+      </Button>
     </Box>
   );
 };
