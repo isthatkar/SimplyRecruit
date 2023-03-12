@@ -5,7 +5,6 @@ import React from "react";
 import AttendeeList from "../Components/Meetings/AttendeesList";
 import { ColumnStackCenter, RowStackCenter } from "../Styles/Theme";
 import { useNavigate, useParams } from "react-router-dom";
-import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -20,7 +19,6 @@ const MeetingView = () => {
   const { meetingId } = useParams();
   const [meeting, setMeeting] = useState<Meeting>();
   const [finalTimeString, setFinalTimeString] = useState("");
-  const [hasPassed, setHasPassed] = useState(false);
 
   const handleGoToLink = () => {
     navigate("schedule");
@@ -113,11 +111,6 @@ const MeetingView = () => {
             <>
               {!meeting?.isFinalTime ? (
                 <RowStackCenter>
-                  <Tooltip title={"Select final time"}>
-                    <IconButton>
-                      <EventAvailableIcon color="secondary" />
-                    </IconButton>
-                  </Tooltip>
                   <Tooltip title={"Copy scheduling link"}>
                     <IconButton onClick={handleCopyLink}>
                       <ContentCopyIcon color="secondary" />

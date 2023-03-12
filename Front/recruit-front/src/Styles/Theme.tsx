@@ -128,6 +128,14 @@ export const RowStackLeft = styled(Stack)({
   alignItems: "center",
 });
 
+export const RowStackItemsBetween = styled(Stack)({
+  paddingTop: 4,
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
 export const ColumnStackCenter = styled(Stack)({
   display: "flex",
   flexDirection: "column",
