@@ -43,7 +43,7 @@ const Login = () => {
           <Box
             sx={{
               width: "auto",
-              mt: 16,
+              mt: 20,
               heigt: "*",
               mx: "auto",
               display: "flex",
@@ -51,11 +51,18 @@ const Login = () => {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, backgroundColor: "#1a237e" }}>
+            <Avatar
+              sx={{
+                m: 2,
+                backgroundColor: "#7986cb",
+                height: "50px",
+                width: "50px",
+              }}
+            >
               <LockOpenIcon />
             </Avatar>
             <Typography component="h1" variant="h3">
-              Sign in
+              SIGN IN
             </Typography>
             <LoginButton></LoginButton>
           </Box>
@@ -70,7 +77,7 @@ const Login = () => {
               justifyContent: "bottom",
             }}
           >
-            <img height="350px" src={personsImage}></img>
+            <img height="250px" src={personsImage}></img>
           </Box>
         </Stack>
       </Grid>

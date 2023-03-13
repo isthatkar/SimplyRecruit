@@ -8,6 +8,10 @@ namespace SimplyRecruitAPI.Auth.Model
 
         public string? RefreshToken { get; set; }
 
+        public string? GoogleAccessToken { get; set; }
+
+        public string? GoogleRefreshToken { get; set; }
+
         public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Container, IconButton, Tooltip, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Meeting } from "../Types/types";
 import React from "react";
@@ -83,14 +76,6 @@ const MeetingView = () => {
     return formattedTimeString;
   };
 
-  const handleCreateGoogleMeets = async () => {
-    const accessToken = localStorage.getItem("gtoken"); //todo store this in DATABASE
-
-    if (meeting) {
-      const link = await createMeeting(meeting);
-    }
-  };
-
   const hasMeetingPassed = () => {
     if (meeting) {
       if (meeting.isFinalTime === false) {
@@ -158,9 +143,6 @@ const MeetingView = () => {
           {meeting ? <AttendeeList attendees={meeting?.attendees} /> : ""}
         </ColumnStackCenter>
       </Container>
-      <Button onClick={handleCreateGoogleMeets}>
-        Create google meets meeting
-      </Button>
     </Box>
   );
 };

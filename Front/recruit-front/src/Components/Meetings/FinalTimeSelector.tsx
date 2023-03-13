@@ -1,6 +1,9 @@
 import {
   Button,
+  Checkbox,
   Container,
+  FormControlLabel,
+  FormGroup,
   List,
   ListItem,
   ListItemText,
@@ -12,6 +15,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import GetFormatedDate from "../../Helpers/DateFormater";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import createMeeting from "../../Helpers/googleMeetsHelper";
+import { nullLiteralTypeAnnotation } from "@babel/types";
 
 interface FinalTimeSelectorProps {
   meeting: Meeting;
@@ -19,6 +24,7 @@ interface FinalTimeSelectorProps {
 const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
   const navigate = useNavigate();
   const [selectedTime, setSelectedTime] = useState<number>(-1);
+  const [sendGoogleMeetsInvite, setSendGoogleMeetsInvite] = useState(true);
 
   function handleTimeClick(timeId: number) {
     console.log(timeId);
@@ -34,16 +40,27 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
     const finalTime = meeting.meetingTimes.find(
       (time) => time.id === selectedTime
     );
-    console.log(finalTime);
-    console.log("starttime");
-    console.log(finalTime?.startTime);
+
+    const tempMeeting = meeting;
+    tempMeeting.isFinalTime = true;
+    tempMeeting.finalTime = finalTime?.startTime as string;
+
+    let meetingUrl = null;
+    if (sendGoogleMeetsInvite) {
+      meetingUrl = await createMeeting(meeting);
+    }
     const response = await axios.put(`/meetings/${meeting.id}`, {
       isFinalTime: true,
       finalTime: finalTime?.startTime,
+      meetingUrl: meetingUrl,
     });
     console.log(response);
     navigate(`/meetings/${meeting.id}`);
   }, [selectedTime]);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSendGoogleMeetsInvite(event.target.checked);
+  };
 
   return (
     <Container>
@@ -77,6 +94,19 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
           </ListItem>
         ))}
       </List>
+
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={sendGoogleMeetsInvite}
+              onChange={handleCheckboxChange}
+              inputProps={{ "aria-label": "controlled checkbox" }}
+            />
+          }
+          label="Create Google Meets event"
+        />
+      </FormGroup>
       <Button
         variant="contained"
         onClick={handleSaveClick}

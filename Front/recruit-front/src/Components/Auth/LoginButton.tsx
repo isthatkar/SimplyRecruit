@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import {
-  CredentialResponse,
-  GoogleLogin,
-  useGoogleLogin,
-} from "@react-oauth/google";
-import jwt_decode from "jwt-decode";
+import { useGoogleLogin } from "@react-oauth/google";
 import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert/Alert";
 import axios from "axios";
+import { Button } from "@mui/material";
+import GoogleIcon from "@mui/icons-material/Google";
 
 export default function LoginButton() {
   const navigate = useNavigate();
@@ -17,11 +14,9 @@ export default function LoginButton() {
 
   const location = useLocation();
   const from = location.state?.from.pathname ?? "/";
-  console.log(from);
 
   const getToken = async (code: string) => {
     const params = new URLSearchParams();
-    console.log("gettoken");
     let accessToken;
     let refreshToken;
     let idToken;
@@ -36,14 +31,12 @@ export default function LoginButton() {
         body: params,
       });
       const data = await response.json();
-      console.log(data);
-
       idToken = data.id_token;
       accessToken = data.access_token;
       refreshToken = data.refresh_token;
       return { idToken, accessToken, refreshToken };
     } catch {
-      console.log("catched");
+      console.log("catched exception");
     }
 
     return { idToken, accessToken, refreshToken };
@@ -51,30 +44,21 @@ export default function LoginButton() {
 
   const onSuccess = async (credentialResponse: any) => {
     setFailed(false);
-
-    console.log(credentialResponse);
     const { idToken, accessToken, refreshToken } = await getToken(
       credentialResponse.code
     );
 
-    localStorage.setItem("gtoken", accessToken);
-    console.log(accessToken);
-    console.log(refreshToken);
     if (accessToken) {
-      console.log(idToken);
-      const decoded = jwt_decode(idToken);
-      console.log(decoded);
-      const body = JSON.stringify({ accessToken: idToken });
-      console.log(body);
+      const body = JSON.stringify({
+        accessToken: idToken,
+        googleAccessToken: accessToken,
+        googleRefreshToken: refreshToken,
+      });
       const response = await axios.post("googlelogin", body, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-
-      console.log(response.status);
-      console.log("response data");
-      console.log(response.data);
 
       if (response.status == 200) {
         const token = response.data;
@@ -123,15 +107,14 @@ export default function LoginButton() {
         alignItems: "center",
       }}
     >
-      <GoogleLogin
-        width="strech"
-        onSuccess={onSuccess}
-        onError={() => {
-          setFailed(true);
-        }}
-      />
-
-      <button onClick={handleSignIn}>Sign in with Google</button>
+      <Button
+        sx={{ padding: "10px 20px" }}
+        variant="contained"
+        onClick={handleSignIn}
+        endIcon={<GoogleIcon />}
+      >
+        Login with Google
+      </Button>
 
       {failed ? (
         <Alert severity="error" variant="outlined" sx={{ my: 1, width: "50%" }}>
