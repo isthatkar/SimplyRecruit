@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Pagination, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { ColumnStackCenter, RowStackCenter } from "../Styles/Theme";
@@ -9,8 +9,14 @@ import axios from "axios";
 import Loader from "../Components/Loading/Loader";
 
 const UserMeetings = () => {
-  const [meetings, setMeetings] = useState<Meeting[]>();
+  const itemsPerPage = 4;
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [upcomingMeetings, setUpcommingMeetings] = useState<Meeting[]>([]);
+  const [page, setPage] = useState(1);
+  const [numPages, setNumPages] = useState(1);
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(4);
+  const [currentPageItems, setCurrentPageItems] = useState<Meeting[]>(meetings);
 
   const getMeetings = useCallback(async () => {
     const response = await axios.get(`/meetings`);
@@ -23,11 +29,26 @@ const UserMeetings = () => {
       (s) => s.isFinalTime === false || new Date(s.finalTime) > now
     );
     setUpcommingMeetings(upcommingMeetings);
+    setNumPages(Math.ceil(upcommingMeetings.length / itemsPerPage));
+    setCurrentPageItems(upcommingMeetings.slice(startIndex, endIndex));
   }, []);
 
   useEffect(() => {
     getMeetings();
   }, []);
+
+  const handlePageChange = async (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+    setStartIndex((value - 1) * itemsPerPage);
+    setEndIndex(value * itemsPerPage);
+  };
+
+  useEffect(() => {
+    setCurrentPageItems(upcomingMeetings.slice(startIndex, endIndex));
+  }, [page]);
 
   return (
     <div>
@@ -56,7 +77,12 @@ const UserMeetings = () => {
                   <Typography align="center" variant="h2" sx={{ mb: 5 }}>
                     Upcoming meetings
                   </Typography>
-                  {upcomingMeetings.map((meet) => (
+                  <Pagination
+                    count={numPages}
+                    page={page}
+                    onChange={handlePageChange}
+                  />
+                  {currentPageItems.map((meet) => (
                     <MeetingListItem
                       meet={meet}
                       key={meet.id}
