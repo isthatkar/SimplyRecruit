@@ -45,7 +45,7 @@ namespace SimplyRecruitAPI.Controllers
             var user = await _userManager.FindByEmailAsync(payload.Email);
             if (user != null)
             {
-                return Ok(await LoginUser(user));
+                return Ok(await LoginUser(user, googleLoginDto));
             }
 
             bool isNordEmployee = IsNordDomain(payload.Email);
@@ -61,7 +61,7 @@ namespace SimplyRecruitAPI.Controllers
 
             await _userManager.AddToRoleAsync(newUser, isNordEmployee ? Roles.Employee : Roles.Candidate);
 
-            return Ok(await LoginUser(newUser));
+            return Ok(await LoginUser(newUser, googleLoginDto));
         }
 
         [HttpPost]
@@ -107,7 +107,7 @@ namespace SimplyRecruitAPI.Controllers
                 allRoles += role;
             }
 
-            return Ok(new SuccessfulLoginDto(newAccessToken, newRefreshToken, allRoles, user.Id, user.Email));
+            return Ok(new SuccessfulLoginDto(newAccessToken, newRefreshToken, allRoles, user.Id, user.Email, user.GoogleAccessToken, user.GoogleRefreshToken));
         }
 
         [Authorize]
@@ -133,8 +133,13 @@ namespace SimplyRecruitAPI.Controllers
         {
             var id = User.FindFirst("sub")?.Value;
             var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            var allRoles = await GetAllUserRoles(user);
 
-            return Ok(new LoginUserDto(user.Email, ""));
+            return Ok(new SuccessfulLoginDto(user.AccessToken, user.RefreshToken, allRoles, user.Id, user.Email, user.GoogleAccessToken, user.GoogleRefreshToken));
         }
 
         private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
@@ -156,27 +161,36 @@ namespace SimplyRecruitAPI.Controllers
             return principal;
         }
 
-        private async Task<SuccessfulLoginDto> LoginUser(SimplyUser user)
+        private async Task<SuccessfulLoginDto> LoginUser(SimplyUser user, GoogleLoginDto loginUserDto)
         {
             var roles = await _userManager.GetRolesAsync(user);
             var accessToken = _jwtTokenService.CreateAccessToken(user.Email, user.Id, roles);
             var refreshToken = _jwtTokenService.CreateRefreshToken();
 
+            user.GoogleAccessToken = loginUserDto.GoogleAccessToken;
+            user.GoogleRefreshToken = loginUserDto.GoogleRefreshToken;
             user.AccessToken = accessToken;
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddHours(7);
 
             await _userManager.UpdateAsync(user);
 
+            var allRoles = await GetAllUserRoles(user);
+
+            return new SuccessfulLoginDto(user.AccessToken, user.RefreshToken, allRoles, user.Id, user.Email, user.GoogleAccessToken, user.GoogleRefreshToken);
+        }
+
+        private bool IsNordDomain(string email) => NordDomains.Any(domain => email.EndsWith(domain));
+
+        private async Task<string> GetAllUserRoles(SimplyUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
             var allRoles = string.Empty;
             foreach (string role in roles)
             {
                 allRoles += role;
             }
-
-            return new SuccessfulLoginDto(user.AccessToken, user.RefreshToken, allRoles, user.Id, user.Email);
+            return allRoles;
         }
-
-        private bool IsNordDomain(string email) => NordDomains.Any(domain => email.EndsWith(domain));
     }
 }

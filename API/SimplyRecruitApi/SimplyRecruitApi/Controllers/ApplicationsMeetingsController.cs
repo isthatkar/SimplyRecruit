@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
-using static SimplyRecruitAPI.Data.Dtos.Applications.ApplicationsDtos;
 using System.Security.Claims;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
 using Microsoft.IdentityModel.JsonWebTokens;
-using System.Collections.Generic;
+using SimplyRecruitAPI.Helpers;
 
 namespace SimplyRecruitAPI.Controllers
 {
@@ -39,11 +38,13 @@ namespace SimplyRecruitAPI.Controllers
             var meetings = await _meetingsRepository.GetApplicationsManyAsync(applicationId);
             var meetingsDto = meetings.Select(m => new MeetingDto(
                 m.Id,
+                m.UserId,
                 m.Title,
                 m.Description,
                 m.FinalTime,
                 m.IsFinal,
                 m.Atendees,
+                m.SelectedAtendees,
                 new MeetingTimes[] {  },
                 m.DurationMinutes,
                 m.SchedullingUrl,
@@ -70,11 +71,12 @@ namespace SimplyRecruitAPI.Controllers
                Title = createMeetingDto.Title,
                Description = createMeetingDto.Description,
                MeetingUrl = createMeetingDto.MeetingUrl,
-               SchedullingUrl = createMeetingDto.SchedulingUrl,
+               SchedullingUrl = application.Id + RandomStringGenerator.GenerateRandomString(25),
                IsFinal = createMeetingDto.IsFinal,
                DurationMinutes = createMeetingDto.DurationMinutes,
                FinalTime = createMeetingDto.IsFinal ? createMeetingDto.FinalTime : new DateTime(),
                IsCanceled = false,
+               SelectedAtendees = string.Empty,
                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
                Atendees = createMeetingDto.Atendees,
                Application = application
@@ -102,6 +104,7 @@ namespace SimplyRecruitAPI.Controllers
             //201
             return Created("", new MeetingDtoWithTimes(
                 meeting.Id,
+                meeting.UserId,
                 meeting.Title,
                 meeting.Description,
                 meeting.MeetingUrl,
@@ -110,6 +113,7 @@ namespace SimplyRecruitAPI.Controllers
                 meeting.DurationMinutes,
                 meeting.IsCanceled,
                 meeting.Atendees,
+                meeting.SelectedAtendees,
                 applicationId,
                 meetingTimes.ToArray()
                ));

@@ -35,6 +35,11 @@ namespace SimplyRecruitAPI.Data.Repositories
             return await _contex.Meetings.FirstOrDefaultAsync(m => m.Id == meetingId);
         }
 
+        public async Task<Meeting?> GetByUrlAsync(string schedulingUrl)
+        {
+            return await _contex.Meetings.FirstOrDefaultAsync(m => m.SchedullingUrl == schedulingUrl);
+        }
+
         public async Task<IReadOnlyList<Meeting>> GetUsersManyAsync(string email)
         {
             return await _contex.Meetings.Where(m => m.Atendees.Contains(email)).ToListAsync();

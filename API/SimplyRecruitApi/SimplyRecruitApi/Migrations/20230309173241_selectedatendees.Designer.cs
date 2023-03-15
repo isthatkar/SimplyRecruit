@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimplyRecruitAPI.Data;
 
@@ -11,9 +12,11 @@ using SimplyRecruitAPI.Data;
 namespace SimplyRecruitAPI.Migrations
 {
     [DbContext(typeof(SimplyRecruitDbContext))]
-    partial class SimplyRecruitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230309173241_selectedatendees")]
+    partial class selectedatendees
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,12 +179,6 @@ namespace SimplyRecruitAPI.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("GoogleAccessToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GoogleRefreshToken")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");

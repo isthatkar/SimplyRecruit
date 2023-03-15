@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Checkbox,
-  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   Grid,
@@ -12,13 +14,17 @@ import {
   InputLabel,
   Stack,
   TextField,
-  Typography,
+  Tooltip,
 } from "@mui/material";
-import React from "react";
-import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import React, { useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
+import { Meeting, MeetingTime } from "../../Types/types";
+
+interface EditMeetingDialogProps {
+  meeting: Meeting;
+}
 
 type MeetingFormData = {
   title: string;
@@ -26,45 +32,58 @@ type MeetingFormData = {
   finalTime: string;
   isFinalTime: boolean;
   attendees: string[];
-  meetingTimes: string[];
+  meetingTimes: MeetingTime[];
   duration: number;
 };
 
-const initialMeetingFormData: MeetingFormData = {
-  title: "",
-  description: "",
-  finalTime: "",
-  isFinalTime: false,
-  attendees: [""],
-  meetingTimes: [""],
-  duration: 60,
-};
-
-const AddMeeting = () => {
+const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
+  const initialMeetingFormData: MeetingFormData = {
+    title: meeting.title,
+    description: meeting.description,
+    finalTime: meeting.finalTime,
+    isFinalTime: meeting.isFinalTime,
+    attendees: meeting.attendees.split(";"),
+    meetingTimes: meeting.meetingTimes,
+    duration: meeting.duration,
+  };
+  const [attendees, setAttendees] = useState<string[]>(
+    meeting.attendees.split(";")
+  );
   const [formData, setFormData] = useState(initialMeetingFormData);
-  const { applicationId } = useParams();
-  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const onCancel = async () => {
+    /*  const response = await axios.put(`meetings/${meeting.id}`, {
+      isCanceled: true,
+    });
+
+    console.log(response);
+    if (response.status === 200) {
+      toast.success("Meeting canceled.", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } */
+    setOpen(false);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(formData);
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
-
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = event.target;
-    setFormData((prevState) => ({ ...prevState, isFinalTime: checked }));
-  };
-
-  const handleMeetingTimeChange = (event: any, index: number) => {
-    const { value } = event.target;
-    setFormData((prevState) => {
-      const newMeetingTimes = [...prevState.meetingTimes];
-      newMeetingTimes[index] = value;
-      return { ...prevState, meetingTimes: newMeetingTimes };
-    });
-  };
-
-  const [attendees, setAttendees] = useState<string[]>([]);
 
   const handleAttendeeEmailChange = (event: any, index: number) => {
     const newAttendees = [...attendees];
@@ -76,10 +95,6 @@ const AddMeeting = () => {
     setAttendees((prevAttendees) => [...prevAttendees, ""]);
   };
 
-  useEffect(() => {
-    setAttendees([window.history.state.usr?.prop]);
-  }, []);
-
   const handleRemoveAttendee = (index: number) => {
     setAttendees((prevAttendees) =>
       prevAttendees.filter((_, i) => i !== index)
@@ -89,8 +104,17 @@ const AddMeeting = () => {
   const handleAddMeetingTime = () => {
     setFormData((prevState) => ({
       ...prevState,
-      meetingTimes: [...prevState.meetingTimes, ""],
+      meetingTimes: [...prevState.meetingTimes],
     }));
+  };
+
+  const handleMeetingTimeChange = (event: any, index: number) => {
+    const { value } = event.target;
+    setFormData((prevState) => {
+      const newMeetingTimes = [...prevState.meetingTimes];
+      newMeetingTimes[index] = value;
+      return { ...prevState, meetingTimes: newMeetingTimes };
+    });
   };
 
   const handleRemoveMeetingTime = (index: number) => {
@@ -101,73 +125,23 @@ const AddMeeting = () => {
     });
   };
 
-  const addMeeting = async (): Promise<void> => {
-    const userEmail = localStorage.getItem("email");
-    let attendeesNew = "";
-    if (attendees.length > 1) {
-      attendeesNew = attendees.join(";");
-    } else {
-      attendeesNew = attendees[0];
-    }
-    if (userEmail) {
-      attendeesNew = attendeesNew + ";" + userEmail;
-    }
-
-    const meetingDto = {
-      title: formData.title,
-      description: formData.description,
-      meetingUrl: "https://google.com", //TODO WITH GOOGLE MEETS INTEGRATION
-      schedulingUrl: "https://google.com", //TODO
-      isFinal: formData.isFinalTime,
-      durationMinutes: formData.duration,
-      atendees: attendeesNew,
-      meetingTimes: formData.isFinalTime
-        ? null
-        : {
-            times: formData.meetingTimes,
-          },
-      finalTime: formData.isFinalTime
-        ? new Date(formData.finalTime)
-        : new Date(),
-    };
-
-    console.log(meetingDto);
-    const response = await axios.post(
-      `applications/${applicationId}/meetings`,
-      meetingDto
-    );
-
-    console.log(response);
-    if (response.status === 201) {
-      return navigate(`/application/${applicationId}`);
-    } else {
-      toast.error("Failed to add meeting!", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    addMeeting();
-    console.log(formData);
-  };
   return (
     <div>
-      <ToastContainer />
-
-      <Box
-        sx={{
-          bgcolor: "background.paper",
-          pt: 8,
-          pb: 2,
-          mb: 8,
-        }}
+      <Tooltip title="Edit">
+        <IconButton color="secondary" onClick={handleClickOpen}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <Container sx={{ py: 1 }} maxWidth="md">
-          <Typography variant="h4" gutterBottom align="center" sx={{ mb: 4 }}>
-            Schedule a Meeting
-          </Typography>
+        <DialogTitle id="alert-dialog-title">
+          {"Edit the meetings information"}
+        </DialogTitle>
+        <DialogContent>
           <Box component="form" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -227,38 +201,20 @@ const AddMeeting = () => {
                     Add Attendee
                   </Button>
                 </Box>
-                <Stack
-                  direction="row"
-                  justifyContent="space-evenly"
-                  alignItems="center"
-                  spacing={2}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={formData.isFinalTime}
-                        onChange={handleCheckboxChange}
-                        name="isFinalTime"
-                        color="primary"
-                      />
-                    }
-                    label="Is the meeting time final?"
+                <FormControl>
+                  <InputLabel htmlFor="duration">
+                    Duration (minutes) *
+                  </InputLabel>
+                  <Input
+                    id="duration"
+                    required
+                    name="duration"
+                    type="number"
+                    inputProps={{ min: 0 }}
+                    value={formData.duration}
+                    onChange={handleInputChange}
                   />
-                  <FormControl>
-                    <InputLabel htmlFor="duration">
-                      Duration (minutes)
-                    </InputLabel>
-                    <Input
-                      id="duration"
-                      name="duration"
-                      type="number"
-                      required
-                      inputProps={{ min: 0 }}
-                      value={formData.duration}
-                      onChange={handleInputChange}
-                    />
-                  </FormControl>
-                </Stack>
+                </FormControl>
               </Grid>
               {formData.isFinalTime ? (
                 <Grid item xs={12}>
@@ -279,7 +235,7 @@ const AddMeeting = () => {
               ) : (
                 <>
                   {formData.meetingTimes.map((meetingTime, index) => (
-                    <Grid item xs={12} key={meetingTime}>
+                    <Grid item xs={12} key={meetingTime.id}>
                       <Stack
                         direction="row"
                         justifyContent="center"
@@ -293,7 +249,7 @@ const AddMeeting = () => {
                           variant="outlined"
                           fullWidth
                           required
-                          value={formData.meetingTimes[index]}
+                          value={formData.meetingTimes[index].startTime}
                           InputLabelProps={{
                             shrink: true,
                           }}
@@ -331,10 +287,16 @@ const AddMeeting = () => {
               </Grid>
             </Grid>
           </Box>
-        </Container>
-      </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            No
+          </Button>
+          <Button onClick={() => onCancel()}>Yes</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
 
-export default AddMeeting;
+export default EditMeetingDialog;

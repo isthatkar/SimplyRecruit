@@ -5,8 +5,11 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
 using SimplyRecruitAPI.Data.Entities;
+using SimplyRecruitAPI.Data.Enums;
+using SimplyRecruitAPI.Data.Repositories;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
 using System.Security.Claims;
+using static SimplyRecruitAPI.Data.Dtos.Applications.ApplicationsDtos;
 
 namespace SimplyRecruitAPI.Controllers
 {
@@ -40,11 +43,13 @@ namespace SimplyRecruitAPI.Controllers
                 IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(m.Id);
                 meetingsDto = meetingsDto.Append(new MeetingDto(
                 m.Id,
+                m.UserId,
                 m.Title,
                 m.Description,
                 m.FinalTime,
                 m.IsFinal,
                 m.Atendees,
+                m.SelectedAtendees,
                 meetTimes.ToArray(),
                 m.DurationMinutes,
                 m.SchedullingUrl,
@@ -59,25 +64,113 @@ namespace SimplyRecruitAPI.Controllers
         [HttpGet]
         [Route("{meetingId}", Name = "GetMeeting")]
         [Authorize]
-        public async Task<MeetingDto> GetMeeting(int meetingId)
+        public async Task<ActionResult<MeetingDto>> GetMeeting(int meetingId)
         {
 
             var meeting = await _meetingsRepository.GetAsync(meetingId);
-            
+
+            if (meeting == null)
+            {
+                return NotFound();
+            }
+
             IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(meeting.Id);
            return new MeetingDto(
                 meeting.Id,
+                meeting.UserId,
                 meeting.Title,
                 meeting.Description,
                 meeting.FinalTime,
                 meeting.IsFinal,
                 meeting.Atendees,
+                meeting.SelectedAtendees,
                 meetTimes.ToArray(),
                 meeting.DurationMinutes,
                 meeting.SchedullingUrl,
                 meeting.MeetingUrl,
                 meeting.IsCanceled
                );
+        }
+
+        [HttpGet]
+        [Route("url/{meetingUrl}", Name = "GetMeetingByUrl")]
+        [Authorize]
+        public async Task<ActionResult<MeetingDto>> GetMeetingByUrl(string meetingUrl)
+        {
+
+            var meeting = await _meetingsRepository.GetByUrlAsync(meetingUrl);
+
+            if(meeting == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(meeting.Id);
+            return new MeetingDto(
+                 meeting.Id,
+                 meeting.UserId,
+                 meeting.Title,
+                 meeting.Description,
+                 meeting.FinalTime,
+                 meeting.IsFinal,
+                 meeting.Atendees,
+                 meeting.SelectedAtendees,
+                 meetTimes.ToArray(),
+                 meeting.DurationMinutes,
+                 meeting.SchedullingUrl,
+                 meeting.MeetingUrl,
+                 meeting.IsCanceled
+                );
+        }
+
+
+        [HttpPut]
+        [Authorize(Roles = Roles.Employee)] //cadidates cannot edit meetings
+        [Route("{meetingId}")]
+        public async Task<ActionResult<MeetingDto>> Update(int meetingId, UpdateMeetingDto updateMeetingDto)
+        {
+            var meeting = await _meetingsRepository.GetAsync(meetingId);
+
+            if (meeting == null)
+            {
+                return NotFound(); //404
+            }
+
+            meeting.Atendees = updateMeetingDto.Attendees is null ? meeting.Atendees : updateMeetingDto.Attendees;
+            meeting.IsCanceled = (bool)(updateMeetingDto.IsCanceled is null ? meeting.IsCanceled : updateMeetingDto.IsCanceled);
+            meeting.Title = updateMeetingDto.Title is null ? meeting.Title : updateMeetingDto.Title;
+            meeting.Description = updateMeetingDto.Description is null ? meeting.Description : updateMeetingDto.Description;
+            meeting.DurationMinutes = (int)(updateMeetingDto.Duration is null ? meeting.DurationMinutes : updateMeetingDto.Duration);
+            meeting.FinalTime = updateMeetingDto.FinalTime is null ? meeting.FinalTime : updateMeetingDto.FinalTime;
+            meeting.IsFinal = (bool)(updateMeetingDto.IsFinalTime is null ? meeting.IsFinal : updateMeetingDto.IsFinalTime);
+            meeting.MeetingUrl = updateMeetingDto.MeetingUrl is null ? meeting.MeetingUrl : updateMeetingDto.MeetingUrl;
+
+            if(updateMeetingDto.NewMeetingTimes is not null)
+            {
+                foreach(var time in updateMeetingDto.NewMeetingTimes)
+                {
+                    await _meetingsTimesRepository.CreateAsync(time);
+                }
+            }
+
+            var meetingTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(meetingId);
+            await _meetingsRepository.UpdateAsync(meeting);
+
+            return Ok(new MeetingDto(
+                  meeting.Id,
+                  meeting.UserId,
+                  meeting.Title,
+                  meeting.Description,
+                  meeting.FinalTime,
+                  meeting.IsFinal,
+                  meeting.Atendees,
+                  meeting.SelectedAtendees,
+                  meetingTimes.ToArray(),
+                  meeting.DurationMinutes,
+                  meeting.SchedullingUrl,
+                  meeting.MeetingUrl,
+                  meeting.IsCanceled
+                 ));
         }
     }
 }

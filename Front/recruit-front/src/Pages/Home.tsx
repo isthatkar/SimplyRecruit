@@ -18,9 +18,17 @@ const Home = () => {
     <Grid
       container
       component="main"
+      item
       sx={{ minHeight: "90vh", overflowX: "auto" }}
     >
-      <Grid xs={false} sm={false} md={7} alignItems="bottom" sx={{ mt: 20 }}>
+      <Grid
+        xs={false}
+        sm={false}
+        md={7}
+        alignItems="bottom"
+        sx={{ mt: 20 }}
+        item
+      >
         <Stack alignItems="bottom">
           <img src={image}></img>
         </Stack>
