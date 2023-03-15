@@ -38,6 +38,7 @@ namespace SimplyRecruitAPI.Controllers
             var meetings = await _meetingsRepository.GetApplicationsManyAsync(applicationId);
             var meetingsDto = meetings.Select(m => new MeetingDto(
                 m.Id,
+                m.UserId,
                 m.Title,
                 m.Description,
                 m.FinalTime,
@@ -103,6 +104,7 @@ namespace SimplyRecruitAPI.Controllers
             //201
             return Created("", new MeetingDtoWithTimes(
                 meeting.Id,
+                meeting.UserId,
                 meeting.Title,
                 meeting.Description,
                 meeting.MeetingUrl,

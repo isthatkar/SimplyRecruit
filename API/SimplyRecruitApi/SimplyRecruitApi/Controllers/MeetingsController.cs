@@ -43,6 +43,7 @@ namespace SimplyRecruitAPI.Controllers
                 IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(m.Id);
                 meetingsDto = meetingsDto.Append(new MeetingDto(
                 m.Id,
+                m.UserId,
                 m.Title,
                 m.Description,
                 m.FinalTime,
@@ -76,6 +77,7 @@ namespace SimplyRecruitAPI.Controllers
             IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(meeting.Id);
            return new MeetingDto(
                 meeting.Id,
+                meeting.UserId,
                 meeting.Title,
                 meeting.Description,
                 meeting.FinalTime,
@@ -106,6 +108,7 @@ namespace SimplyRecruitAPI.Controllers
             IEnumerable<MeetingTimes> meetTimes = await _meetingsTimesRepository.GetMeetingsManyAsync(meeting.Id);
             return new MeetingDto(
                  meeting.Id,
+                 meeting.UserId,
                  meeting.Title,
                  meeting.Description,
                  meeting.FinalTime,
@@ -155,6 +158,7 @@ namespace SimplyRecruitAPI.Controllers
 
             return Ok(new MeetingDto(
                   meeting.Id,
+                  meeting.UserId,
                   meeting.Title,
                   meeting.Description,
                   meeting.FinalTime,
