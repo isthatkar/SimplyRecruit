@@ -27,6 +27,7 @@ const MeetingSchedulingPage = () => {
   const [meeting, setMeeting] = useState<Meeting>();
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
   const userEmail = localStorage.getItem("email");
+  const [isUserMeeting, setIsUserMeeting] = useState(false);
   const [userHasSelectedTimes, setUserHasSelectedTimes] =
     useState<boolean>(false);
   const [isSelectingFinalTime, setIsSelectingFinalTime] =
@@ -84,6 +85,10 @@ const MeetingSchedulingPage = () => {
 
       setSelectedTimes(userSelectedTimes);
     }
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
+    console.log(responseMeeting.userId);
+    setIsUserMeeting(responseMeeting.userId === userId);
   }, []);
 
   function updateEmails(
@@ -194,14 +199,18 @@ const MeetingSchedulingPage = () => {
                     <EditIcon color="secondary"></EditIcon>
                   </IconButton>
                 </Tooltip>
-                <Tooltip title={"Select final time"}>
-                  <IconButton
-                    onClick={handleSelectFinalTime}
-                    disabled={isEditingTimes}
-                  >
-                    <EventAvailableIcon color="secondary" />
-                  </IconButton>
-                </Tooltip>
+                {isUserMeeting ? (
+                  <Tooltip title={"Select final time"}>
+                    <IconButton
+                      onClick={handleSelectFinalTime}
+                      disabled={isEditingTimes}
+                    >
+                      <EventAvailableIcon color="secondary" />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  ""
+                )}
               </Stack>
             ) : (
               ""

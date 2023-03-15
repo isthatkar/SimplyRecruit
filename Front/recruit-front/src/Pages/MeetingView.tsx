@@ -12,12 +12,12 @@ import CancelMeetingDialog from "../Components/Meetings/CancelMeetingDialog";
 import { toast } from "react-toastify";
 import MeetingStateChip from "../Components/Meetings/MeetingStateChip";
 import EditMeetingDialog from "../Components/Meetings/EditMeetingDialog";
-import createMeeting from "../Helpers/googleMeetsHelper";
 
 const MeetingView = () => {
   const navigate = useNavigate();
   const { meetingId } = useParams();
   const [meeting, setMeeting] = useState<Meeting>();
+  const [isUserMeeting, setIsUserMeeting] = useState(false);
   const [finalTimeString, setFinalTimeString] = useState("");
 
   const handleGoToLink = () => {
@@ -37,12 +37,18 @@ const MeetingView = () => {
   const getMeeting = useCallback(async () => {
     const response = await axios.get(`/meetings/${meetingId}`);
     console.log(response);
-    const meeting = response.data;
-    console.log(meeting);
-    setMeeting(meeting);
-    if (meeting.isFinalTime) {
-      setFinalTimeString(getTimeString(meeting.finalTime, meeting.duration));
+    const fetchedMeeting = response.data;
+    console.log(fetchedMeeting);
+    setMeeting(fetchedMeeting);
+    if (fetchedMeeting.isFinalTime) {
+      setFinalTimeString(
+        getTimeString(fetchedMeeting.finalTime, fetchedMeeting.duration)
+      );
     }
+    const userId = localStorage.getItem("userId");
+    const userEmail = localStorage.getItem("email");
+    setIsUserMeeting(fetchedMeeting.userId === userId);
+    console.log(isUserMeeting);
   }, []);
 
   useEffect(() => {
@@ -126,8 +132,18 @@ const MeetingView = () => {
                 ""
               )}
             </>
-            {meeting ? <EditMeetingDialog meeting={meeting} /> : ""}
-            <CancelMeetingDialog meetingId={meeting?.id}></CancelMeetingDialog>
+            <>
+              {meeting && isUserMeeting ? (
+                <>
+                  <EditMeetingDialog meeting={meeting} />
+                  <CancelMeetingDialog
+                    meetingId={meeting?.id}
+                  ></CancelMeetingDialog>
+                </>
+              ) : (
+                ""
+              )}
+            </>
           </RowStackCenter>
         )}
 

@@ -20,7 +20,6 @@ const MeetingStateChip = ({ meeting }: Props) => {
     return hasEventPassed;
   };
 
-  const hasPassed = hasMeetingPassed();
   if (meeting.isCanceled) {
     return (
       <Chip icon={<EventBusyIcon />} variant="outlined" label="Canceled" />

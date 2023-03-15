@@ -54,6 +54,8 @@ const MeetingCalendar = ({ meetings }: CalendarProps) => {
     <ThemeProvider theme={Theme}>
       <div className={classes.calendarContainer}>
         <FullCalendar
+          weekNumberCalculation="ISO"
+          firstDay={1}
           height="600px"
           themeSystem="bootstrap"
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

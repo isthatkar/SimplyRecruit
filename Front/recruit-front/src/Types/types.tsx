@@ -35,6 +35,7 @@ export interface Meeting {
   meetingUrl: string;
   selectedAtendees: string;
   isCanceled: boolean;
+  userId: string;
 }
 
 export interface MeetingTime {
