@@ -6,10 +6,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
-import { ThemeProvider } from "@mui/material";
 import IconSelector from "./RatingSelector";
 
 const AddReviewDialog = (props: any) => {
@@ -50,9 +49,6 @@ const AddReviewDialog = (props: any) => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add a review</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Please be honest when reviewing this candidate
-          </DialogContentText>
           <Box
             component="form"
             noValidate
@@ -61,13 +57,24 @@ const AddReviewDialog = (props: any) => {
               "& .MuiTextField-root": { m: 1, width: "50ch" },
             }}
           >
+            <DialogContentText>Job-related skills</DialogContentText>
+
+            <IconSelector onIconClick={handleIconClick} />
+            <DialogContentText>Communication</DialogContentText>
+
+            <IconSelector onIconClick={handleIconClick} />
+            <DialogContentText>Flexibility</DialogContentText>
+
+            <IconSelector onIconClick={handleIconClick} />
+            <DialogContentText>Attitude</DialogContentText>
+
             <IconSelector onIconClick={handleIconClick} />
 
             <TextField
               onChange={(e) => setComment(e.target.value)}
               multiline
               required
-              rows={4}
+              rows={2}
               value={comment}
               id="outlined-title-input"
               label="Comment"
