@@ -69,7 +69,7 @@ const EditProjectDialog = (props: any) => {
   };
 
   return (
-    <ThemeProvider theme={Theme}>
+    <>
       <ToastContainer />
 
       <ListItemButton onClick={handleClickOpen}>Edit</ListItemButton>
@@ -110,7 +110,7 @@ const EditProjectDialog = (props: any) => {
           </DialogActions>
         </Box>
       </Dialog>
-    </ThemeProvider>
+    </>
   );
 };
 

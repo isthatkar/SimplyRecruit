@@ -139,7 +139,7 @@ const AddMeeting = () => {
 
     console.log(response);
     if (response.status === 201) {
-      return navigate(`/application/${applicationId}`);
+      return navigate(`/application/${applicationId}?tab=1`);
     } else {
       toast.error("Failed to add meeting!", {
         position: toast.POSITION.TOP_RIGHT,

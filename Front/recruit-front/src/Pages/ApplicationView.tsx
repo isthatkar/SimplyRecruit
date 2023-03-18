@@ -5,7 +5,7 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { Application, Resume } from "../Types/types";
 import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
@@ -42,6 +42,7 @@ function TabPanel(props: TabPanelProps) {
 const ApplicationView = () => {
   const { applicationId } = useParams();
   const [value, setValue] = React.useState(0);
+  const navigate = useNavigate();
   const [application, setApplication] = useState<Application>();
   const [resume, setResume] = useState<Resume>();
 
@@ -67,12 +68,20 @@ const ApplicationView = () => {
   }, []);
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialTab = urlParams.get("tab");
+
+    if (initialTab !== null) {
+      setValue(parseInt(initialTab));
+    }
     getApplication();
     getResume();
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    console.log("change");
+    navigate(`/application/${applicationId}?tab=${newValue}`);
   };
 
   return (
@@ -97,23 +106,29 @@ const ApplicationView = () => {
           </Tabs>
         </Container>
       </Box>
-      <TabPanel value={value} index={0}>
-        <ApplicationCard
-          application={application}
-          resume={resume}
-        ></ApplicationCard>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <ApplicationMeetings
-          candidateEmail={application?.contactEmail}
-        ></ApplicationMeetings>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <ReviewsTab></ReviewsTab>
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <EmployeeTasksTab></EmployeeTasksTab>
-      </TabPanel>
+      {application ? (
+        <>
+          <TabPanel value={value} index={0}>
+            <ApplicationCard
+              application={application}
+              resume={resume}
+            ></ApplicationCard>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <ApplicationMeetings
+              candidateEmail={application?.contactEmail}
+            ></ApplicationMeetings>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <ReviewsTab applicationId={application?.id}></ReviewsTab>
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <EmployeeTasksTab></EmployeeTasksTab>
+          </TabPanel>
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
