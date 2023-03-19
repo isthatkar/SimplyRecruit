@@ -1,13 +1,11 @@
-import { CircularProgress } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../Loading/Loader";
 
 const MeetingSchedulingRedirect = () => {
   const navigate = useNavigate();
   const { randomUrl } = useParams();
-  const [meetId, setMeetId] = useState(null);
 
   async function getMeeting() {
     console.log(randomUrl);

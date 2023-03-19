@@ -34,6 +34,10 @@ namespace SimplyRecruitAPI.Controllers
                 a.CoverLetter,
                 a.ContactEmail,
                 a.Stage,
+                a.AverageRating,
+                a.AverageSkillRating,
+                a.AverageCommsRating,
+                a.AverageAttitudeRating,
                 a.PositionId,
                 a.UserId,
                 a.PositionName,
@@ -60,6 +64,10 @@ namespace SimplyRecruitAPI.Controllers
                 application.CoverLetter,
                 application.ContactEmail,
                 application.Stage,
+                application.AverageRating,
+                application.AverageSkillRating,
+                application.AverageCommsRating,
+                application.AverageAttitudeRating, 
                 application.PositionId,
                 application.UserId,
                 application.PositionName,
@@ -81,6 +89,10 @@ namespace SimplyRecruitAPI.Controllers
                 a.CoverLetter,
                 a.ContactEmail,
                 a.Stage,
+                a.AverageRating,
+                a.AverageSkillRating,
+                a.AverageCommsRating,
+                a.AverageAttitudeRating,
                 a.PositionId,
                 a.UserId,
                 a.PositionName, 
@@ -117,6 +129,10 @@ namespace SimplyRecruitAPI.Controllers
                 application.CoverLetter,
                 application.ContactEmail,
                 application.Stage,
+                application.AverageRating,
+                application.AverageSkillRating,
+                application.AverageCommsRating,
+                application.AverageAttitudeRating,
                 application.PositionId,
                 application.UserId, 
                 application.PositionName,
@@ -124,7 +140,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = Roles.Employee)] //candidates cannot delete applications
+        [Authorize(Roles = Roles.Employee)] 
         [Route("{applicationId}")]
         public async Task<ActionResult> Remove(int applicationId)
         {

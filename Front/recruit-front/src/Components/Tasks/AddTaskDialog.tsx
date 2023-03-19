@@ -6,7 +6,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
 
@@ -27,8 +26,6 @@ const AddTaskDialog = (props: any) => {
 
   return (
     <div>
-      <ToastContainer />
-
       <Button size="medium" variant="contained" onClick={handleClickOpen}>
         Add new task for candidate
       </Button>

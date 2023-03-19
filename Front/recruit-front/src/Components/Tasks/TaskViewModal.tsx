@@ -4,7 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ListItemButton, ThemeProvider } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -26,8 +26,6 @@ const TaskViewModal = ({ task }: TaskViewModalProps) => {
 
   return (
     <div>
-      <ToastContainer />
-
       <ListItemButton onClick={handleClickOpen}>View task</ListItemButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{task.title}</DialogTitle>

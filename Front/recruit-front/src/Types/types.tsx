@@ -45,11 +45,15 @@ export interface MeetingTime {
   meeting: Meeting;
 }
 
-export interface Review {
+export interface Rating {
   id: number;
   userEmail: string;
-  rating: number;
+  userId: string;
+  skillsRatings: number;
+  communicationRating: number;
+  attitudeRating: number;
   comment: string;
+  applicationId: number;
 }
 
 export interface Task {
@@ -79,6 +83,10 @@ export interface Application {
   coverLetter: string;
   contactEmail: string;
   stage: Stage;
+  averageRating: number;
+  averageSkillRating: number;
+  averageCommsRating: number;
+  averageAttitudeRating: number;
   positionId: number;
   positionName: string;
   isArchived: boolean;

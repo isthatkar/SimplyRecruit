@@ -5,11 +5,22 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import "react-toastify/dist/ReactToastify.css";
 import PersonOffIcon from "@mui/icons-material/PersonOff";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const ArchiveApplicationButton = (props: any) => {
+interface archiveProps {
+  applicationId: number;
+  positionId: number;
+}
+const ArchiveApplicationButton = ({
+  applicationId,
+  positionId,
+}: archiveProps) => {
   const [open, setOpen] = React.useState(false);
 
+  const navigate = useNavigate();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -19,14 +30,33 @@ const ArchiveApplicationButton = (props: any) => {
   };
 
   const handleSave = async () => {
+    const applicationDto = {
+      isArchived: true,
+    };
+
+    const response = await axios.put(
+      `applications/${applicationId}`,
+      applicationDto
+    );
     setOpen(false);
+
+    if (response.status !== 200) {
+      return toast.error("Failed to archive application!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+
+    navigate(`/positions/${positionId}/applications`);
   };
 
   return (
     <div>
-      <IconButton size="medium" onClick={handleClickOpen}>
-        <PersonOffIcon></PersonOffIcon>
-      </IconButton>
+      <Tooltip title="Archive application">
+        <IconButton size="medium" onClick={handleClickOpen}>
+          <PersonOffIcon></PersonOffIcon>
+        </IconButton>
+      </Tooltip>
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
           Do you really want to archive this application? This cannot be undone.

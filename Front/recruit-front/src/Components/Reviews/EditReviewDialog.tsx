@@ -11,19 +11,26 @@ import Box from "@mui/material/Box/Box";
 import IconSelector from "./RatingSelector";
 import axios from "axios";
 import { Rating } from "../../Types/types";
+import { ListItemButton } from "@mui/material";
+import { toast } from "react-toastify";
 
-interface AddReviewProps {
-  applicationId: number;
-  onAddObject: (newObject: Rating) => void;
+interface EditReviewProps {
+  rating: Rating;
+  onEditObject: () => void;
 }
 
-const AddReviewDialog = ({ applicationId, onAddObject }: AddReviewProps) => {
+const EditReviewDialog = ({ rating, onEditObject }: EditReviewProps) => {
   const [open, setOpen] = React.useState(false);
-  const [comment, setComment] = React.useState("");
-  const [workRelatedRating, setWorkRelatedRating] = React.useState<number>(3);
-  const [communicationRating, setCommunicationRating] =
-    React.useState<number>(3);
-  const [attitudeRating, setAttitudeRating] = React.useState<number>(3);
+  const [comment, setComment] = React.useState(rating.comment);
+  const [workRelatedRating, setWorkRelatedRating] = React.useState<number>(
+    rating.skillsRatings
+  );
+  const [communicationRating, setCommunicationRating] = React.useState<number>(
+    rating.communicationRating
+  );
+  const [attitudeRating, setAttitudeRating] = React.useState<number>(
+    rating.attitudeRating
+  );
   const handleWorkRelatedClick = (value: number) => {
     setWorkRelatedRating(value);
   };
@@ -58,24 +65,23 @@ const AddReviewDialog = ({ applicationId, onAddObject }: AddReviewProps) => {
       comment: comment,
     };
 
-    const response = await axios.post(
-      `applications/${applicationId}/ratings`,
+    const response = await axios.put(
+      `applications/${rating.applicationId}/ratings/${rating.id}`,
       ratingDto
     );
 
-    onAddObject(response.data as Rating);
-    setComment("");
-    setWorkRelatedRating(3);
-    setCommunicationRating(3);
-    setAttitudeRating(3);
-    console.log(response);
+    if (response.status !== 200) {
+      toast.error("Failed to edit review!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } else {
+      onEditObject();
+    }
   };
 
   return (
     <Box>
-      <Button size="medium" variant="contained" onClick={handleClickOpen}>
-        Add a review
-      </Button>
+      <ListItemButton onClick={handleClickOpen}>Edit</ListItemButton>
       <Dialog open={open} onClose={handleClose}>
         <Box component="form" onSubmit={handleSave} autoComplete="off">
           <DialogTitle>Add a review</DialogTitle>
@@ -115,4 +121,4 @@ const AddReviewDialog = ({ applicationId, onAddObject }: AddReviewProps) => {
   );
 };
 
-export default AddReviewDialog;
+export default EditReviewDialog;

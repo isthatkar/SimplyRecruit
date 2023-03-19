@@ -6,6 +6,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Box, Grid, Paper, Typography, Stack } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import GetStateLabel from "../Helpers/ApplicationStateToText";
+import StarRating from "../Components/Reviews/StartRatingComponent";
 
 export default function EnhancedTable() {
   const [allApplications, setAllApplications] = React.useState<Application[]>(
@@ -29,7 +30,10 @@ export default function EnhancedTable() {
   const getPositionApplications = React.useCallback(async () => {
     const response = await axios.get(`positions/${positionId}/applications`);
     const applications = response.data;
-    setAllApplications(applications);
+    const notArchivedApplications = (applications as Application[]).filter(
+      (a) => !a.isArchived
+    );
+    setAllApplications(notArchivedApplications);
   }, []);
 
   const getPosition = React.useCallback(async () => {
@@ -134,7 +138,9 @@ export default function EnhancedTable() {
                                       {...provided.dragHandleProps}
                                       sx={{
                                         mb: 1,
-                                        minHeight: "60px",
+                                        py: 1,
+                                        px: 1,
+                                        minHeight: "65px",
                                         borderRadius: 1,
 
                                         backgroundColor: snapshot.isDragging
@@ -143,13 +149,12 @@ export default function EnhancedTable() {
                                         ...provided.draggableProps.style,
                                       }}
                                     >
-                                      <PersonIcon />
-                                      <Typography
-                                        variant="body1"
-                                        sx={{ my: 1 }}
-                                      >
+                                      <Typography variant="body1">
                                         {app.fullName}
                                       </Typography>
+                                      <StarRating
+                                        value={app.averageRating}
+                                      ></StarRating>
                                     </Box>
                                   </Paper>
                                 )}

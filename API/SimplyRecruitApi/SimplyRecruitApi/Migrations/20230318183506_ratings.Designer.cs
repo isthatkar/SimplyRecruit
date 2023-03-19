@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimplyRecruitAPI.Data;
 
@@ -11,9 +12,11 @@ using SimplyRecruitAPI.Data;
 namespace SimplyRecruitAPI.Migrations
 {
     [DbContext(typeof(SimplyRecruitDbContext))]
-    partial class SimplyRecruitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230318183506_ratings")]
+    partial class ratings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,18 +245,6 @@ namespace SimplyRecruitAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("AverageAttitudeRating")
-                        .HasColumnType("float");
-
-                    b.Property<double>("AverageCommsRating")
-                        .HasColumnType("float");
-
-                    b.Property<double>("AverageRating")
-                        .HasColumnType("float");
-
-                    b.Property<double>("AverageSkillRating")
-                        .HasColumnType("float");
 
                     b.Property<string>("ContactEmail")
                         .IsRequired()

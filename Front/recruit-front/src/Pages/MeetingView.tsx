@@ -46,9 +46,7 @@ const MeetingView = () => {
       );
     }
     const userId = localStorage.getItem("userId");
-    const userEmail = localStorage.getItem("email");
     setIsUserMeeting(fetchedMeeting.userId === userId);
-    console.log(isUserMeeting);
   }, []);
 
   useEffect(() => {

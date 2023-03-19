@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
 import { ListItemButton, ThemeProvider } from "@mui/material";
@@ -69,9 +69,7 @@ const EditProjectDialog = (props: any) => {
   };
 
   return (
-    <ThemeProvider theme={Theme}>
-      <ToastContainer />
-
+    <>
       <ListItemButton onClick={handleClickOpen}>Edit</ListItemButton>
       <Dialog open={open} onClose={handleClose}>
         <Box
@@ -110,7 +108,7 @@ const EditProjectDialog = (props: any) => {
           </DialogActions>
         </Box>
       </Dialog>
-    </ThemeProvider>
+    </>
   );
 };
 

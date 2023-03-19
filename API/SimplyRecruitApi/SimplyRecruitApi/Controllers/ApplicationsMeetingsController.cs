@@ -78,7 +78,7 @@ namespace SimplyRecruitAPI.Controllers
                IsCanceled = false,
                SelectedAtendees = string.Empty,
                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
-               Atendees = createMeetingDto.Atendees,
+               Atendees = CleanAttendiesString(createMeetingDto.Atendees),
                Application = application
             };
 
@@ -117,6 +117,17 @@ namespace SimplyRecruitAPI.Controllers
                 applicationId,
                 meetingTimes.ToArray()
                ));
+        }
+
+        private string CleanAttendiesString(string attendies)
+        {
+            string[] listOfAttendees = attendies.Split(';');
+            IEnumerable<string> distinctSubstrings = listOfAttendees
+                .GroupBy(s => s)
+                .Select(g => g.Key);
+
+            string cleanedString = string.Join(";", distinctSubstrings);
+            return cleanedString;
         }
     }
 }

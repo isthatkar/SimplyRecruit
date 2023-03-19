@@ -4,7 +4,7 @@ import React from "react";
 import { Application, Resume } from "../../Types/types";
 import GetStateLabel from "../../Helpers/ApplicationStateToText";
 import ArchiveApplicationButton from "./ArchiveApplicationButton";
-import { RowStackCenter } from "../../Styles/Theme";
+import RadarChart from "../Reviews/RatingChart";
 
 interface CardProps {
   application: Application | undefined;
@@ -12,6 +12,8 @@ interface CardProps {
 }
 
 const ApplicationCard = ({ resume, application }: CardProps) => {
+  const roles = localStorage.getItem("roles");
+  const isEmployee = roles ? roles.includes("Employee") : false;
   const downloadFile = () => {
     if (resume) {
       const filename = resume.fileName;
@@ -34,7 +36,7 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
   };
   return (
     <Card>
-      <Typography align="center" variant="h4" sx={{ mt: 6 }}>
+      <Typography align="center" variant="h4" sx={{ mt: 2 }}>
         {application?.positionName}
       </Typography>
       <Stack
@@ -70,10 +72,11 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        sx={{ mb: 8 }}
       >
         <Typography variant="h5">Cover letter</Typography>
-        <Typography>{application?.coverLetter}</Typography>
+        <Typography>
+          {application?.coverLetter ? application?.coverLetter : "-"}
+        </Typography>
       </Grid>
 
       <Grid
@@ -89,7 +92,14 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
           alignItems="center"
           spacing={2}
         >
-          <ArchiveApplicationButton></ArchiveApplicationButton>
+          {application ? (
+            <ArchiveApplicationButton
+              applicationId={application.id}
+              positionId={application.positionId}
+            ></ArchiveApplicationButton>
+          ) : (
+            ""
+          )}
 
           <Typography variant="h5">Current stage:</Typography>
           <Typography variant="h6">
@@ -100,6 +110,19 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
           <DownloadIcon></DownloadIcon>
           Download resume
         </Button>
+      </Grid>
+      <Grid container justifyContent="center" sx={{ height: "500px" }}>
+        {application && isEmployee ? (
+          <RadarChart
+            points={[
+              application.averageCommsRating,
+              application.averageSkillRating,
+              application.averageAttitudeRating,
+            ]}
+          ></RadarChart>
+        ) : (
+          ""
+        )}
       </Grid>
     </Card>
   );

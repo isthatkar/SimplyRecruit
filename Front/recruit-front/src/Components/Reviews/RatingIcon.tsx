@@ -1,5 +1,9 @@
 import React from "react";
-import { Avatar } from "@mui/material";
+import LooksOneIcon from "@mui/icons-material/LooksOne";
+import LooksTwoIcon from "@mui/icons-material/LooksTwo";
+import Looks3Icon from "@mui/icons-material/Looks3";
+import Looks4Icon from "@mui/icons-material/Looks4";
+import Looks5Icon from "@mui/icons-material/Looks5";
 import { MoodBadOutlined as MoodBadOutlinedIcon } from "@mui/icons-material";
 
 type Props = {
@@ -15,48 +19,35 @@ const RatingIcon = ({ value, selected, onClick }: Props) => {
     }
   };
 
-  const backgroundColor = selected ? "#3f51b5" : getBackgroundColor(value);
-
-  return (
-    <Avatar
-      className="avatar"
-      sx={{ backgroundColor, height: "50px", width: "50px" }}
-      onClick={handleClick}
-    >
-      {getIcon(value)}
-    </Avatar>
-  );
-};
-
-const getBackgroundColor = (value: number): string => {
-  switch (value) {
-    case 1:
-      return "#a4bdff";
-    case 2:
-      return "#8facff";
-    case 3:
-      return "#7a9bff";
-    case 4:
-      return "#5375ff";
-    case 5:
-      return "#3446fd";
-    default:
-      return "";
-  }
+  return <div onClick={handleClick}>{getIcon(value)}</div>;
 };
 
 const getIcon = (value: number) => {
   switch (value) {
     case 1:
-      return <i className="fa-solid fa-face-grimace"></i>;
+      return (
+        <LooksOneIcon
+          sx={{ color: "#a4bdff", height: "30px", width: "30px" }}
+        />
+      );
     case 2:
-      return <i className="fa-solid fa-face-rolling-eyes"></i>;
+      return (
+        <LooksTwoIcon
+          sx={{ color: "#8facff", height: "30px", width: "30px" }}
+        />
+      );
     case 3:
-      return <i className="fa-solid fa-face-meh-blank"></i>;
+      return (
+        <Looks3Icon sx={{ color: "#7a9bff", height: "30px", width: "30px" }} />
+      );
     case 4:
-      return <i className="fa-solid fa-face-grin-tongue-wink"></i>;
+      return (
+        <Looks4Icon sx={{ color: "#5375ff", height: "30px", width: "30px" }} />
+      );
     case 5:
-      return <i className="fa-regular fa-face-grin-hearts"></i>;
+      return (
+        <Looks5Icon sx={{ color: "#3446fd", height: "30px", width: "30px" }} />
+      );
     default:
       return <MoodBadOutlinedIcon />;
   }

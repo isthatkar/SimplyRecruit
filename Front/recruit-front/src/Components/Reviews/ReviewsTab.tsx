@@ -1,54 +1,58 @@
-import { Box, Typography } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
+import { Box, Pagination, Typography } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { Review } from "../../Types/types";
 import ReviewListItem from "./ReviewListItem";
 import AddReviewDialog from "./AddReviewDialog";
 import { ColumnStackCenter, RowStackCenter } from "../../Styles/Theme";
+import { Rating } from "../../Types/types";
+import axios from "axios";
 
-const ReviewsTab = (props: any) => {
-  const [reviews, setReviews] = React.useState<Review[]>([]);
+interface ReviewsTabProps {
+  applicationId: number;
+}
+const ReviewsTab = ({ applicationId }: ReviewsTabProps) => {
+  const itemsPerPage = 10;
+  const [ratings, setRatings] = React.useState<Rating[]>([]);
+  const [page, setPage] = useState(1);
+  const [numPages, setNumPages] = useState(1);
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(10);
+  const [currentPageItems, setCurrentPageItems] = useState<Rating[]>(ratings);
 
   const getReviews = useCallback(async () => {
-    const upcomingMeetings: Review[] = [
-      {
-        id: 1,
-        userEmail: "vardas.test@gmail.com",
-        rating: 5,
-        comment: "Perfect candidate for this possition in my opinion",
-      },
-      {
-        id: 2,
-        userEmail: "vardas.test@gmail.com",
-        rating: 2,
-        comment: "Didn't really like him",
-      },
-      {
-        id: 3,
-        userEmail: "vardas.test@gmail.com",
-        rating: 1,
-        comment: "Very bad, rude and arrogant",
-      },
-      {
-        id: 4,
-        userEmail: "vardas.test@gmail.com",
-        rating: 3,
-        comment: "Could improve his technical knowledge",
-      },
-      {
-        id: 5,
-        userEmail: "vardas.test@gmail.com",
-        rating: 4,
-        comment: "Not bad",
-      },
-    ];
+    const response = await axios.get(`applications/${applicationId}/ratings`);
+    console.log(response.data);
+    const ratings = response.data;
 
-    setReviews(upcomingMeetings);
+    setRatings(ratings);
+    setNumPages(Math.ceil(ratings.length / itemsPerPage));
+    setCurrentPageItems(ratings.slice(startIndex, endIndex));
   }, []);
 
   useEffect(() => {
     getReviews();
   }, []);
+
+  const handleAddObject = (newObject: Rating) => {
+    const newRatings = [...ratings, newObject];
+    setRatings(newRatings);
+    setNumPages(Math.ceil(newRatings.length / itemsPerPage));
+    setCurrentPageItems(newRatings.slice(startIndex, endIndex));
+  };
+
+  const handlePageChange = async (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+    setStartIndex((value - 1) * itemsPerPage);
+    setEndIndex(value * itemsPerPage);
+  };
+
+  useEffect(() => {
+    setCurrentPageItems(ratings.slice(startIndex, endIndex));
+  }, [page]);
+
   return (
     <div>
       <Box
@@ -58,10 +62,13 @@ const ReviewsTab = (props: any) => {
           mb: 5,
         }}
       >
-        <AddReviewDialog></AddReviewDialog>
+        <AddReviewDialog
+          applicationId={applicationId}
+          onAddObject={handleAddObject}
+        ></AddReviewDialog>
       </Box>
 
-      {reviews.length > 0 ? (
+      {ratings.length > 0 ? (
         <Box
           sx={{
             display: "flex",
@@ -72,6 +79,7 @@ const ReviewsTab = (props: any) => {
           <ColumnStackCenter
             sx={{
               width: "80%",
+              mb: 8,
               maxWidth: "900",
               "@media (max-width: 900px)": {
                 width: "100%",
@@ -82,12 +90,21 @@ const ReviewsTab = (props: any) => {
             <Typography align="center" variant="h5" sx={{ mb: 5 }}>
               APPLICANT REVIEWS
             </Typography>
-            {reviews.map((review) => (
+            {ratings.length > 10 ? (
+              <Pagination
+                count={numPages}
+                page={page}
+                onChange={handlePageChange}
+              />
+            ) : (
+              ""
+            )}
+
+            {currentPageItems.map((review) => (
               <ReviewListItem
                 key={review.id}
-                rating={review.rating}
-                comment={review.comment}
-                email={review.userEmail}
+                rating={review}
+                onObjectChange={getReviews}
               ></ReviewListItem>
             ))}
           </ColumnStackCenter>

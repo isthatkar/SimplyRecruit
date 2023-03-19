@@ -2,7 +2,7 @@ import * as React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Box from "@mui/material/Box/Box";
@@ -96,7 +96,6 @@ const AddPositionPage = (props: any) => {
 
   return (
     <div>
-      <ToastContainer />
       <Box
         sx={{
           bgcolor: "background.paper",

@@ -21,7 +21,7 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 import FinalTimeSelector from "../Components/Meetings/FinalTimeSelector";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const MeetingSchedulingPage = () => {
   const [meeting, setMeeting] = useState<Meeting>();
@@ -152,7 +152,6 @@ const MeetingSchedulingPage = () => {
         width: 1,
       }}
     >
-      <ToastContainer></ToastContainer>
       <Container sx={{ width: "100%", my: 8 }}>
         <Stack
           direction="column"
