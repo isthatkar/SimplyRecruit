@@ -88,7 +88,7 @@ const ApplicationView = () => {
     <div>
       <Box
         sx={{
-          pb: 6,
+          pb: 4,
           width: 1,
         }}
       >

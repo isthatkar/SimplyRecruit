@@ -1,19 +1,18 @@
-import {
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import React from "react";
 import { ColumnStackStrech, useStyles } from "../../Styles/Theme";
 import { Rating } from "../../Types/types";
+import DeleteReviewDialog from "./DeleteReviewDialog";
+import EditReviewDialog from "./EditReviewDialog";
 import RatingIcon from "./RatingIcon";
 interface RatingProps {
   rating: Rating;
+  onObjectChange: () => void;
 }
-const ReviewListItem = ({ rating }: RatingProps) => {
+const ReviewListItem = ({ rating, onObjectChange }: RatingProps) => {
   const classes = useStyles();
+  const userId = localStorage.getItem("userId");
+
   return (
     <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
       <ColumnStackStrech sx={{ width: "100%" }} spacing={2}>
@@ -38,10 +37,20 @@ const ReviewListItem = ({ rating }: RatingProps) => {
           <ListItemText primary={rating.comment} secondary={rating.userEmail} />
         </Stack>
       </ColumnStackStrech>
-      <div>
-        <ListItemButton>Edit</ListItemButton>
-        <ListItemButton>Delete</ListItemButton>
-      </div>
+      {rating.userId === userId ? (
+        <div>
+          <EditReviewDialog
+            rating={rating}
+            onEditObject={onObjectChange}
+          ></EditReviewDialog>
+          <DeleteReviewDialog
+            rating={rating}
+            onDeleteObject={onObjectChange}
+          ></DeleteReviewDialog>
+        </div>
+      ) : (
+        ""
+      )}
     </ListItem>
   );
 };

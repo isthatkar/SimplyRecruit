@@ -18,7 +18,7 @@ import React from "react";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 type MeetingFormData = {
   title: string;
@@ -154,8 +154,6 @@ const AddMeeting = () => {
   };
   return (
     <div>
-      <ToastContainer />
-
       <Box
         sx={{
           bgcolor: "background.paper",

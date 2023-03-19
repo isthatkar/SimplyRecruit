@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
 import {
@@ -68,8 +68,6 @@ const AddProjectDialog = () => {
 
   return (
     <div>
-      <ToastContainer />
-
       <Button variant="contained" onClick={handleClickOpen}>
         Add new project
       </Button>

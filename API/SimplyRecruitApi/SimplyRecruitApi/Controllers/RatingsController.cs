@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using SimplyRecruitAPI.Auth.Model;
-using SimplyRecruitAPI.Data.Dtos.Positions;
 using SimplyRecruitAPI.Data.Dtos.Ratings;
 using SimplyRecruitAPI.Data.Entities;
-using SimplyRecruitAPI.Data.Repositories;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
 using System.Security.Claims;
+using Application = SimplyRecruitAPI.Data.Entities.Application;
 
 namespace SimplyRecruitAPI.Controllers
 {
@@ -54,6 +53,7 @@ namespace SimplyRecruitAPI.Controllers
 
             await _ratingsRepository.CreateAsync(rating);
 
+            await UpdateApplicationRatingAverages(application);
             //201
             return Created("", new RatingDto(
                 rating.Id,
@@ -64,7 +64,35 @@ namespace SimplyRecruitAPI.Controllers
                 user.Email,
                 user.Id,
                 applicationId));
+        }
 
+        private async Task UpdateApplicationRatingAverages(Application application)
+        {
+            var allRatings = await _ratingsRepository.GetApplicationRatings(application.Id);
+
+            double tempCommsRating = 0;
+            double tempSkillsRating = 0;
+            double tempAttitudeRating = 0;
+            
+            foreach(Rating rating in allRatings)
+            {
+                tempAttitudeRating += rating.AttitudeRating;
+                tempCommsRating += rating.CommunicationRating;
+                tempSkillsRating += rating.SkillsRating;
+            }
+
+            tempSkillsRating = tempSkillsRating / allRatings.Count();
+            tempCommsRating = tempCommsRating / allRatings.Count();
+            tempAttitudeRating = tempAttitudeRating / allRatings.Count();
+
+            double averageRating = 0.5 * tempSkillsRating + 0.25 * tempAttitudeRating + 0.25 * tempCommsRating;
+
+            application.AverageAttitudeRating = Math.Round(tempAttitudeRating, 1);
+            application.AverageCommsRating = Math.Round(tempCommsRating, 1);
+            application.AverageSkillRating = Math.Round(tempSkillsRating,1);
+            application.AverageRating = Math.Round(averageRating, 1);
+
+            await _applicationsRepository.UpdateAsync(application);
         }
 
         [HttpGet]
@@ -85,10 +113,17 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = Roles.Employee)] //cadidates cannot edit their applications
+        [Authorize(Roles = Roles.Employee)] 
         [Route("{ratingId}")]
-        public async Task<ActionResult<Application>> Update(int applicationId, int ratingId, UpdateRatingDto updateRatingDto)
+        public async Task<ActionResult<RatingDto>> Update(int applicationId, int ratingId, UpdateRatingDto updateRatingDto)
         {
+            var application = await _applicationsRepository.GetAsync(applicationId);
+
+            if (application == null)
+            {
+                return NotFound();
+            }
+
             var rating = await _ratingsRepository.GetAsync(ratingId);
 
             if (rating == null)
@@ -104,6 +139,7 @@ namespace SimplyRecruitAPI.Controllers
             await _ratingsRepository.UpdateAsync(rating);
             var user = await _userManager.FindByIdAsync(rating.UserId);
 
+            await UpdateApplicationRatingAverages(application);
 
             return Ok(new RatingDto(rating.Id, rating.SkillsRating, rating.CommunicationRating, rating.AttitudeRating, rating.Comment, user.Email, rating.UserId, rating.Application.Id));
         }
@@ -113,6 +149,13 @@ namespace SimplyRecruitAPI.Controllers
         [Route("{ratingId}")]
         public async Task<ActionResult> Remove(int applicationId, int ratingId)
         {
+            var application = await _applicationsRepository.GetAsync(applicationId);
+
+            if (application == null)
+            {
+                return NotFound(); //404
+            }
+
             var rating = await _ratingsRepository.GetAsync(ratingId);
 
             if (rating == null)
@@ -121,6 +164,8 @@ namespace SimplyRecruitAPI.Controllers
             }
 
             await _ratingsRepository.DeleteAsync(rating);
+
+            await UpdateApplicationRatingAverages(application);
 
             //204
             return NoContent();

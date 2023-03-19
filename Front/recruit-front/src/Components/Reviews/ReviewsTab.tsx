@@ -101,7 +101,11 @@ const ReviewsTab = ({ applicationId }: ReviewsTabProps) => {
             )}
 
             {currentPageItems.map((review) => (
-              <ReviewListItem key={review.id} rating={review}></ReviewListItem>
+              <ReviewListItem
+                key={review.id}
+                rating={review}
+                onObjectChange={getReviews}
+              ></ReviewListItem>
             ))}
           </ColumnStackCenter>
         </Box>

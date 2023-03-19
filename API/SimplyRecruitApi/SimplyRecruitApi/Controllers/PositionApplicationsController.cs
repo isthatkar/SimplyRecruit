@@ -42,6 +42,10 @@ namespace SimplyRecruitAPI.Controllers
                 a.CoverLetter,
                 a.ContactEmail,
                 a.Stage,
+                a.AverageRating,
+                a.AverageSkillRating,
+                a.AverageCommsRating,
+                a.AverageAttitudeRating,
                 a.UserId,
                 a.PositionName,
                 a.IsArchived));
@@ -70,7 +74,11 @@ namespace SimplyRecruitAPI.Controllers
                 Position = position,
                 UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
                 PositionName = position.Name,
-                IsArchived = false
+                IsArchived = false,
+                AverageCommsRating = 0,
+                AverageSkillRating = 0,
+                AverageAttitudeRating = 0,
+                AverageRating = 0
             };
     
             await _applicationsRepository.CreateAsync(application);
@@ -84,6 +92,10 @@ namespace SimplyRecruitAPI.Controllers
                 application.CoverLetter,
                 application.ContactEmail,
                 application.Stage,
+                application.AverageRating,
+                application.AverageSkillRating,
+                application.AverageCommsRating,
+                application.AverageAttitudeRating,
                 application.PositionId,
                 application.UserId,
                 application.PositionName,

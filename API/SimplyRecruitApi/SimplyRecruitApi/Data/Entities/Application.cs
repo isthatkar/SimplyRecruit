@@ -16,6 +16,10 @@ namespace SimplyRecruitAPI.Data.Entities
         public int PositionId { get; set; }
         public string UserId { get; set; }
         public string PositionName { get; set; }
+        public double AverageSkillRating { get; set; }
+        public double AverageCommsRating { get; set; }
+        public double AverageAttitudeRating { get; set; }
+        public double AverageRating { get; set; }
         public bool IsArchived { get; set; }
     }
 }

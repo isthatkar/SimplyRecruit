@@ -118,35 +118,9 @@ const PositionView = () => {
                 justifyContent="center"
               >
                 {" "}
-                <Button variant="contained" onClick={handleClickAdd}>
+                <Button variant="outlined" onClick={handleClickAdd}>
                   Edit position
                 </Button>
-                <Stack direction="row" spacing={2} justifyContent="center">
-                  <Button size="medium" color="error" onClick={handleClickOpen}>
-                    Delete position
-                  </Button>
-                  <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                  >
-                    <DialogTitle id="alert-dialog-title">
-                      {"Are you sure you want to delete this position?"}
-                    </DialogTitle>
-                    <DialogContent>
-                      All of the positions applications will also be deleted.
-                      This cannot be undone.
-                    </DialogContent>
-
-                    <DialogActions>
-                      <Button onClick={handleClose} autoFocus>
-                        Disagree
-                      </Button>
-                      <Button onClick={() => onDelete()}>Agree</Button>
-                    </DialogActions>
-                  </Dialog>
-                </Stack>
               </Stack>
             </Stack>
           ) : (
