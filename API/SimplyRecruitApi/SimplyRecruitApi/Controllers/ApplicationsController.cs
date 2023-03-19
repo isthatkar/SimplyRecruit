@@ -140,7 +140,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = Roles.Employee)] //candidates cannot delete applications
+        [Authorize(Roles = Roles.Employee)] 
         [Route("{applicationId}")]
         public async Task<ActionResult> Remove(int applicationId)
         {
