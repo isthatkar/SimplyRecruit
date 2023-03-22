@@ -1,5 +1,4 @@
 import { Box, Container, Tab, Tabs, Typography } from "@mui/material";
-
 import TaskIcon from "@mui/icons-material/Task";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import InfoIcon from "@mui/icons-material/Info";
@@ -60,10 +59,10 @@ const ApplicationView = () => {
         const resume = response.data;
         setResume(resume);
       } else {
-        console.error("Error downloading file:", response.statusText);
+        console.log("Error downloading file:", response.statusText);
       }
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.log("Error downloading file:", error);
     }
   }, []);
 
@@ -76,11 +75,10 @@ const ApplicationView = () => {
     }
     getApplication();
     getResume();
-  }, []);
+  }, [value]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    console.log("change");
     navigate(`/application/${applicationId}?tab=${newValue}`);
   };
 

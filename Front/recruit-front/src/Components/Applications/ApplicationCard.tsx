@@ -1,10 +1,12 @@
-import { Button, Card, Grid, Stack, Typography } from "@mui/material";
+import { Button, Card, Grid, Stack, Tooltip, Typography } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import React from "react";
 import { Application, Resume } from "../../Types/types";
 import GetStateLabel from "../../Helpers/ApplicationStateToText";
 import ArchiveApplicationButton from "./ArchiveApplicationButton";
 import RadarChart from "../Reviews/RatingChart";
+import StarRating from "../Reviews/StartRatingComponent";
+import { ColumnStackCenter } from "../../Styles/Theme";
 
 interface CardProps {
   application: Application | undefined;
@@ -34,6 +36,7 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
   const handleDownloadClick = () => {
     downloadFile();
   };
+
   return (
     <Card>
       <Typography align="center" variant="h4" sx={{ mt: 2 }}>
@@ -84,7 +87,7 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
         direction="row"
         justifyContent="space-around"
         alignItems="stretch"
-        sx={{ mb: 8 }}
+        sx={{ mb: 4 }}
       >
         <Stack
           direction="row"
@@ -111,15 +114,22 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
           Download resume
         </Button>
       </Grid>
-      <Grid container justifyContent="center" sx={{ height: "500px" }}>
+      <Grid>
         {application && isEmployee ? (
-          <RadarChart
-            points={[
-              application.averageCommsRating,
-              application.averageSkillRating,
-              application.averageAttitudeRating,
-            ]}
-          ></RadarChart>
+          <ColumnStackCenter spacing={3}>
+            <Tooltip title="Average rating = 50% skills + 25% communication + 25% attitude">
+              <StarRating value={application.averageRating}></StarRating>
+            </Tooltip>
+            <Grid sx={{ height: "500px", width: "500px" }}>
+              <RadarChart
+                points={[
+                  application.averageCommsRating,
+                  application.averageSkillRating,
+                  application.averageAttitudeRating,
+                ]}
+              ></RadarChart>
+            </Grid>
+          </ColumnStackCenter>
         ) : (
           ""
         )}

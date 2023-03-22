@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 import React, { useState } from "react";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 interface CancelMeetingProps {
   meetingId: number | undefined;
@@ -41,7 +41,6 @@ const CancelMeetingDialog = ({ meetingId }: CancelMeetingProps) => {
 
   return (
     <div>
-      <ToastContainer></ToastContainer>
       <Tooltip title="Cancel">
         <IconButton color="secondary" onClick={handleClickOpen}>
           <EventBusyIcon />
