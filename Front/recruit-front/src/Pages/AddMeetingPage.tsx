@@ -117,7 +117,7 @@ const AddMeeting = () => {
       title: formData.title,
       description: formData.description,
       meetingUrl: "https://google.com", //TODO WITH GOOGLE MEETS INTEGRATION
-      schedulingUrl: "https://google.com", //TODO
+      schedulingUrl: "",
       isFinal: formData.isFinalTime,
       durationMinutes: formData.duration,
       atendees: attendeesNew,

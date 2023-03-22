@@ -1,10 +1,4 @@
-import {
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useStyles } from "../../Styles/Theme";
 import { Task, TaskStatus } from "../../Types/types";

@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
 
-const AddTaskDialog = (props: any) => {
+const AddTaskDialog = () => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

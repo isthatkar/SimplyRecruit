@@ -6,7 +6,7 @@ import { Application, Resume } from "../../Types/types";
 import CandidateTasks from "../Tasks/CandidateTasks";
 import ApplicationCard from "./ApplicationCard";
 
-const CandidateApplicationView = (props: any) => {
+const CandidateApplicationView = () => {
   const { applicationId } = useParams();
   const [application, setApplication] = useState<Application>();
   const [resume, setResume] = useState<Resume>();
