@@ -10,14 +10,14 @@ import Box from "@mui/material/Box/Box";
 import { ChangeEvent, useState } from "react";
 import { Stack, Typography } from "@mui/material";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 interface AddTaskProps {
   applicationId: number;
+  onAddObject: () => void;
 }
 
-const AddTaskDialog = ({ applicationId }: AddTaskProps) => {
+const AddTaskDialog = ({ applicationId, onAddObject }: AddTaskProps) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [goal, setGoal] = useState("");
@@ -25,7 +25,6 @@ const AddTaskDialog = ({ applicationId }: AddTaskProps) => {
   const [taskUrl, setTaskUrl] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filename, setFilename] = useState("");
-  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -50,17 +49,16 @@ const AddTaskDialog = ({ applicationId }: AddTaskProps) => {
       fileName: filename === "" ? null : filename,
     };
     const formData = new FormData();
-    if (selectedFile !== null) {
+    if (selectedFile !== null && filename !== "") {
       formData.append("file", selectedFile);
+      formData.append("createTaskDto.FileName", filename);
     }
     formData.append("createTaskDto.Title", title);
     formData.append("createTaskDto.Goal", goal);
     formData.append("createTaskDto.Deadline", deadline);
-    formData.append("createTaskDto.Url", taskUrl === "" ? "null" : taskUrl);
-    formData.append(
-      "createTaskDto.FileName",
-      filename === "" ? "null" : filename
-    );
+    if (taskUrl !== "") {
+      formData.append("createTaskDto.Url", taskUrl);
+    }
 
     const headers = { "Content-Type": "multipart/form-data" };
 
@@ -75,6 +73,7 @@ const AddTaskDialog = ({ applicationId }: AddTaskProps) => {
       toast.success("Added task!", {
         position: toast.POSITION.TOP_RIGHT,
       });
+      onAddObject();
     } else {
       toast.error("Failed to add task!", {
         position: toast.POSITION.TOP_RIGHT,
@@ -82,27 +81,6 @@ const AddTaskDialog = ({ applicationId }: AddTaskProps) => {
     }
   };
 
-  const addResume = async (applicationId: number) => {
-    if (!selectedFile) {
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    formData.append("fileName", filename);
-    try {
-      const response = await axios.post(
-        `applications/${applicationId}/resume`,
-        formData
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to add resume to application!", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
-  };
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return;

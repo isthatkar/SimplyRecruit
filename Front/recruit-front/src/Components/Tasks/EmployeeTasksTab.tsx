@@ -37,7 +37,7 @@ const EmployeeTasksTab = ({ applicationId }: TaskTabProps) => {
           alignItems="center"
           spacing={3}
         >
-          <AddTaskDialog applicationId={applicationId} />
+          <AddTaskDialog applicationId={applicationId} onAddObject={getTasks} />
         </Stack>
       </Box>
 
@@ -47,6 +47,7 @@ const EmployeeTasksTab = ({ applicationId }: TaskTabProps) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            mb: 8,
           }}
         >
           <ColumnStackCenter
@@ -65,6 +66,7 @@ const EmployeeTasksTab = ({ applicationId }: TaskTabProps) => {
             {tasks.map((task) => (
               <EmployeeTaskListItem
                 key={task.id}
+                applicationId={applicationId}
                 task={task}
               ></EmployeeTaskListItem>
             ))}

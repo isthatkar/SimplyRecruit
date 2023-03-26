@@ -74,6 +74,30 @@ namespace SimplyRecruitAPI.Controllers
                ));
         }
 
+        [HttpGet("download/{taskId}")]
+        [Authorize]
+        public async Task<IActionResult> DownloadResume(int applicationId, int taskId)
+        {
+            var application = await _applicationsRepository.GetAsync(applicationId);
+
+            if (application == null)
+            {
+                return NotFound("Application to which you want to add task was not found");
+            }
+
+            var task = await _taskRepository.GetAsync(taskId);
+
+            if (task == null || task.FileData == null || task.FileName == null)
+            {
+                return NotFound();
+            }
+
+            byte[] fileData = task.FileData;
+            string fileName = task.FileName;
+
+            return File(fileData, "application/octet-stream", fileName);
+        }
+
 
         [HttpGet]
         [Authorize]

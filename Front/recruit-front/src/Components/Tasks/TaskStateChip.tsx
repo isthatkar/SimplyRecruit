@@ -1,40 +1,47 @@
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import React from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Chip } from "@mui/material";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import TimerOffIcon from "@mui/icons-material/TimerOff";
+import { Task } from "../../Types/types";
 
 type Props = {
-  value: number;
+  task: Task;
 };
 
-const TaskStateChip = ({ value }: Props) => {
-  if (value >= 0 && value <= 2) {
-    switch (value) {
-      case 0:
-        return <Chip icon={<HourglassBottomIcon />} label="Waiting..." />;
-      case 1:
-        return (
-          <Chip
-            icon={<CheckCircleOutlineIcon />}
-            label="Completed!"
-            color="success"
-            variant="outlined"
-          />
-        );
-      case 2:
-        return (
-          <Chip
-            icon={<TimerOffIcon />}
-            label="Deadline passed"
-            color="error"
-            variant="outlined"
-          />
-        );
-    }
+export function hasDeadlinePassed(dateString: string): boolean {
+  const date = new Date(dateString);
+  console.log("date comparison");
+  console.log(date.getTime() < Date.now());
+  return date.getTime() < Date.now();
+}
+
+const TaskStateChip = ({ task }: Props) => {
+  console.log(task);
+  if (hasDeadlinePassed(task.deadline) && task.answerSubmited === false) {
+    return (
+      <Chip
+        icon={<TimerOffIcon />}
+        label="Deadline passed"
+        color="error"
+        variant="outlined"
+      />
+    );
   }
-  return <Chip icon={<QuestionMarkIcon />} label="Unknown" />;
+  if (task.answerSubmited === false) {
+    return <Chip icon={<HourglassBottomIcon />} label="Waiting..." />;
+  }
+  if (task.answerSubmited === true) {
+    return (
+      <Chip
+        icon={<CheckCircleOutlineIcon />}
+        label="Completed!"
+        color="success"
+        variant="outlined"
+      />
+    );
+  }
+  return <Chip></Chip>;
 };
 
 export default TaskStateChip;

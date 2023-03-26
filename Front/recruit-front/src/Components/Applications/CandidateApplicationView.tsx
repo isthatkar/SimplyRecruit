@@ -47,7 +47,11 @@ const CandidateApplicationView = () => {
         application={application}
         resume={resume}
       ></ApplicationCard>
-      <CandidateTasks positionName={application?.positionName}></CandidateTasks>
+      {application ? (
+        <CandidateTasks applicationId={application.id}></CandidateTasks>
+      ) : (
+        ""
+      )}
     </Box>
   );
 };

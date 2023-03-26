@@ -2,15 +2,16 @@ import { ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import React from "react";
 import GetFormatedDate from "../../Helpers/DateFormater";
 import { useStyles } from "../../Styles/Theme";
-import { Task, TaskStatus } from "../../Types/types";
+import { Task } from "../../Types/types";
 import AddTaskAnswerDialog from "./AddTaskAnswerDialog";
-import TaskStateChip from "./TaskStateChip";
+import TaskStateChip, { hasDeadlinePassed } from "./TaskStateChip";
 import TaskViewModal from "./TaskViewModal";
 
 interface taskListItemProps {
   task: Task;
+  applicationId: number;
 }
-const CandidateTaskListItem = ({ task }: taskListItemProps) => {
+const CandidateTaskListItem = ({ task, applicationId }: taskListItemProps) => {
   const classes = useStyles();
   return (
     <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
@@ -27,7 +28,7 @@ const CandidateTaskListItem = ({ task }: taskListItemProps) => {
               <Typography sx={{ mb: 2 }} variant="h5" color="text.primary">
                 {task.title}
               </Typography>
-              <TaskStateChip value={task.state}></TaskStateChip>
+              <TaskStateChip task={task}></TaskStateChip>
             </Stack>
           </React.Fragment>
         }
@@ -44,10 +45,19 @@ const CandidateTaskListItem = ({ task }: taskListItemProps) => {
         }
       />
       <div>
-        {task.state === TaskStatus.Assigned ? (
+        {task.answerSubmited === false ? (
           <div>
-            <TaskViewModal task={task}></TaskViewModal>
-            <AddTaskAnswerDialog task={task}></AddTaskAnswerDialog>
+            <TaskViewModal
+              task={task}
+              applicationId={applicationId}
+            ></TaskViewModal>
+            <>
+              {hasDeadlinePassed(task.deadline) ? (
+                ""
+              ) : (
+                <AddTaskAnswerDialog task={task}></AddTaskAnswerDialog>
+              )}
+            </>
           </div>
         ) : (
           ""

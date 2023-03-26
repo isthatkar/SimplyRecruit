@@ -2,16 +2,17 @@ import { ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import React from "react";
 import GetFormatedDate from "../../Helpers/DateFormater";
 import { useStyles } from "../../Styles/Theme";
-import { Task, TaskStatus } from "../../Types/types";
+import { Task } from "../../Types/types";
 import TaskAnswerViewModal from "./TaskAnswerViewModal";
 import TaskStateChip from "./TaskStateChip";
 import TaskViewModal from "./TaskViewModal";
 
 interface TaskListItemProps {
   task: Task;
+  applicationId: number;
 }
 
-const EmployeeTaskListItem = ({ task }: TaskListItemProps) => {
+const EmployeeTaskListItem = ({ task, applicationId }: TaskListItemProps) => {
   const classes = useStyles();
   return (
     <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
@@ -28,7 +29,7 @@ const EmployeeTaskListItem = ({ task }: TaskListItemProps) => {
               <Typography sx={{ mb: 2 }} variant="h5" color="text.primary">
                 {task.title}
               </Typography>
-              <TaskStateChip value={task.state}></TaskStateChip>
+              <TaskStateChip task={task}></TaskStateChip>
             </Stack>
           </React.Fragment>
         }
@@ -52,8 +53,11 @@ const EmployeeTaskListItem = ({ task }: TaskListItemProps) => {
         }
       />
       <div>
-        <TaskViewModal task={task}></TaskViewModal>
-        {task.state === TaskStatus.Completed ? (
+        <TaskViewModal
+          task={task}
+          applicationId={applicationId}
+        ></TaskViewModal>
+        {task.answerSubmited === true ? (
           <TaskAnswerViewModal taskId={task.id}></TaskAnswerViewModal>
         ) : (
           ""
