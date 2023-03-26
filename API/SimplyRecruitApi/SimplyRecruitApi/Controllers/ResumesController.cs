@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Resumes;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Mime;
 using System.Security.Claims;
 
 namespace SimplyRecruitAPI.Controllers
@@ -44,14 +41,6 @@ namespace SimplyRecruitAPI.Controllers
                 return NotFound(); //404
             }
 
-            byte[] fileData = resume.Data;
-
-            /*// Save the file to the desktop
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string fileName = resume.FileName; // Replace with the actual file name and extension
-            string filePath = Path.Combine(desktopPath, fileName);
-            object value = File.WriteAllBytes(filePath, fileData);*/
-
             return new ResumeDto(resume.Id, resume.FileName, resume.Data);
         }
 
@@ -63,13 +52,6 @@ namespace SimplyRecruitAPI.Controllers
             {
                 return NotFound();
             }
-
-            var contentDisposition = new ContentDisposition
-            {
-                FileName = resume.FileName,
-                Inline = false,  // forces download
-            };
-            Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
 
             byte[] fileData = resume.Data;
             string fileName = resume.FileName;
