@@ -93,7 +93,7 @@ export interface Application {
 }
 
 export interface Resume {
-  file: Uint8Array;
+  data: Uint8Array;
   fileName: string;
 }
 

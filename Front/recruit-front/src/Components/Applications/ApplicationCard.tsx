@@ -7,6 +7,7 @@ import ArchiveApplicationButton from "./ArchiveApplicationButton";
 import RadarChart from "../Reviews/RatingChart";
 import StarRating from "../Reviews/StartRatingComponent";
 import { ColumnStackCenter } from "../../Styles/Theme";
+import axios from "axios";
 
 interface CardProps {
   application: Application | undefined;
@@ -16,20 +17,25 @@ interface CardProps {
 const ApplicationCard = ({ resume, application }: CardProps) => {
   const roles = localStorage.getItem("roles");
   const isEmployee = roles ? roles.includes("Employee") : false;
-  const downloadFile = () => {
-    if (resume) {
-      const filename = resume.fileName;
-      const downloadLink = document.createElement("a");
-      downloadLink.href = URL.createObjectURL(
-        new Blob([resume.file], { type: "application/octet-stream" })
-      );
-      downloadLink.download = filename;
-      downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink);
-
-      downloadLink.click();
-
-      document.body.removeChild(downloadLink);
+  const downloadFile = async () => {
+    if (resume && application) {
+      axios({
+        url: `applications/${application.id}/download`,
+        method: "GET",
+        responseType: "blob",
+      }).then((response) => {
+        const blob = new Blob([response.data], {
+          type: "application/octet-stream",
+        });
+        const fileName = `resume_${application.fullName}.pdf`;
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
     }
   };
 

@@ -4,7 +4,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Box, ListItemButton, TextField } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -66,7 +65,7 @@ const AddTaskAnswerDialog = ({ task }: TaskViewModalProps) => {
                   <input
                     type="file"
                     hidden
-                    accept=".doc, .docx, .pdf"
+                    accept=".pdf"
                     /*  onChange={handleFileUpload} */
                   />
                 </FileUploadIcon>{" "}

@@ -21,7 +21,8 @@ const ApplicationForm = (props: any) => {
     setSelectedFile(file);
   };
 
-  const handleAdd = async () => {
+  const handleAdd = async (event: React.FormEvent) => {
+    event.preventDefault();
     await addApplication();
   };
 
@@ -128,12 +129,7 @@ const ApplicationForm = (props: any) => {
       >
         <Button variant="outlined" component="label" sx={{ mt: 2 }}>
           Upload resume
-          <input
-            type="file"
-            hidden
-            accept=".doc, .docx, .pdf"
-            onChange={handleFileUpload}
-          />
+          <input type="file" hidden accept=".pdf" onChange={handleFileUpload} />
         </Button>
         <Typography sx={{ ml: 3 }}>{filename}</Typography>
       </Stack>

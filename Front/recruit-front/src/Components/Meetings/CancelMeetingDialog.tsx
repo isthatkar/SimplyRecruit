@@ -10,11 +10,12 @@ import axios from "axios";
 import React, { useState } from "react";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import { toast } from "react-toastify";
+import { Meeting } from "../../Types/types";
 
 interface CancelMeetingProps {
-  meetingId: number | undefined;
+  meeting: Meeting;
 }
-const CancelMeetingDialog = ({ meetingId }: CancelMeetingProps) => {
+const CancelMeetingDialog = ({ meeting }: CancelMeetingProps) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -26,7 +27,7 @@ const CancelMeetingDialog = ({ meetingId }: CancelMeetingProps) => {
   };
 
   const onCancel = async () => {
-    const response = await axios.put(`meetings/${meetingId}`, {
+    const response = await axios.put(`meetings/${meeting.id}`, {
       isCanceled: true,
     });
 

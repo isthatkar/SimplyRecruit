@@ -15,7 +15,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import GetFormatedDate from "../../Helpers/DateFormater";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import createMeeting from "../../Helpers/googleMeetsHelper";
+import { createMeeting } from "../../Helpers/googleMeetsHelper";
+import { toast } from "react-toastify";
 
 interface FinalTimeSelectorProps {
   meeting: Meeting;
@@ -44,14 +45,23 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
     tempMeeting.isFinalTime = true;
     tempMeeting.finalTime = finalTime?.startTime as string;
 
-    let meetingUrl = null;
+    let data = null;
     if (sendGoogleMeetsInvite) {
-      meetingUrl = await createMeeting(meeting);
+      data = await createMeeting(meeting);
     }
+
+    if (data === null) {
+      console.error("failed to create google calendar event");
+      toast.error("Failed to create Google Calendar event!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+
     const response = await axios.put(`/meetings/${meeting.id}`, {
       isFinalTime: true,
       finalTime: finalTime?.startTime,
-      meetingUrl: meetingUrl,
+      meetingUrl: data === null ? "" : data.htmlLink,
+      googleId: data === null ? "" : data.id,
     });
     console.log(response);
     navigate(`/meetings/${meeting.id}`);

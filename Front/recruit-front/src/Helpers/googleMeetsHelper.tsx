@@ -19,7 +19,7 @@ const getGoogleAccessToken = async () => {
   return user.googleAccessToken;
 };
 
-const createMeeting = async (meeting: Meeting) => {
+export const createMeeting = async (meeting: Meeting) => {
   const accessToken = await getGoogleAccessToken();
   const event = {
     summary: meeting.title,
@@ -68,7 +68,7 @@ const createMeeting = async (meeting: Meeting) => {
   console.log(data);
 
   if (response.ok) {
-    return data.htmlLink;
+    return data;
   } else {
     console.error(`Failed to create event: ${data.error.message}`);
     return null;

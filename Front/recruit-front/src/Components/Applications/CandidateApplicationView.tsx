@@ -15,6 +15,7 @@ const CandidateApplicationView = () => {
     const response = await axios.get(`applications/${applicationId}`);
     const applications = response.data;
     setApplication(applications);
+    await getResume();
   }, []);
 
   const getResume = useCallback(async () => {
@@ -22,8 +23,8 @@ const CandidateApplicationView = () => {
       const response = await axios.get(`applications/${applicationId}/resume`);
 
       if (response.status === 200) {
-        const resume = response.data;
-        setResume(resume);
+        const fetchedResume = response.data;
+        setResume(fetchedResume);
       } else {
         console.error("Error downloading file:", response.statusText);
       }
@@ -34,7 +35,6 @@ const CandidateApplicationView = () => {
 
   useEffect(() => {
     getApplication();
-    getResume();
   }, []);
 
   return (
