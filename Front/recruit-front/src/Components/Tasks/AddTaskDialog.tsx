@@ -4,13 +4,28 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box/Box";
+import { ChangeEvent, useState } from "react";
+import { Stack, Typography } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const AddTaskDialog = () => {
-  const [open, setOpen] = React.useState(false);
+interface AddTaskProps {
+  applicationId: number;
+}
+
+const AddTaskDialog = ({ applicationId }: AddTaskProps) => {
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [goal, setGoal] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [taskUrl, setTaskUrl] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filename, setFilename] = useState("");
+  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -20,8 +35,82 @@ const AddTaskDialog = () => {
     setOpen(false);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (event: React.FormEvent) => {
+    event.preventDefault();
+    await addTask();
     setOpen(false);
+  };
+
+  const addTask = async (): Promise<void> => {
+    const taskDto = {
+      title: title,
+      goal: goal,
+      deadline: deadline,
+      url: taskUrl === "" ? null : taskUrl,
+      fileName: filename === "" ? null : filename,
+    };
+    const formData = new FormData();
+    if (selectedFile !== null) {
+      formData.append("file", selectedFile);
+    }
+    formData.append("createTaskDto.Title", title);
+    formData.append("createTaskDto.Goal", goal);
+    formData.append("createTaskDto.Deadline", deadline);
+    formData.append("createTaskDto.Url", taskUrl === "" ? "null" : taskUrl);
+    formData.append(
+      "createTaskDto.FileName",
+      filename === "" ? "null" : filename
+    );
+
+    const headers = { "Content-Type": "multipart/form-data" };
+
+    const response = await axios.post(
+      `applications/${applicationId}/tasks`,
+      formData,
+      { headers }
+    );
+
+    console.log(response);
+    if (response?.status === 201) {
+      toast.success("Added task!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } else {
+      toast.error("Failed to add task!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
+  const addResume = async (applicationId: number) => {
+    if (!selectedFile) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("fileName", filename);
+    try {
+      const response = await axios.post(
+        `applications/${applicationId}/resume`,
+        formData
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add resume to application!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const file = e.target.files[0];
+    const { name } = file;
+    setFilename(name);
+    setSelectedFile(file);
   };
 
   return (
@@ -40,55 +129,62 @@ const AddTaskDialog = () => {
         >
           <DialogTitle>Add task</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              {`For bullet points in multiline fields, separate the lines with a semicolon ; `}
-            </DialogContentText>
-
             <TextField
               required
               id="outlined-title-input"
               label="Title"
+              value={title}
               type="text"
+              onChange={(e) => setTitle(e.target.value)}
             />
             <TextField
               required
               id="outlined-title-input"
               label="Goal"
               type="text"
-            />
-            <TextField
+              value={goal}
               multiline
-              rows={3}
-              required
-              id="outlined-title-input"
-              label="Instructions"
-              type="text"
+              rows={2}
+              onChange={(e) => setGoal(e.target.value)}
             />
             <TextField
-              multiline
-              rows={3}
-              id="outlined-title-input"
-              label="Deliverables"
-              type="text"
-            />
-            <TextField
-              multiline
-              rows={3}
-              id="outlined-title-input"
-              label="Criteria for evaluation"
-              type="text"
-            />
-            <TextField
-              name="finalTime"
+              name="deadline"
               label="Deadline"
               type="datetime-local"
               variant="outlined"
               fullWidth
+              value={deadline}
               required
               InputLabelProps={{
                 shrink: true,
               }}
+              onChange={(e) => setDeadline(e.target.value)}
             />
+            <TextField
+              id="outlined-title-input"
+              value={taskUrl}
+              label="Task link"
+              type="url"
+              onChange={(e) => setTaskUrl(e.target.value)}
+            />
+            <Stack
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="baseline"
+              spacing={1}
+              sx={{ mt: 1 }}
+            >
+              <Button variant="outlined" component="label" sx={{ ml: 1 }}>
+                Upload task file
+                <input
+                  type="file"
+                  hidden
+                  accept=".pdf"
+                  onChange={handleFileUpload}
+                />
+              </Button>
+              <Typography sx={{ ml: 3 }}>{filename}</Typography>
+            </Stack>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>

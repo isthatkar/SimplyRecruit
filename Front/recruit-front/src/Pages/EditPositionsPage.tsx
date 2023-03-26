@@ -19,7 +19,6 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import { Field, JobLocation, Position, WorkTime } from "../Types/types";

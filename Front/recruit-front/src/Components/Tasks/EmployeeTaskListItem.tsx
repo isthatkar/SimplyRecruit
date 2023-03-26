@@ -1,11 +1,6 @@
-import {
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import React from "react";
+import GetFormatedDate from "../../Helpers/DateFormater";
 import { useStyles } from "../../Styles/Theme";
 import { Task, TaskStatus } from "../../Types/types";
 import TaskAnswerViewModal from "./TaskAnswerViewModal";
@@ -44,7 +39,7 @@ const EmployeeTaskListItem = ({ task }: TaskListItemProps) => {
               variant="subtitle1"
               color="text.primary"
             >
-              {task.deadline.toDateString()}
+              {GetFormatedDate(task.deadline)}
             </Typography>
             <Typography
               sx={{ mx: 4, display: "inline" }}

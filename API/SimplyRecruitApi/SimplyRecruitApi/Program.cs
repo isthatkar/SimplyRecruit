@@ -65,6 +65,7 @@ namespace SimplyRecruitAPI
             builder.Services.AddTransient<IMeetingTimesRepository, MeetingTimesRepository>();
             builder.Services.AddTransient<IRatingsRepository, RatingsRepository>();
             builder.Services.AddSingleton<IAuthorizationHandler, ResourceOwnerHandler>();
+            builder.Services.AddTransient<ITaskRepository, TaskRepository>();
 
             var app = builder.Build();
 

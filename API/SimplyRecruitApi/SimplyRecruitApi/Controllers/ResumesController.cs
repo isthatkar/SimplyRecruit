@@ -45,6 +45,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpGet("download")]
+        [Authorize]
         public async Task<IActionResult> DownloadResume(int applicationId)
         {
             var resume = await _resumesRepository.GetApplicationResumeAsync(applicationId);

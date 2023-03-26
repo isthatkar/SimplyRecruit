@@ -19,6 +19,8 @@ namespace SimplyRecruitAPI.Data
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<MeetingTimes> MeetingTimes { get; set; }
+        public DbSet<ApplicationTask> Tasks { get; set; }
+        public DbSet<TaskAnswer> TaskAnswers { get; set; }
 
     }
 }

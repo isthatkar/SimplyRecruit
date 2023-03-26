@@ -25,11 +25,9 @@ const CandidateApplicationView = () => {
       if (response.status === 200) {
         const fetchedResume = response.data;
         setResume(fetchedResume);
-      } else {
-        console.error("Error downloading file:", response.statusText);
       }
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.error("Error fetching file:", error);
     }
   }, []);
 

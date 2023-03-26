@@ -5,44 +5,17 @@ import { Task } from "../../Types/types";
 import EmployeeTaskListItem from "./EmployeeTaskListItem";
 import AddTaskDialog from "./AddTaskDialog";
 import { ColumnStackCenter, RowStackCenter } from "../../Styles/Theme";
+import axios from "axios";
 
-const EmployeeTasksTab = (props: any) => {
+interface TaskTabProps {
+  applicationId: number;
+}
+const EmployeeTasksTab = ({ applicationId }: TaskTabProps) => {
   const [tasks, setTasks] = React.useState<Task[]>([]);
 
   const getTasks = useCallback(async () => {
-    const applicationTasks: Task[] = [
-      {
-        id: 1,
-        title: "Create a Facebook Advertising Campaign",
-        goal: "Drive traffic to the company website and increase conversions for a specific product",
-        state: 0,
-        fileName: "asdsa",
-        url: "https://google.com",
-        fileData: undefined,
-        deadline: new Date(),
-      },
-      {
-        id: 3,
-        title: "Create a Facebook Advertising Campaign",
-        goal: "Drive traffic to the company website and increase conversions for a specific product",
-        state: 1,
-        fileName: "",
-        url: "",
-        fileData: undefined,
-        deadline: new Date(),
-      },
-      {
-        id: 2,
-        title: "Create a Facebook Advertising Campaign",
-        goal: "Drive traffic to the company website and increase conversions for a specific product",
-        state: 2,
-        fileName: "",
-        url: "",
-        fileData: undefined,
-        deadline: new Date(),
-      },
-    ];
-
+    const response = await axios.get(`applications/${applicationId}/tasks`);
+    const applicationTasks = response.data;
     setTasks(applicationTasks);
   }, []);
 
@@ -64,7 +37,7 @@ const EmployeeTasksTab = (props: any) => {
           alignItems="center"
           spacing={3}
         >
-          <AddTaskDialog />
+          <AddTaskDialog applicationId={applicationId} />
         </Stack>
       </Box>
 

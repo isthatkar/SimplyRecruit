@@ -1,5 +1,6 @@
 import { ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import React from "react";
+import GetFormatedDate from "../../Helpers/DateFormater";
 import { useStyles } from "../../Styles/Theme";
 import { Task, TaskStatus } from "../../Types/types";
 import AddTaskAnswerDialog from "./AddTaskAnswerDialog";
@@ -37,7 +38,7 @@ const CandidateTaskListItem = ({ task }: taskListItemProps) => {
               variant="subtitle1"
               color="text.primary"
             >
-              Due till {task.deadline.toDateString()}
+              Due till {GetFormatedDate(task.deadline)}
             </Typography>
           </React.Fragment>
         }

@@ -58,11 +58,9 @@ const ApplicationView = () => {
       if (response.status === 200) {
         const resume = response.data;
         setResume(resume);
-      } else {
-        console.log("Error downloading file:", response.statusText);
       }
     } catch (error) {
-      console.log("Error downloading file:", error);
+      console.log("Error fetching file:", error);
     }
   }, []);
 
@@ -121,7 +119,7 @@ const ApplicationView = () => {
             <ReviewsTab applicationId={application?.id}></ReviewsTab>
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <EmployeeTasksTab></EmployeeTasksTab>
+            <EmployeeTasksTab applicationId={application.id}></EmployeeTasksTab>
           </TabPanel>
         </>
       ) : (

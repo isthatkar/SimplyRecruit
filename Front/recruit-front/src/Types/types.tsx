@@ -61,7 +61,7 @@ export interface Task {
   title: string;
   goal: string;
   state: TaskStatus;
-  deadline: Date;
+  deadline: string;
   fileName: string | undefined;
   url: string | undefined;
   fileData: Uint8Array | undefined;

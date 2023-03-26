@@ -17,7 +17,7 @@ const CandidateTasks = (props: any) => {
         fileName: "sdws",
         url: "https://google.com",
         fileData: undefined,
-        deadline: new Date(),
+        deadline: "",
       },
       {
         id: 3,
@@ -27,7 +27,7 @@ const CandidateTasks = (props: any) => {
         fileName: "",
         url: "sdsdsd",
         fileData: undefined,
-        deadline: new Date(),
+        deadline: "",
       },
       {
         id: 2,
@@ -37,7 +37,7 @@ const CandidateTasks = (props: any) => {
         fileName: "",
         url: "asdsad",
         fileData: undefined,
-        deadline: new Date(),
+        deadline: "",
       },
     ];
 
