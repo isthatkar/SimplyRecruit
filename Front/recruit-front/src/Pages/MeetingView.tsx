@@ -134,9 +134,7 @@ const MeetingView = () => {
               {meeting && isUserMeeting ? (
                 <>
                   <EditMeetingDialog meeting={meeting} />
-                  <CancelMeetingDialog
-                    meetingId={meeting?.id}
-                  ></CancelMeetingDialog>
+                  <CancelMeetingDialog meeting={meeting}></CancelMeetingDialog>
                 </>
               ) : (
                 ""

@@ -44,6 +44,22 @@ namespace SimplyRecruitAPI.Controllers
             return new ResumeDto(resume.Id, resume.FileName, resume.Data);
         }
 
+        [HttpGet("download")]
+        [Authorize]
+        public async Task<IActionResult> DownloadResume(int applicationId)
+        {
+            var resume = await _resumesRepository.GetApplicationResumeAsync(applicationId);
+            if (resume == null)
+            {
+                return NotFound();
+            }
+
+            byte[] fileData = resume.Data;
+            string fileName = resume.FileName;
+
+            return File(fileData, "application/octet-stream", fileName);
+        }
+
         [HttpPost]
         [Authorize]
         [Route("resume")]

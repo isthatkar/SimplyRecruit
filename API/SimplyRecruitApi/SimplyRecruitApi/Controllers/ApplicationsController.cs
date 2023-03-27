@@ -45,7 +45,7 @@ namespace SimplyRecruitAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = Roles.Employee)]
+        [Authorize]
         [Route("{applicationId}", Name = "GetApplication")]
         public async Task<ActionResult<ApplicationDto>> Get(int applicationId)
         {

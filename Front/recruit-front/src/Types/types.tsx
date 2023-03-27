@@ -60,8 +60,8 @@ export interface Task {
   id: number;
   title: string;
   goal: string;
-  state: TaskStatus;
-  deadline: Date;
+  deadline: string;
+  answerSubmited: boolean;
   fileName: string | undefined;
   url: string | undefined;
   fileData: Uint8Array | undefined;
@@ -93,14 +93,8 @@ export interface Application {
 }
 
 export interface Resume {
-  file: Uint8Array;
+  data: Uint8Array;
   fileName: string;
-}
-
-export enum TaskStatus {
-  Assigned,
-  Completed,
-  DeadLinePassed,
 }
 
 export enum Stage {
@@ -120,6 +114,7 @@ export enum NordProduct {
   NordLocker,
   NordLayer,
   NordSecurity,
+  All,
 }
 
 export enum JobLocation {

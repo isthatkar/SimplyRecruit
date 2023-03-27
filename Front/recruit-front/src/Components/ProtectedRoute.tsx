@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 
 const ProtectedRoute = () => {
   const location = useLocation();
-
   const token = localStorage.getItem("accessToken");
   const isAuthent = !(token === null);
   console.log(isAuthent);

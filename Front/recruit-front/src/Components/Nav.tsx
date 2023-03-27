@@ -108,7 +108,7 @@ const Nav = () => {
                   component="a"
                   href="/projects"
                 >
-                  <Typography textAlign="center">Projects</Typography>
+                  <Typography textAlign="center">PROJECTS</Typography>
                 </MenuItem>
               ) : (
                 ""
@@ -119,7 +119,7 @@ const Nav = () => {
                   component="a"
                   href="/positions"
                 >
-                  <Typography textAlign="center"> open Positions</Typography>
+                  <Typography textAlign="center">OPEN POSITIONS</Typography>
                 </MenuItem>
               ) : (
                 ""
@@ -130,7 +130,7 @@ const Nav = () => {
                   component="a"
                   href="/userApplications"
                 >
-                  <Typography textAlign="center">My applications</Typography>
+                  <Typography textAlign="center">MY APPLICATIONS</Typography>
                 </MenuItem>
               ) : (
                 ""
@@ -141,7 +141,7 @@ const Nav = () => {
                   component="a"
                   href="/userMeetings"
                 >
-                  <Typography textAlign="center">my Meetings</Typography>
+                  <Typography textAlign="center">MY MEETINGS</Typography>
                 </MenuItem>
               ) : (
                 ""
@@ -176,7 +176,7 @@ const Nav = () => {
                 component="a"
                 href="/projects"
               >
-                Projects
+                PROJECTS
               </Button>
             ) : (
               ""
@@ -187,7 +187,7 @@ const Nav = () => {
                 component="a"
                 href="/positions"
               >
-                open Positions
+                OPEN POSITIONS
               </Button>
             ) : (
               ""
@@ -198,7 +198,7 @@ const Nav = () => {
                 component="a"
                 href="/userApplications"
               >
-                My applications
+                MY APPLICATIONS
               </Button>
             ) : (
               ""
@@ -209,7 +209,7 @@ const Nav = () => {
                 component="a"
                 href="/userMeetings"
               >
-                my Meetings
+                MY MEETINGS
               </Button>
             ) : (
               ""

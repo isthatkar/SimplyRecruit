@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Chart from "chart.js/auto";
 import { ChartType } from "chart.js";
 
@@ -9,8 +9,11 @@ interface RadarChartProps {
 const RadarChart: React.FC<RadarChartProps> = ({ points }) => {
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const radarChartType: ChartType = "radar";
+  const [chart, setChart] = useState<Chart>();
 
   React.useEffect(() => {
+    chart?.destroy();
+
     if (chartRef.current) {
       const chartData = {
         labels: ["Communication", "Skills", "Attitude"],
@@ -38,7 +41,7 @@ const RadarChart: React.FC<RadarChartProps> = ({ points }) => {
         },
       };
 
-      new Chart(chartRef.current, chartConfig);
+      setChart(new Chart(chartRef.current, chartConfig));
     }
   }, [points]);
 

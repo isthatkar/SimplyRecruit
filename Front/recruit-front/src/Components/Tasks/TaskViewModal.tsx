@@ -4,16 +4,17 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ListItemButton, ThemeProvider } from "@mui/material";
+import { ListItemButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Task } from "../../Types/types";
+import axios from "axios";
 
 interface TaskViewModalProps {
   task: Task;
+  applicationId: number;
 }
-const TaskViewModal = ({ task }: TaskViewModalProps) => {
+const TaskViewModal = ({ task, applicationId }: TaskViewModalProps) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -24,8 +25,32 @@ const TaskViewModal = ({ task }: TaskViewModalProps) => {
     setOpen(false);
   };
 
+  const downloadFile = async () => {
+    axios({
+      url: `applications/${applicationId}/tasks/download/${task.id}`,
+      method: "GET",
+      responseType: "blob",
+    }).then((response) => {
+      const blob = new Blob([response.data], {
+        type: "application/octet-stream",
+      });
+      const fileName = `task_${task.title}.pdf`;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
+
+  const handleDownloadClick = () => {
+    downloadFile();
+  };
+
   return (
-    <div>
+    <>
       <ListItemButton onClick={handleClickOpen}>View task</ListItemButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{task.title}</DialogTitle>
@@ -42,7 +67,7 @@ const TaskViewModal = ({ task }: TaskViewModalProps) => {
             ""
           )}
           {task.fileName ? (
-            <Button>
+            <Button sx={{ mt: 2 }} onClick={handleDownloadClick}>
               <DownloadIcon></DownloadIcon>
               Download task
             </Button>
@@ -51,7 +76,7 @@ const TaskViewModal = ({ task }: TaskViewModalProps) => {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 };
 

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Meeting, MeetingTime } from "../Types/types";
-import { RowStackItemsBetween, RowStackLeft } from "../Styles/Theme";
+import { RowStackItemsBetween } from "../Styles/Theme";
 import PersonIcon from "@mui/icons-material/Person";
 import GetFormatedDate from "../Helpers/DateFormater";
 import axios from "axios";

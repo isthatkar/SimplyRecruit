@@ -297,6 +297,51 @@ namespace SimplyRecruitAPI.Migrations
                     b.ToTable("Applications");
                 });
 
+            modelBuilder.Entity("SimplyRecruitAPI.Data.Entities.ApplicationTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AnswerSubmited")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("FileData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Goal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("Tasks");
+                });
+
             modelBuilder.Entity("SimplyRecruitAPI.Data.Entities.Meeting", b =>
                 {
                     b.Property<int>("Id")
@@ -521,6 +566,41 @@ namespace SimplyRecruitAPI.Migrations
                     b.ToTable("Resumes");
                 });
 
+            modelBuilder.Entity("SimplyRecruitAPI.Data.Entities.TaskAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("FileData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TaskAnswers");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -583,6 +663,17 @@ namespace SimplyRecruitAPI.Migrations
                     b.Navigation("Position");
                 });
 
+            modelBuilder.Entity("SimplyRecruitAPI.Data.Entities.ApplicationTask", b =>
+                {
+                    b.HasOne("SimplyRecruitAPI.Data.Entities.Application", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+                });
+
             modelBuilder.Entity("SimplyRecruitAPI.Data.Entities.Meeting", b =>
                 {
                     b.HasOne("SimplyRecruitAPI.Data.Entities.Application", "Application")
@@ -636,6 +727,17 @@ namespace SimplyRecruitAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Application");
+                });
+
+            modelBuilder.Entity("SimplyRecruitAPI.Data.Entities.TaskAnswer", b =>
+                {
+                    b.HasOne("SimplyRecruitAPI.Data.Entities.ApplicationTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
                 });
 #pragma warning restore 612, 618
         }

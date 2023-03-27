@@ -6,7 +6,7 @@ import { Application, Resume } from "../../Types/types";
 import CandidateTasks from "../Tasks/CandidateTasks";
 import ApplicationCard from "./ApplicationCard";
 
-const CandidateApplicationView = (props: any) => {
+const CandidateApplicationView = () => {
   const { applicationId } = useParams();
   const [application, setApplication] = useState<Application>();
   const [resume, setResume] = useState<Resume>();
@@ -15,6 +15,7 @@ const CandidateApplicationView = (props: any) => {
     const response = await axios.get(`applications/${applicationId}`);
     const applications = response.data;
     setApplication(applications);
+    await getResume();
   }, []);
 
   const getResume = useCallback(async () => {
@@ -22,19 +23,16 @@ const CandidateApplicationView = (props: any) => {
       const response = await axios.get(`applications/${applicationId}/resume`);
 
       if (response.status === 200) {
-        const resume = response.data;
-        setResume(resume);
-      } else {
-        console.error("Error downloading file:", response.statusText);
+        const fetchedResume = response.data;
+        setResume(fetchedResume);
       }
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.error("Error fetching file:", error);
     }
   }, []);
 
   useEffect(() => {
     getApplication();
-    getResume();
   }, []);
 
   return (
@@ -49,7 +47,11 @@ const CandidateApplicationView = (props: any) => {
         application={application}
         resume={resume}
       ></ApplicationCard>
-      <CandidateTasks positionName={application?.positionName}></CandidateTasks>
+      {application ? (
+        <CandidateTasks applicationId={application.id}></CandidateTasks>
+      ) : (
+        ""
+      )}
     </Box>
   );
 };

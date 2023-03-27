@@ -3,44 +3,17 @@ import React, { useCallback, useEffect } from "react";
 import { Task } from "../../Types/types";
 import { ColumnStackCenter } from "../../Styles/Theme";
 import CandidateTaskListItem from "./CandidateTaskListItem";
+import axios from "axios";
 
-const CandidateTasks = (props: any) => {
+interface CandidateTaskProps {
+  applicationId: number;
+}
+const CandidateTasks = ({ applicationId }: CandidateTaskProps) => {
   const [tasks, setTasks] = React.useState<Task[]>([]);
 
   const getTasks = useCallback(async () => {
-    const applicationTasks: Task[] = [
-      {
-        id: 1,
-        title: "Create a Facebook Advertising Campaign",
-        goal: "Drive traffic to the company website and increase conversions for a specific product",
-        state: 0,
-        fileName: "sdws",
-        url: "https://google.com",
-        fileData: undefined,
-        deadline: new Date(),
-      },
-      {
-        id: 3,
-        title: "Create a Facebook Advertising Campaign",
-        goal: "Drive traffic to the company website and increase conversions for a specific product",
-        state: 1,
-        fileName: "",
-        url: "sdsdsd",
-        fileData: undefined,
-        deadline: new Date(),
-      },
-      {
-        id: 2,
-        title: "Create a Facebook Advertising Campaign",
-        goal: "Drive traffic to the company website and increase conversions for a specific product",
-        state: 2,
-        fileName: "",
-        url: "asdsad",
-        fileData: undefined,
-        deadline: new Date(),
-      },
-    ];
-
+    const response = await axios.get(`applications/${applicationId}/tasks`);
+    const applicationTasks = response.data;
     setTasks(applicationTasks);
   }, []);
 
@@ -74,6 +47,7 @@ const CandidateTasks = (props: any) => {
             {tasks.map((task) => (
               <CandidateTaskListItem
                 key={task.id}
+                applicationId={applicationId}
                 task={task}
               ></CandidateTaskListItem>
             ))}
