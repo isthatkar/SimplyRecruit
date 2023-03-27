@@ -10,5 +10,6 @@ namespace SimplyRecruitAPI.Data.Entities
         public string? FileName { get; set; }
         public byte[]? FileData { get; set; }
         public string? Url { get; set; }
+        public ApplicationTask Task { get; set; }
     }
 }
