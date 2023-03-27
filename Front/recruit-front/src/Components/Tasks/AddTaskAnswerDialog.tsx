@@ -37,7 +37,6 @@ const AddTaskAnswerDialog = ({ task }: TaskViewModalProps) => {
   };
 
   const handleSave = async (event: React.FormEvent) => {
-    event.preventDefault();
     addTaskAnswer();
     setOpen(false);
   };
@@ -74,7 +73,6 @@ const AddTaskAnswerDialog = ({ task }: TaskViewModalProps) => {
       toast.success("Added task!", {
         position: toast.POSITION.TOP_RIGHT,
       });
-      //onAddObject();
     } else {
       toast.error("Failed to add task!", {
         position: toast.POSITION.TOP_RIGHT,

@@ -87,7 +87,7 @@ namespace SimplyRecruitAPI.Controllers
                 return NotFound("Could not find task");
             }
 
-            var taskAnswer = await _taskAnswerRepository.GetAsync(taskId);
+            var taskAnswer = await _taskAnswerRepository.GetTaskAnswerAsync(taskId);
 
             if (taskAnswer == null)
             {

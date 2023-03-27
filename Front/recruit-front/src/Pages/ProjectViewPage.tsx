@@ -155,12 +155,7 @@ const Projects = () => {
         </Container>
       </Box>
       <Container sx={{ py: 1, mb: 8 }} maxWidth="md">
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
+        <Stack direction="column" justifyContent="center" alignItems="center">
           {allPositions.map((position) => (
             <PositionListItem
               key={position.id}

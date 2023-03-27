@@ -15,7 +15,6 @@ const CandidateTasks = ({ applicationId }: CandidateTaskProps) => {
     const response = await axios.get(`applications/${applicationId}/tasks`);
     const applicationTasks = response.data;
     setTasks(applicationTasks);
-    setTasks(applicationTasks);
   }, []);
 
   useEffect(() => {

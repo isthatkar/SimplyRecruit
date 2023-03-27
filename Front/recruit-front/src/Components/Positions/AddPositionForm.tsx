@@ -1,12 +1,8 @@
 import * as React from "react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Box from "@mui/material/Box/Box";
-import dayjs, { Dayjs } from "dayjs";
 import {
   Button,
   Container,
@@ -22,7 +18,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { CenteredContainer, ColumnStackCenter } from "../../Styles/Theme";
 
-const AddPositionPage = (props: any) => {
+const AddPositionPage = () => {
   const navigate = useNavigate();
 
   const [name, setName] = React.useState("");
@@ -31,9 +27,6 @@ const AddPositionPage = (props: any) => {
   const [salary, setSalary] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [offers, setOffers] = React.useState("");
-  const [deadline, setDeadline] = React.useState<Dayjs | null>(
-    dayjs("2023-08-18T21:11:54")
-  );
   const [selectedWorkTime, setSelectedWorkTime] = React.useState("0");
   const [selectedLocation, setSelectedLocation] = React.useState("0");
   const [selectedField, setSelectedField] = React.useState("0");
@@ -50,10 +43,6 @@ const AddPositionPage = (props: any) => {
     setSelectedField(event.target.value as string);
   };
 
-  const deadlineChanged = (newValue: Dayjs | null) => {
-    setDeadline(newValue);
-  };
-
   const { projectid } = useParams();
   const nordFields = Object.keys(Field).filter((x) => !(parseInt(x) >= 0));
   const workTimes = Object.keys(WorkTime).filter((x) => !(parseInt(x) >= 0));
@@ -63,12 +52,12 @@ const AddPositionPage = (props: any) => {
     const positionsDto = {
       name: name,
       description: description,
-      deadLine: deadline?.format(),
       location: selectedLocation,
       workTime: selectedWorkTime,
       field: selectedField,
       salaryRange: salary,
       duties: duties,
+      deadline: new Date(),
       expectations: expectations,
       offers: offers,
     };
@@ -89,7 +78,8 @@ const AddPositionPage = (props: any) => {
     }
   };
 
-  const handleAdd = () => {
+  const handleAdd = (event: React.FormEvent) => {
+    event.preventDefault();
     addPosition();
     return;
   };
@@ -249,16 +239,6 @@ const AddPositionPage = (props: any) => {
                 ))}
               </Select>
             </FormControl>
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DesktopDatePicker
-                label="Deadline"
-                value={deadline}
-                onChange={deadlineChanged}
-                inputFormat="MM/DD/YYYY"
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
             <Button
               variant="contained"
               type="submit"

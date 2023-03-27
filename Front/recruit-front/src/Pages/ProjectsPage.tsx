@@ -1,3 +1,10 @@
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -7,18 +14,35 @@ import React, { useCallback, useEffect, useState } from "react";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import ProjectListItem from "../Components/Projects/ProjectListItem";
 import { ColumnStackStrech } from "../Styles/Theme";
-import { Project } from "../Types/types";
+import { NordProduct, Project } from "../Types/types";
 
 const Projects = () => {
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [isEmployee, setIsEmployee] = useState(false);
+  const [productFilter, setProductFilter] = useState<NordProduct>(
+    NordProduct.All
+  );
 
   const getProjects = useCallback(async () => {
     const response = await axios.get("projects");
     const projects = response.data;
     setAllProjects(projects);
   }, []);
+  const handleProductFilterChange = (
+    event: SelectChangeEvent<NordProduct | "">
+  ) => {
+    setProductFilter(event.target.value as NordProduct);
+  };
 
+  const filteredProjects = allProjects.filter((project) => {
+    if (
+      productFilter !== NordProduct.All &&
+      project.product !== productFilter
+    ) {
+      return false;
+    }
+    return true;
+  });
   useEffect(() => {
     getProjects();
     const roles = localStorage.getItem("roles");
@@ -31,7 +55,7 @@ const Projects = () => {
         sx={{
           bgcolor: "background.paper",
           pt: 8,
-          pb: 6,
+          pb: 4,
         }}
       >
         <Container maxWidth="sm">
@@ -63,9 +87,26 @@ const Projects = () => {
           </Stack>
         </Container>
       </Box>
-      <Container>
-        <ColumnStackStrech spacing={3} alignItems="strech">
-          {allProjects.map((pr) => (
+      <Container sx={{ mb: 8 }}>
+        <FormControl sx={{ width: 200, mb: 1 }}>
+          <InputLabel id="location-select-label">Product</InputLabel>
+
+          <Select
+            value={productFilter}
+            label={"Product"}
+            onChange={handleProductFilterChange}
+          >
+            <MenuItem value={NordProduct.All}>All products</MenuItem>
+
+            <MenuItem value={NordProduct.NordPass}>NordPass</MenuItem>
+            <MenuItem value={NordProduct.NordVPN}>NordVPN</MenuItem>
+            <MenuItem value={NordProduct.NordLocker}>NordLocker</MenuItem>
+            <MenuItem value={NordProduct.NordLayer}>NordLayer</MenuItem>
+            <MenuItem value={NordProduct.NordSecurity}>Nord Security</MenuItem>
+          </Select>
+        </FormControl>
+        <ColumnStackStrech alignItems="strech">
+          {filteredProjects.map((pr) => (
             <div key={pr.id}>
               <ProjectListItem project={pr} key={pr.id}></ProjectListItem>
             </div>

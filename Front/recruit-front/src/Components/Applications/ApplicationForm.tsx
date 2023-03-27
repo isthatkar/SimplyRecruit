@@ -69,6 +69,12 @@ const ApplicationForm = (props: any) => {
       toast.success("Application sent succesfully!", {
         position: toast.POSITION.TOP_RIGHT,
       });
+      setSelectedFile(null);
+      setFilename('"');
+      setName("");
+      setPhoneNumber("");
+      setProfileUrl("");
+      setCoveringLetter("");
     } else {
       toast.error("Failed to send application!", {
         position: toast.POSITION.TOP_RIGHT,

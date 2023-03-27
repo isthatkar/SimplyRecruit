@@ -11,6 +11,7 @@ interface taskListItemProps {
   task: Task;
   applicationId: number;
 }
+
 const CandidateTaskListItem = ({ task, applicationId }: taskListItemProps) => {
   const classes = useStyles();
   return (

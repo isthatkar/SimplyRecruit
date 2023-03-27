@@ -41,13 +41,6 @@ const AddTaskDialog = ({ applicationId, onAddObject }: AddTaskProps) => {
   };
 
   const addTask = async (): Promise<void> => {
-    const taskDto = {
-      title: title,
-      goal: goal,
-      deadline: deadline,
-      url: taskUrl === "" ? null : taskUrl,
-      fileName: filename === "" ? null : filename,
-    };
     const formData = new FormData();
     if (selectedFile !== null && filename !== "") {
       formData.append("file", selectedFile);

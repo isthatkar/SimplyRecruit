@@ -114,6 +114,7 @@ export enum NordProduct {
   NordLocker,
   NordLayer,
   NordSecurity,
+  All,
 }
 
 export enum JobLocation {
