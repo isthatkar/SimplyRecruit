@@ -12,7 +12,7 @@ import {
 import React, { useCallback, useState } from "react";
 import { Meeting, MeetingTime } from "../../Types/types";
 import PersonIcon from "@mui/icons-material/Person";
-import GetFormatedDate from "../../Helpers/DateFormater";
+import { GetFormatedDate } from "../../Helpers/DateHelper";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { createMeeting } from "../../Helpers/googleMeetsHelper";

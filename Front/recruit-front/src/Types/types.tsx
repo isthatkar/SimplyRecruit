@@ -43,6 +43,7 @@ export interface MeetingTime {
   startTime: string;
   selectedAttendees: string;
   meeting: Meeting;
+  conflictingMeetings: Meeting[];
 }
 
 export interface Rating {

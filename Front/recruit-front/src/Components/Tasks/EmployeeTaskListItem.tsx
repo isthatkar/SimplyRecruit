@@ -1,6 +1,6 @@
 import { ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import React from "react";
-import GetFormatedDate from "../../Helpers/DateFormater";
+import { GetFormatedDate } from "../../Helpers/DateHelper";
 import { useStyles } from "../../Styles/Theme";
 import { Task } from "../../Types/types";
 import TaskAnswerViewModal from "./TaskAnswerViewModal";

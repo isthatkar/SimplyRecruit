@@ -159,6 +159,7 @@ const Projects = () => {
           {allPositions.map((position) => (
             <PositionListItem
               key={position.id}
+              isOpen={position.isOpen}
               id={position.id}
               positionName={position.name}
               location={JobLocation[position.location]}

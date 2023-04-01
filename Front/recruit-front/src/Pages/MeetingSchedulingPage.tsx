@@ -15,13 +15,17 @@ import React from "react";
 import { Meeting, MeetingTime } from "../Types/types";
 import { RowStackItemsBetween } from "../Styles/Theme";
 import PersonIcon from "@mui/icons-material/Person";
-import GetFormatedDate from "../Helpers/DateFormater";
+import {
+  findTimeConflictingMeetings,
+  GetFormatedDate,
+} from "../Helpers/DateHelper";
 import axios from "axios";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 import FinalTimeSelector from "../Components/Meetings/FinalTimeSelector";
 import { toast } from "react-toastify";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 const MeetingSchedulingPage = () => {
   const [meeting, setMeeting] = useState<Meeting>();
@@ -70,7 +74,6 @@ const MeetingSchedulingPage = () => {
   const getMeeting = useCallback(async () => {
     const response = await axios.get(`/meetings/${meetingId}`);
     const responseMeeting = response.data as Meeting;
-    setMeeting(responseMeeting);
     if (responseMeeting?.isFinalTime || responseMeeting?.isCanceled) {
       navigate(`/meetings/${responseMeeting.id}`);
     }
@@ -89,6 +92,27 @@ const MeetingSchedulingPage = () => {
     console.log(userId);
     console.log(responseMeeting.userId);
     setIsUserMeeting(responseMeeting.userId === userId);
+
+    const userMeetingsResponse = await axios.get(`/meetings`);
+    console.log(userMeetingsResponse);
+    const allMeetings = userMeetingsResponse.data;
+    const now = new Date();
+
+    const upcommingMeetings = (allMeetings as Meeting[]).filter(
+      (s) => s.isFinalTime === true && new Date(s.finalTime) > now
+    );
+
+    console.log(upcommingMeetings);
+    responseMeeting.meetingTimes.forEach((time) => {
+      time.conflictingMeetings = findTimeConflictingMeetings(
+        time,
+        responseMeeting.duration,
+        upcommingMeetings
+      );
+    });
+    console.log("aaaa");
+    console.log(responseMeeting);
+    setMeeting(responseMeeting);
   }, []);
 
   function updateEmails(
@@ -227,6 +251,13 @@ const MeetingSchedulingPage = () => {
                     selected={selectedTimes.includes(time.id)}
                     onClick={() => handleTimeClick(time.id)}
                   >
+                    {time.conflictingMeetings.length > 0 ? (
+                      <Tooltip title="You have meetings in your calendar that are overlapping with this time">
+                        <PriorityHighIcon></PriorityHighIcon>
+                      </Tooltip>
+                    ) : (
+                      ""
+                    )}
                     <ListItemText primary={GetFormatedDate(time.startTime)} />
 
                     <Tooltip

@@ -155,6 +155,7 @@ const Positions = () => {
             <PositionListItem
               key={position.id}
               id={position.id}
+              isOpen={position.isOpen}
               positionName={position.name}
               location={JobLocation[position.location]}
               time={WorkTime[position.workTime]}
