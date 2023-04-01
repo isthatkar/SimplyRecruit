@@ -61,3 +61,16 @@ export function findTimeConflictingMeetings(
 
   return conflictedMeetings;
 }
+
+export const getUTCDate = (ISOdateString: string): Date => {
+  console.log(ISOdateString);
+  return new Date(
+    Date.UTC(
+      parseInt(ISOdateString.substr(0, 4)), // Year
+      parseInt(ISOdateString.substr(5, 2)) - 1, // Month (zero-based)
+      parseInt(ISOdateString.substr(8, 2)), // Day
+      parseInt(ISOdateString.substr(11, 2)), // Hour
+      parseInt(ISOdateString.substr(14, 2)) // Minute
+    )
+  );
+};

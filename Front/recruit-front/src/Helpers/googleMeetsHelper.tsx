@@ -1,11 +1,13 @@
 import axios from "axios";
 import React from "react";
-import { Meeting } from "../Types/types";
+import { CreateMeetingDto } from "../Types/types";
 
-const getEndTime = (startTime: string, durationMinutes: number): string => {
-  const startDate = new Date(startTime);
-  const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
-  return endDate.toISOString();
+const getEndTime = (startTime: Date, durationMinutes: number): Date => {
+  console.log(typeof startTime);
+  const endDate = new Date(
+    new Date(startTime).getTime() + durationMinutes * 60000
+  );
+  return endDate;
 };
 
 const queryParams = new URLSearchParams({
@@ -19,8 +21,9 @@ const getGoogleAccessToken = async () => {
   return user.googleAccessToken;
 };
 
-export const createMeeting = async (meeting: Meeting) => {
+export const createMeeting = async (meeting: CreateMeetingDto) => {
   const accessToken = await getGoogleAccessToken();
+  console.log(meeting);
   const event = {
     summary: meeting.title,
     location: "Remote",
@@ -36,7 +39,7 @@ export const createMeeting = async (meeting: Meeting) => {
     attendees: meeting.attendees.split(";").map((email) => ({ email })),
     conferenceData: {
       createRequest: {
-        requestId: `${meeting.id}${meeting.schedulingUrl}`,
+        requestId: `${meeting.description}`,
         conferenceSolutionKey: {
           type: "hangoutsMeet",
         },
@@ -49,6 +52,9 @@ export const createMeeting = async (meeting: Meeting) => {
     guestsCanModify: false,
     guestsCanInviteOthers: false,
   };
+
+  console.log("event");
+  console.log(event);
 
   const response = await fetch(
     `https://www.googleapis.com/calendar/v3/calendars/primary/events?${queryParams}`,
@@ -63,9 +69,6 @@ export const createMeeting = async (meeting: Meeting) => {
   );
 
   const data = await response.json();
-
-  console.log("event data");
-  console.log(data);
 
   if (response.ok) {
     return data;

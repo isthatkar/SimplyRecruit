@@ -5,11 +5,8 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
 using SimplyRecruitAPI.Data.Entities;
-using SimplyRecruitAPI.Data.Enums;
-using SimplyRecruitAPI.Data.Repositories;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
 using System.Security.Claims;
-using static SimplyRecruitAPI.Data.Dtos.Applications.ApplicationsDtos;
 
 namespace SimplyRecruitAPI.Controllers
 {

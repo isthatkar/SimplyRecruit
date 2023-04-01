@@ -27,7 +27,7 @@ interface EditMeetingDialogProps {
 type MeetingFormData = {
   title: string;
   description: string;
-  finalTime: string;
+  finalTime: Date;
   isFinalTime: boolean;
   attendees: string[];
   meetingTimes: MeetingTime[];

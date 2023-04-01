@@ -1,4 +1,11 @@
-import { Box, Container, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Meeting } from "../Types/types";
 import React from "react";
@@ -12,6 +19,8 @@ import CancelMeetingDialog from "../Components/Meetings/CancelMeetingDialog";
 import { toast } from "react-toastify";
 import MeetingStateChip from "../Components/Meetings/MeetingStateChip";
 import EditMeetingDialog from "../Components/Meetings/EditMeetingDialog";
+import GoogleIcon from "@mui/icons-material/Google";
+import createMeeting from "../Helpers/googleMeetsHelper";
 
 const MeetingView = () => {
   const navigate = useNavigate();
@@ -32,6 +41,24 @@ const MeetingView = () => {
     toast.success("Link copied to clipboard", {
       position: toast.POSITION.TOP_RIGHT,
     });
+  };
+
+  const handleCreateGoogleMeet = async () => {
+    if (meeting) {
+      const data = await createMeeting(meeting);
+      if (data === null) {
+        console.error("failed to create google calendar event");
+        toast.error("Failed to create Google Calendar event!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      } else {
+        const response = await axios.put(`/meetings/${meeting.id}`, {
+          meetingUrl: data.htmlLink,
+        });
+        console.log(response);
+        setMeeting({ ...meeting, meetingUrl: data.htmlLink });
+      }
+    }
   };
 
   const getMeeting = useCallback(async () => {
@@ -152,6 +179,32 @@ const MeetingView = () => {
               {finalTimeString}
             </Typography>
           )}
+          {meeting?.isCanceled === false ? (
+            <>
+              {meeting.meetingUrl !== "" ? (
+                <>
+                  <a
+                    href={meeting?.meetingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Go to meeting
+                  </a>
+                </>
+              ) : (
+                <Button
+                  variant="text"
+                  startIcon={<GoogleIcon></GoogleIcon>}
+                  onClick={handleCreateGoogleMeet}
+                >
+                  Create Google Meet
+                </Button>
+              )}
+            </>
+          ) : (
+            ""
+          )}
+
           {meeting ? <AttendeeList attendees={meeting?.attendees} /> : ""}
         </ColumnStackCenter>
       </Container>

@@ -41,10 +41,6 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
       (time) => time.id === selectedTime
     );
 
-    const tempMeeting = meeting;
-    tempMeeting.isFinalTime = true;
-    tempMeeting.finalTime = finalTime?.startTime as string;
-
     let data = null;
     if (sendGoogleMeetsInvite) {
       data = await createMeeting(meeting);
