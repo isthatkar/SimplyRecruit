@@ -179,7 +179,7 @@ const MeetingView = () => {
               {finalTimeString}
             </Typography>
           )}
-          {meeting?.isCanceled === false ? (
+          {meeting?.isCanceled === false && meeting.isFinalTime === true ? (
             <>
               {meeting.meetingUrl !== "" ? (
                 <>

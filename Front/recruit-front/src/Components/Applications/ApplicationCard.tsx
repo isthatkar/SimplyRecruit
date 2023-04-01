@@ -101,7 +101,7 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
           alignItems="center"
           spacing={2}
         >
-          {application ? (
+          {application && isEmployee ? (
             <ArchiveApplicationButton
               applicationId={application.id}
               positionId={application.positionId}

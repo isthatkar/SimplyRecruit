@@ -19,6 +19,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { Meeting, MeetingTime } from "../../Types/types";
+import { ColumnStackStrech } from "../../Styles/Theme";
 
 interface EditMeetingDialogProps {
   meeting: Meeting;
@@ -59,22 +60,9 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
     setOpen(false);
   };
 
-  const onCancel = async () => {
-    /*  const response = await axios.put(`meetings/${meeting.id}`, {
-      isCanceled: true,
-    });
-
-    console.log(response);
-    if (response.status === 200) {
-      toast.success("Meeting canceled.", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    } */
-    setOpen(false);
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setOpen(false);
     console.log(formData);
   };
 
@@ -136,13 +124,13 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Edit the meetings information"}
-        </DialogTitle>
-        <DialogContent>
-          <Box component="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+        <Box component="form" onSubmit={handleSubmit}>
+          <DialogTitle id="alert-dialog-title">
+            {"Edit the meetings information"}
+          </DialogTitle>
+          <DialogContent>
+            <ColumnStackStrech width="500px" spacing={2} sx={{ mt: 2 }}>
+              <Grid>
                 <TextField
                   name="title"
                   label="Meeting Title"
@@ -278,20 +266,12 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
                   </Grid>
                 </>
               )}
-              <Grid item xs={12}>
-                <Button variant="contained" type="submit">
-                  Create Meeting
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} autoFocus>
-            No
+            </ColumnStackStrech>
+          </DialogContent>
+          <Button type="submit" variant="contained" sx={{ ml: 2, mb: 3 }}>
+            Save changes
           </Button>
-          <Button onClick={() => onCancel()}>Yes</Button>
-        </DialogActions>
+        </Box>
       </Dialog>
     </div>
   );
