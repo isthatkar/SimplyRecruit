@@ -186,9 +186,6 @@ const MeetingSchedulingPage = () => {
           <Typography variant="h3" align="center">
             {meeting?.title}{" "}
           </Typography>
-          <Typography variant="body1" align="center">
-            {meeting?.description}
-          </Typography>
 
           <Typography variant="body1" align="center">
             The meeting will take {meeting?.duration} minutes

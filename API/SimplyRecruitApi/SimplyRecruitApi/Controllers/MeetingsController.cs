@@ -146,7 +146,13 @@ namespace SimplyRecruitAPI.Controllers
             {
                 foreach(var time in updateMeetingDto.NewMeetingTimes)
                 {
-                    await _meetingsTimesRepository.CreateAsync(time);
+                    var newTime = new MeetingTimes()
+                    {
+                        StartTime = time,
+                        SelectedAttendees = "",
+                        Meeting = meeting
+                    };
+                    await _meetingsTimesRepository.CreateAsync(newTime);
                 }
             }
 

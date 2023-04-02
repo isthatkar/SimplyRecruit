@@ -21,6 +21,7 @@ import MeetingStateChip from "../Components/Meetings/MeetingStateChip";
 import EditMeetingDialog from "../Components/Meetings/EditMeetingDialog";
 import GoogleIcon from "@mui/icons-material/Google";
 import createMeeting from "../Helpers/googleMeetsHelper";
+import VideocamIcon from "@mui/icons-material/Videocam";
 
 const MeetingView = () => {
   const navigate = useNavigate();
@@ -166,44 +167,54 @@ const MeetingView = () => {
               ) : (
                 ""
               )}
+              {meeting?.isCanceled === false && meeting.isFinalTime === true ? (
+                <>
+                  {meeting.meetingUrl !== "" ? (
+                    <>
+                      <Tooltip title={"Open Google Meet"}>
+                        <IconButton
+                          href={meeting?.meetingUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <VideocamIcon color="secondary" />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  ) : (
+                    <>
+                      {isUserMeeting ? (
+                        <Tooltip title={"Create Google Meet"}>
+                          <IconButton onClick={handleCreateGoogleMeet}>
+                            <GoogleIcon color="secondary" />
+                          </IconButton>
+                        </Tooltip>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  )}
+                </>
+              ) : (
+                ""
+              )}
             </>
           </RowStackCenter>
         )}
 
         <ColumnStackCenter spacing={2}>
-          <Typography variant="subtitle1" gutterBottom>
-            {meeting?.description}
-          </Typography>
           {meeting?.isFinalTime && (
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="h6" gutterBottom>
               {finalTimeString}
             </Typography>
           )}
-          {meeting?.isCanceled === false && meeting.isFinalTime === true ? (
-            <>
-              {meeting.meetingUrl !== "" ? (
-                <>
-                  <a
-                    href={meeting?.meetingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Go to meeting
-                  </a>
-                </>
-              ) : (
-                <Button
-                  variant="text"
-                  startIcon={<GoogleIcon></GoogleIcon>}
-                  onClick={handleCreateGoogleMeet}
-                >
-                  Create Google Meet
-                </Button>
-              )}
-            </>
-          ) : (
-            ""
-          )}
+          <Typography
+            variant="subtitle1"
+            gutterBottom
+            sx={{ whiteSpace: "pre-wrap" }}
+          >
+            {meeting?.description}
+          </Typography>
 
           {meeting ? <AttendeeList attendees={meeting?.attendees} /> : ""}
         </ColumnStackCenter>
