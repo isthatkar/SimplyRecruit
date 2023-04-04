@@ -22,7 +22,7 @@ import UserMeetings from "./Pages/UserMeetingsPage";
 import { ThemeProvider } from "@emotion/react";
 import { Theme } from "./Styles/Theme";
 import ProtectedRouteEmployee from "./Components/ProtectedRouteEmployee";
-import CandidateApplicationView from "./Components/Applications/CandidateApplicationView";
+import CandidateApplicationView from "./Pages/CandidateApplicationView";
 import MeetingSchedulingRedirect from "./Components/Meetings/MeetingSchedulinkRedirect";
 import { ToastContainer } from "react-toastify";
 

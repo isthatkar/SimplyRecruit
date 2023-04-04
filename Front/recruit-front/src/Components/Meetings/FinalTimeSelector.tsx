@@ -12,11 +12,12 @@ import {
 import React, { useCallback, useState } from "react";
 import { Meeting, MeetingTime } from "../../Types/types";
 import PersonIcon from "@mui/icons-material/Person";
-import { GetFormatedDate } from "../../Helpers/DateHelper";
+import { GetFormatedDate, getUTCDate } from "../../Helpers/DateHelper";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { createMeeting } from "../../Helpers/googleMeetsHelper";
 import { toast } from "react-toastify";
+import { CreateMeetingDto } from "../../Types/types";
 
 interface FinalTimeSelectorProps {
   meeting: Meeting;
@@ -41,9 +42,19 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
       (time) => time.id === selectedTime
     );
 
+    console.log("finalTime");
+    console.log(finalTime);
+
     let data = null;
-    if (sendGoogleMeetsInvite) {
-      data = await createMeeting(meeting);
+
+    if (finalTime) {
+      const newMeeting = {
+        ...meeting,
+        finalTime: getUTCDate(finalTime.startTime),
+      };
+      if (sendGoogleMeetsInvite) {
+        data = await createMeeting(newMeeting as CreateMeetingDto);
+      }
     }
 
     if (data === null) {
