@@ -26,11 +26,15 @@ const Home = () => {
         sm={false}
         md={7}
         alignItems="bottom"
-        sx={{ mt: 20 }}
+        sx={{ mt: 10, mb: 2 }}
         item
       >
         <Stack alignItems="bottom">
           <img src={image}></img>
+          <Typography variant="subtitle2" align="center">
+            designed by Pch.vector -
+            <a href="https://www.freepik.com"> Freepik.com</a>
+          </Typography>
         </Stack>
       </Grid>
       <Grid item xs={12} sm={12} md={5} justifyContent="center" container>

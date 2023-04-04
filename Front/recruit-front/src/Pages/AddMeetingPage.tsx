@@ -19,6 +19,10 @@ import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { RowStackCenter } from "../Styles/Theme";
+import createMeeting from "../Helpers/googleMeetsHelper";
+import { CreateMeetingDto, Meeting } from "../Types/types";
+import { getUTCDate } from "../Helpers/DateHelper";
 
 type MeetingFormData = {
   title: string;
@@ -28,6 +32,7 @@ type MeetingFormData = {
   attendees: string[];
   meetingTimes: string[];
   duration: number;
+  createGoogleMeet: boolean;
 };
 
 const initialMeetingFormData: MeetingFormData = {
@@ -37,6 +42,7 @@ const initialMeetingFormData: MeetingFormData = {
   isFinalTime: false,
   attendees: [""],
   meetingTimes: [""],
+  createGoogleMeet: false,
   duration: 60,
 };
 
@@ -52,7 +58,17 @@ const AddMeeting = () => {
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
-    setFormData((prevState) => ({ ...prevState, isFinalTime: checked }));
+    setFormData((prevState) => ({
+      ...prevState,
+      isFinalTime: checked,
+    }));
+  };
+
+  const handleGoogleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { checked } = event.target;
+    setFormData((prevState) => ({ ...prevState, createGoogleMeet: checked }));
   };
 
   const handleMeetingTimeChange = (event: any, index: number) => {
@@ -116,20 +132,30 @@ const AddMeeting = () => {
     const meetingDto = {
       title: formData.title,
       description: formData.description,
-      meetingUrl: "https://google.com", //TODO WITH GOOGLE MEETS INTEGRATION
+      meetingUrl: "",
       schedulingUrl: "",
-      isFinal: formData.isFinalTime,
-      durationMinutes: formData.duration,
-      atendees: attendeesNew,
-      meetingTimes: formData.isFinalTime
-        ? null
-        : {
-            times: formData.meetingTimes,
-          },
+      isFinalTime: formData.isFinalTime,
+      duration: formData.duration,
+      attendees: attendeesNew,
+      meetingTimes: formData.isFinalTime ? [] : formData.meetingTimes,
       finalTime: formData.isFinalTime
-        ? new Date(formData.finalTime)
-        : new Date(),
+        ? getUTCDate(formData.finalTime)
+        : new Date(Date.UTC(2023, 1, 1)),
     };
+
+    let data = undefined;
+    if (formData.createGoogleMeet) {
+      data = await createMeeting(meetingDto as CreateMeetingDto);
+    }
+
+    if (data === null) {
+      console.error("failed to create google calendar event");
+      toast.error("Failed to create Google Calendar event!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } else if (data !== undefined) {
+      meetingDto.meetingUrl = data.htmlLink;
+    }
 
     console.log(meetingDto);
     const response = await axios.post(
@@ -231,17 +257,32 @@ const AddMeeting = () => {
                   alignItems="center"
                   spacing={2}
                 >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={formData.isFinalTime}
-                        onChange={handleCheckboxChange}
-                        name="isFinalTime"
-                        color="primary"
-                      />
-                    }
-                    label="Is the meeting time final?"
-                  />
+                  <RowStackCenter>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={formData.isFinalTime}
+                          onChange={handleCheckboxChange}
+                          name="isFinalTime"
+                          color="primary"
+                        />
+                      }
+                      label="The meeting time is final"
+                    />
+                    <FormControlLabel
+                      disabled={!formData.isFinalTime}
+                      control={
+                        <Checkbox
+                          checked={formData.createGoogleMeet}
+                          onChange={handleGoogleCheckboxChange}
+                          name="createGoogleMeet"
+                          color="primary"
+                        />
+                      }
+                      label="Create Google Meet"
+                    />
+                  </RowStackCenter>
+
                   <FormControl>
                     <InputLabel htmlFor="duration">
                       Duration (minutes)

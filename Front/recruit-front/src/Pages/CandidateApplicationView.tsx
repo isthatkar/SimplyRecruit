@@ -2,9 +2,9 @@ import { Box } from "@mui/material";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Application, Resume } from "../../Types/types";
-import CandidateTasks from "../Tasks/CandidateTasks";
-import ApplicationCard from "./ApplicationCard";
+import { Application, Resume } from "../Types/types";
+import CandidateTasks from "../Components/Tasks/CandidateTasks";
+import ApplicationCard from "../Components/Applications/ApplicationCard";
 
 const CandidateApplicationView = () => {
   const { applicationId } = useParams();

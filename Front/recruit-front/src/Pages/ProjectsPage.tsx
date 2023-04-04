@@ -2,6 +2,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Pagination,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
@@ -13,36 +14,75 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import ProjectListItem from "../Components/Projects/ProjectListItem";
-import { ColumnStackStrech } from "../Styles/Theme";
+import { ColumnStackStrech, RowStackCenter } from "../Styles/Theme";
 import { NordProduct, Project } from "../Types/types";
 
 const Projects = () => {
   const [allProjects, setAllProjects] = useState<Project[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [isEmployee, setIsEmployee] = useState(false);
   const [productFilter, setProductFilter] = useState<NordProduct>(
     NordProduct.All
   );
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 8;
+  const [numPages, setNumPages] = useState(1);
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(8);
+  const [currentPageItems, setCurrentPageItems] = useState<Project[]>([]);
 
   const getProjects = useCallback(async () => {
     const response = await axios.get("projects");
     const projects = response.data;
     setAllProjects(projects);
+    const filtered = filterProjects(projects);
+    setNumPages(Math.ceil(filtered.length / itemsPerPage));
+    setCurrentPageItems(filtered.slice(startIndex, endIndex));
+    setFilteredProjects(filtered);
   }, []);
+
   const handleProductFilterChange = (
     event: SelectChangeEvent<NordProduct | "">
   ) => {
     setProductFilter(event.target.value as NordProduct);
   };
 
-  const filteredProjects = allProjects.filter((project) => {
-    if (
-      productFilter !== NordProduct.All &&
-      project.product !== productFilter
-    ) {
-      return false;
-    }
-    return true;
-  });
+  const handlePageChange = async (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setStartIndex((value - 1) * itemsPerPage);
+    setEndIndex(value * itemsPerPage);
+    setPage(value);
+  };
+
+  const filterProjects = (projects: Project[]): Project[] => {
+    return projects.filter((project) => {
+      if (
+        productFilter !== NordProduct.All &&
+        project.product !== productFilter
+      ) {
+        return false;
+      }
+      return true;
+    });
+  };
+
+  useEffect(() => {
+    setNumPages(Math.ceil(filteredProjects.length / itemsPerPage));
+    setCurrentPageItems(filteredProjects.slice(startIndex, endIndex));
+  }, [page]);
+
+  useEffect(() => {
+    const filtered = filterProjects(allProjects);
+    setStartIndex(0);
+    setEndIndex(8);
+    setFilteredProjects(filtered);
+    setCurrentPageItems(filtered.slice(0, 8));
+    setNumPages(Math.ceil(filtered.length / itemsPerPage));
+    setPage(1);
+  }, [productFilter]);
+
   useEffect(() => {
     getProjects();
     const roles = localStorage.getItem("roles");
@@ -106,7 +146,15 @@ const Projects = () => {
           </Select>
         </FormControl>
         <ColumnStackStrech alignItems="strech">
-          {filteredProjects.map((pr) => (
+          <RowStackCenter>
+            <Pagination
+              count={numPages}
+              page={page}
+              onChange={handlePageChange}
+            />
+          </RowStackCenter>
+
+          {currentPageItems.map((pr) => (
             <div key={pr.id}>
               <ProjectListItem project={pr} key={pr.id}></ProjectListItem>
             </div>

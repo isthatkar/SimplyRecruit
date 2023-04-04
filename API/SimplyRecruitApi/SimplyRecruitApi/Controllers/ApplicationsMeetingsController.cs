@@ -72,22 +72,22 @@ namespace SimplyRecruitAPI.Controllers
                Description = createMeetingDto.Description,
                MeetingUrl = createMeetingDto.MeetingUrl,
                SchedullingUrl = application.Id + RandomStringGenerator.GenerateRandomString(25),
-               IsFinal = createMeetingDto.IsFinal,
-               DurationMinutes = createMeetingDto.DurationMinutes,
-               FinalTime = createMeetingDto.IsFinal ? createMeetingDto.FinalTime : new DateTime(),
+               IsFinal = createMeetingDto.IsFinalTime,
+               DurationMinutes = createMeetingDto.Duration,
+               FinalTime = createMeetingDto.IsFinalTime ? createMeetingDto.FinalTime : new DateTime(),
                IsCanceled = false,
                SelectedAtendees = string.Empty,
                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
-               Atendees = CleanAttendiesString(createMeetingDto.Atendees),
+               Atendees = CleanAttendiesString(createMeetingDto.Attendees),
                Application = application
             };
 
             await _meetingsRepository.CreateAsync(meeting);
 
             IEnumerable<MeetingTimes> meetingTimes = new List<MeetingTimes>();
-            if (!createMeetingDto.IsFinal)
+            if (!createMeetingDto.IsFinalTime && createMeetingDto.MeetingTimes is not null)
             {
-                meetingTimes = createMeetingDto.meetingTimes.times.Select(t => new MeetingTimes()
+                meetingTimes = createMeetingDto.MeetingTimes.Select(t => new MeetingTimes()
                 {
                     SelectedAttendees = string.Empty,
                     StartTime = t,

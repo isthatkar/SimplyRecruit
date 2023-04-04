@@ -18,7 +18,11 @@ const PositionListItem = (props: any) => {
   }
 
   return (
-    <ListItem alignItems="flex-start" className={classes.listItemWithHover}>
+    <ListItem
+      alignItems="flex-start"
+      className={classes.listItemWithHover}
+      disabled={!props.isOpen}
+    >
       <ListItemText
         disableTypography
         primary={

@@ -26,7 +26,7 @@ export interface Meeting {
   id: number;
   title: string;
   description: string;
-  finalTime: string;
+  finalTime: Date;
   isFinalTime: boolean;
   attendees: string;
   meetingTimes: MeetingTime[];
@@ -38,11 +38,23 @@ export interface Meeting {
   userId: string;
 }
 
+export interface CreateMeetingDto {
+  title: string;
+  description: string;
+  finalTime: Date;
+  isFinalTime: boolean;
+  attendees: string;
+  duration: number;
+  schedulingUrl: string;
+  meetingUrl: string;
+}
+
 export interface MeetingTime {
   id: number;
   startTime: string;
   selectedAttendees: string;
   meeting: Meeting;
+  conflictingMeetings: Meeting[];
 }
 
 export interface Rating {

@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import image from "../img/Projects/project9.png";
 import LoginButton from "../Components/Auth/LoginButton";
 import personsImage from "../img/Projects/persons.png";
-import { Stack } from "@mui/material";
+import { Hidden, Stack } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 const Login = () => {
@@ -22,18 +22,25 @@ const Login = () => {
       sx={{ minHeight: "90vh", overflowX: "auto" }}
     >
       <CssBaseline />
-      <Grid
-        item
-        xs={false}
-        sm={false}
-        md={7}
-        sx={{
-          backgroundImage: `url(${image})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+      <Grid item xs={false} sm={false} md={7} container>
+        <Hidden mdDown>
+          <Box
+            sx={{
+              height: "90vh",
+              display: "inline",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <img src={image} alt="Your image" height="90%" width="auto" />
+            <Typography variant="subtitle2" align="center">
+              designed by Vectorjuice -
+              <a href="https://www.freepik.com"> Freepik.com</a>
+            </Typography>
+          </Box>
+        </Hidden>
+      </Grid>
       <Grid item xs={12} sm={12} md={5} justifyContent="center" container>
         <Stack
           direction="column"
@@ -78,6 +85,10 @@ const Login = () => {
             }}
           >
             <img height="250px" src={personsImage}></img>
+            <Typography variant="subtitle2">
+              designed by Pikisuperstar -
+              <a href="https://www.freepik.com"> Freepik.com</a>
+            </Typography>
           </Box>
         </Stack>
       </Grid>

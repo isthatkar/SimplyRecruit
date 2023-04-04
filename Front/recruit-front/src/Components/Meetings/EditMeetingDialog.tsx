@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
@@ -13,12 +12,16 @@ import {
   Stack,
   TextField,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { Meeting, MeetingTime } from "../../Types/types";
+import { ColumnStackStrech } from "../../Styles/Theme";
+import { toast } from "react-toastify";
+import { GetFormatedDate } from "../../Helpers/DateHelper";
 
 interface EditMeetingDialogProps {
   meeting: Meeting;
@@ -27,10 +30,10 @@ interface EditMeetingDialogProps {
 type MeetingFormData = {
   title: string;
   description: string;
-  finalTime: string;
+  finalTime: Date;
   isFinalTime: boolean;
   attendees: string[];
-  meetingTimes: MeetingTime[];
+  meetingTimes: string[];
   duration: number;
 };
 
@@ -41,7 +44,7 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
     finalTime: meeting.finalTime,
     isFinalTime: meeting.isFinalTime,
     attendees: meeting.attendees.split(";"),
-    meetingTimes: meeting.meetingTimes,
+    meetingTimes: [],
     duration: meeting.duration,
   };
   const [attendees, setAttendees] = useState<string[]>(
@@ -59,22 +62,26 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
     setOpen(false);
   };
 
-  const onCancel = async () => {
-    /*  const response = await axios.put(`meetings/${meeting.id}`, {
-      isCanceled: true,
-    });
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    console.log(formData);
+    setOpen(false);
+    const meetingDto = {
+      title: formData.title,
+      description: formData.description,
+      finalTime: formData.finalTime,
+      attendees: formData.attendees.join(";"),
+      duration: formData.duration,
+      newMeetingTimes: meeting.isFinalTime ? null : formData.meetingTimes,
+    };
+
+    const response = await axios.put(`meetings/${meeting.id}`, meetingDto);
 
     console.log(response);
-    if (response.status === 200) {
-      toast.success("Meeting canceled.", {
+    if (response.status !== 200) {
+      toast.error("Failed to edit meeting!", {
         position: toast.POSITION.TOP_RIGHT,
       });
-    } */
-    setOpen(false);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    }
     console.log(formData);
   };
 
@@ -102,7 +109,7 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
   const handleAddMeetingTime = () => {
     setFormData((prevState) => ({
       ...prevState,
-      meetingTimes: [...prevState.meetingTimes],
+      meetingTimes: [...prevState.meetingTimes, ""],
     }));
   };
 
@@ -131,18 +138,19 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
         </IconButton>
       </Tooltip>
       <Dialog
+        maxWidth="lg"
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Edit the meetings information"}
-        </DialogTitle>
-        <DialogContent>
-          <Box component="form" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+        <Box component="form" onSubmit={handleSubmit} width="800px">
+          <DialogTitle id="alert-dialog-title">
+            {"Edit the meetings information"}
+          </DialogTitle>
+          <DialogContent>
+            <ColumnStackStrech spacing={2} sx={{ mt: 2, px: 2 }}>
+              <Grid>
                 <TextField
                   name="title"
                   label="Meeting Title"
@@ -160,7 +168,7 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
                   variant="outlined"
                   fullWidth
                   multiline
-                  rows={4}
+                  maxRows={5}
                   required
                   value={formData.description}
                   onChange={handleInputChange}
@@ -196,7 +204,7 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
                     startIcon={<AddIcon />}
                     onClick={handleAddAttendee}
                   >
-                    Add Attendee
+                    Add attendee
                   </Button>
                 </Box>
                 <FormControl>
@@ -232,8 +240,20 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
                 </Grid>
               ) : (
                 <>
-                  {formData.meetingTimes.map((meetingTime, index) => (
+                  <Typography variant="subtitle2">Meeting times:</Typography>
+                  {meeting.meetingTimes.map((meetingTime, index) => (
                     <Grid item xs={12} key={meetingTime.id}>
+                      <Stack direction="row" spacing={2}>
+                        <Typography align="right">
+                          {GetFormatedDate(
+                            meeting.meetingTimes[index].startTime
+                          )}
+                        </Typography>
+                      </Stack>
+                    </Grid>
+                  ))}
+                  {formData.meetingTimes.map((meetingTime, index) => (
+                    <Grid item xs={12} key={meetingTime}>
                       <Stack
                         direction="row"
                         justifyContent="center"
@@ -247,7 +267,7 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
                           variant="outlined"
                           fullWidth
                           required
-                          value={formData.meetingTimes[index].startTime}
+                          value={formData.meetingTimes[index]}
                           InputLabelProps={{
                             shrink: true,
                           }}
@@ -255,15 +275,13 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
                             handleMeetingTimeChange(event, index)
                           }
                         />
-                        {index > 0 && (
-                          <IconButton
-                            aria-label="delete"
-                            color="error"
-                            onClick={() => handleRemoveMeetingTime(index)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        )}
+                        <IconButton
+                          aria-label="delete"
+                          color="error"
+                          onClick={() => handleRemoveMeetingTime(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
                       </Stack>
                     </Grid>
                   ))}
@@ -273,25 +291,19 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
                       startIcon={<AddIcon />}
                       onClick={handleAddMeetingTime}
                     >
-                      Add Meeting Time
+                      Add neeting time
                     </Button>
                   </Grid>
                 </>
               )}
-              <Grid item xs={12}>
-                <Button variant="contained" type="submit">
-                  Create Meeting
-                </Button>
-              </Grid>
-            </Grid>
+            </ColumnStackStrech>
+          </DialogContent>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button type="submit" variant="contained" sx={{ mr: 3, mb: 3 }}>
+              Save changes
+            </Button>{" "}
           </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} autoFocus>
-            No
-          </Button>
-          <Button onClick={() => onCancel()}>Yes</Button>
-        </DialogActions>
+        </Box>
       </Dialog>
     </div>
   );

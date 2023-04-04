@@ -1,4 +1,11 @@
-import { Box, Container, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Meeting } from "../Types/types";
 import React from "react";
@@ -12,6 +19,9 @@ import CancelMeetingDialog from "../Components/Meetings/CancelMeetingDialog";
 import { toast } from "react-toastify";
 import MeetingStateChip from "../Components/Meetings/MeetingStateChip";
 import EditMeetingDialog from "../Components/Meetings/EditMeetingDialog";
+import GoogleIcon from "@mui/icons-material/Google";
+import createMeeting from "../Helpers/googleMeetsHelper";
+import VideocamIcon from "@mui/icons-material/Videocam";
 
 const MeetingView = () => {
   const navigate = useNavigate();
@@ -32,6 +42,24 @@ const MeetingView = () => {
     toast.success("Link copied to clipboard", {
       position: toast.POSITION.TOP_RIGHT,
     });
+  };
+
+  const handleCreateGoogleMeet = async () => {
+    if (meeting) {
+      const data = await createMeeting(meeting);
+      if (data === null) {
+        console.error("failed to create google calendar event");
+        toast.error("Failed to create Google Calendar event!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      } else {
+        const response = await axios.put(`/meetings/${meeting.id}`, {
+          meetingUrl: data.htmlLink,
+        });
+        console.log(response);
+        setMeeting({ ...meeting, meetingUrl: data.htmlLink });
+      }
+    }
   };
 
   const getMeeting = useCallback(async () => {
@@ -139,19 +167,55 @@ const MeetingView = () => {
               ) : (
                 ""
               )}
+              {meeting?.isCanceled === false && meeting.isFinalTime === true ? (
+                <>
+                  {meeting.meetingUrl !== "" ? (
+                    <>
+                      <Tooltip title={"Open Google Meet"}>
+                        <IconButton
+                          href={meeting?.meetingUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <VideocamIcon color="secondary" />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  ) : (
+                    <>
+                      {isUserMeeting ? (
+                        <Tooltip title={"Create Google Meet"}>
+                          <IconButton onClick={handleCreateGoogleMeet}>
+                            <GoogleIcon color="secondary" />
+                          </IconButton>
+                        </Tooltip>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  )}
+                </>
+              ) : (
+                ""
+              )}
             </>
           </RowStackCenter>
         )}
 
         <ColumnStackCenter spacing={2}>
-          <Typography variant="subtitle1" gutterBottom>
-            {meeting?.description}
-          </Typography>
           {meeting?.isFinalTime && (
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="h6" gutterBottom>
               {finalTimeString}
             </Typography>
           )}
+          <Typography
+            variant="subtitle1"
+            gutterBottom
+            sx={{ whiteSpace: "pre-wrap" }}
+          >
+            {meeting?.description}
+          </Typography>
+
           {meeting ? <AttendeeList attendees={meeting?.attendees} /> : ""}
         </ColumnStackCenter>
       </Container>

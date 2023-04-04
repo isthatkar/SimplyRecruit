@@ -5,6 +5,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  Pagination,
   Select,
   SelectChangeEvent,
   Stack,
@@ -14,10 +15,17 @@ import {
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import PositionListItem from "../Components/Positions/PositionListItem";
-import { Theme } from "../Styles/Theme";
+import { ColumnStackCenter, RowStackCenter, Theme } from "../Styles/Theme";
 import { Field, JobLocation, Position, WorkTime } from "../Types/types";
 
 const Positions = () => {
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 8;
+  const [numPages, setNumPages] = useState(1);
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(6);
+  const [currentPageItems, setCurrentPageItems] = useState<Position[]>([]);
+  const [filteredPositions, setFilteredPositions] = useState<Position[]>([]);
   const [locationFilter, setLocationFilter] = useState<JobLocation>(
     JobLocation.All
   );
@@ -33,6 +41,15 @@ const Positions = () => {
     setFieldFilter(event.target.value as Field);
   };
 
+  const handlePageChange = async (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setStartIndex((value - 1) * itemsPerPage);
+    setEndIndex(value * itemsPerPage);
+    setPage(value);
+  };
+
   const [allPositions, setAllPositions] = useState<Position[]>([]);
   const getPositions = useCallback(async () => {
     const response = await axios.get("positions");
@@ -42,26 +59,47 @@ const Positions = () => {
       (position) => position.isOpen
     );
     setAllPositions(openPositions);
+    const filtered = filterPositions(openPositions);
+    setNumPages(Math.ceil(filtered.length / itemsPerPage));
+    setCurrentPageItems(filtered.slice(startIndex, endIndex));
+    setFilteredPositions(filtered);
   }, []);
 
-  const filteredPositions = allPositions.filter((position) => {
-    if (
-      locationFilter !== JobLocation.All &&
-      position.location !== locationFilter
-    ) {
-      return false;
-    }
-    if (fieldFilter !== Field.All && position.field !== fieldFilter) {
-      return false;
-    }
-    return true;
-  });
+  const filterPositions = (positions: Position[]): Position[] => {
+    return positions.filter((position) => {
+      if (
+        locationFilter !== JobLocation.All &&
+        position.location !== locationFilter
+      ) {
+        return false;
+      }
+      if (fieldFilter !== Field.All && position.field !== fieldFilter) {
+        return false;
+      }
+      return true;
+    });
+  };
+
+  useEffect(() => {
+    setNumPages(Math.ceil(filteredPositions.length / itemsPerPage));
+    setCurrentPageItems(filteredPositions.slice(startIndex, endIndex));
+  }, [page]);
+
+  useEffect(() => {
+    const filtered = filterPositions(allPositions);
+    setStartIndex(0);
+    setEndIndex(6);
+    setFilteredPositions(filtered);
+    setCurrentPageItems(filtered.slice(0, 6));
+    setNumPages(Math.ceil(filtered.length / itemsPerPage));
+    setPage(1);
+  }, [locationFilter, fieldFilter]);
 
   useEffect(() => {
     getPositions();
   }, []);
   return (
-    <ThemeProvider theme={Theme}>
+    <>
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -82,12 +120,7 @@ const Positions = () => {
         </Container>
       </Box>
       <Container>
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
+        <ColumnStackCenter spacing={1} sx={{ mb: 12 }}>
           <Grid container spacing={2} alignItems="center" sx={{ ml: 2 }}>
             <Grid item>
               <FormControl sx={{ width: 200 }}>
@@ -151,18 +184,26 @@ const Positions = () => {
               </FormControl>
             </Grid>
           </Grid>
-          {filteredPositions.map((position) => (
+          <RowStackCenter>
+            <Pagination
+              count={numPages}
+              page={page}
+              onChange={handlePageChange}
+            />
+          </RowStackCenter>
+          {currentPageItems.map((position) => (
             <PositionListItem
               key={position.id}
               id={position.id}
+              isOpen={position.isOpen}
               positionName={position.name}
               location={JobLocation[position.location]}
               time={WorkTime[position.workTime]}
             ></PositionListItem>
           ))}
-        </Stack>
+        </ColumnStackCenter>
       </Container>
-    </ThemeProvider>
+    </>
   );
 };
 
