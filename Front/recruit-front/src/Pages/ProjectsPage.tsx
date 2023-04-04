@@ -40,11 +40,13 @@ const Projects = () => {
     setCurrentPageItems(filtered.slice(startIndex, endIndex));
     setFilteredProjects(filtered);
   }, []);
+
   const handleProductFilterChange = (
     event: SelectChangeEvent<NordProduct | "">
   ) => {
     setProductFilter(event.target.value as NordProduct);
   };
+
   const handlePageChange = async (
     event: React.ChangeEvent<unknown>,
     value: number
@@ -74,7 +76,7 @@ const Projects = () => {
   useEffect(() => {
     const filtered = filterProjects(allProjects);
     setStartIndex(0);
-    setEndIndex(6);
+    setEndIndex(8);
     setFilteredProjects(filtered);
     setCurrentPageItems(filtered.slice(0, 8));
     setNumPages(Math.ceil(filtered.length / itemsPerPage));

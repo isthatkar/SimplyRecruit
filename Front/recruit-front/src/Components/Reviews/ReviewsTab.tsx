@@ -90,15 +90,11 @@ const ReviewsTab = ({ applicationId }: ReviewsTabProps) => {
             <Typography align="center" variant="h5" sx={{ mb: 5 }}>
               APPLICANT REVIEWS
             </Typography>
-            {ratings.length > 10 ? (
-              <Pagination
-                count={numPages}
-                page={page}
-                onChange={handlePageChange}
-              />
-            ) : (
-              ""
-            )}
+            <Pagination
+              count={numPages}
+              page={page}
+              onChange={handlePageChange}
+            />
 
             {currentPageItems.map((review) => (
               <ReviewListItem
