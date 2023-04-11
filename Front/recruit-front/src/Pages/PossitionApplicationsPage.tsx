@@ -3,11 +3,19 @@ import { Application, Position, Stage } from "../Types/types";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Box, Grid, Paper, Typography, Stack, Tooltip } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Paper,
+  Typography,
+  Stack,
+  Tooltip,
+  Chip,
+} from "@mui/material";
 import GetStateLabel from "../Helpers/ApplicationStateToText";
 import StarRating from "../Components/Reviews/StartRatingComponent";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { RowStackCenter } from "../Styles/Theme";
+import { RowStackCenter, RowStackItemsBetween } from "../Styles/Theme";
 
 export default function EnhancedTable() {
   const [allApplications, setAllApplications] = React.useState<Application[]>(
@@ -106,7 +114,7 @@ export default function EnhancedTable() {
               .filter((x) => parseInt(x as string) >= 0)
               .map((stageIndex: any) => (
                 <Grid item key={stageIndex}>
-                  <Paper sx={{ p: 1, width: 160, height: "100%" }}>
+                  <Paper sx={{ p: 1, width: 190, height: "100%" }}>
                     <Box
                       sx={{
                         display: "flex",
@@ -115,9 +123,19 @@ export default function EnhancedTable() {
                       }}
                     >
                       <Box sx={{ height: "60px" }}>
-                        <Typography variant="h6" gutterBottom>
-                          {GetStateLabel(stageIndex)}
-                        </Typography>
+                        <RowStackItemsBetween>
+                          <Typography variant="h6" gutterBottom>
+                            {GetStateLabel(stageIndex)}{" "}
+                          </Typography>
+                          <Chip
+                            label={
+                              allApplications.filter(
+                                (app) => app.stage === stageIndex
+                              ).length
+                            }
+                            sx={{ background: "#e0e2f2" }}
+                          ></Chip>
+                        </RowStackItemsBetween>
                       </Box>
 
                       <Droppable droppableId={stageIndex.toString()}>
