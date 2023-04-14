@@ -16,6 +16,7 @@ import GetStateLabel from "../Helpers/ApplicationStateToText";
 import StarRating from "../Components/Reviews/StartRatingComponent";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { RowStackCenter, RowStackItemsBetween } from "../Styles/Theme";
+import { useReward } from "react-rewards";
 
 export default function EnhancedTable() {
   const [allApplications, setAllApplications] = React.useState<Application[]>(
@@ -24,6 +25,8 @@ export default function EnhancedTable() {
   const [position, setPosition] = React.useState<Position>();
 
   const { positionId } = useParams();
+  const { reward: confettiReward, isAnimating: isConfettiAnimating } =
+    useReward("confettiReward", "confetti");
 
   const editApplication = React.useCallback(
     async (application: Application) => {
@@ -85,6 +88,10 @@ export default function EnhancedTable() {
 
     editApplication(draggedApplication);
     setAllApplications(newApplications);
+
+    if (newStageIndex === 7) {
+      confettiReward();
+    }
   };
 
   return (
@@ -93,7 +100,6 @@ export default function EnhancedTable() {
         <Typography variant="h2" align="center" gutterBottom>
           {position?.name} applicants
         </Typography>
-
         <RowStackCenter>
           <Tooltip title="Rating = 50% skills + 25% communication + 25% attitude">
             <InfoOutlinedIcon></InfoOutlinedIcon>
@@ -122,6 +128,7 @@ export default function EnhancedTable() {
                         height: "100%",
                       }}
                     >
+                      {" "}
                       <Box sx={{ height: "60px" }}>
                         <RowStackItemsBetween>
                           <Typography variant="h6" gutterBottom>
@@ -137,7 +144,6 @@ export default function EnhancedTable() {
                           ></Chip>
                         </RowStackItemsBetween>
                       </Box>
-
                       <Droppable droppableId={stageIndex.toString()}>
                         {(provided: any, snapshot: any) => (
                           <Box
@@ -181,7 +187,6 @@ export default function EnhancedTable() {
                                           px: 1,
                                           minHeight: "65px",
                                           borderRadius: 1,
-
                                           backgroundColor: snapshot.isDragging
                                             ? "#a5adf5"
                                             : "#e0e2f2",
@@ -207,6 +212,8 @@ export default function EnhancedTable() {
                   </Paper>
                 </Grid>
               ))}
+
+            <span className="bottom-right-span" id="confettiReward"></span>
           </Stack>
         </DragDropContext>
       </Stack>

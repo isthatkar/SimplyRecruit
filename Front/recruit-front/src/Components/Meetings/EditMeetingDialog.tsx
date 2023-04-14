@@ -18,7 +18,7 @@ import axios from "axios";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import { Meeting, MeetingTime } from "../../Types/types";
+import { Meeting } from "../../Types/types";
 import { ColumnStackStrech } from "../../Styles/Theme";
 import { toast } from "react-toastify";
 import { GetFormatedDate } from "../../Helpers/DateHelper";

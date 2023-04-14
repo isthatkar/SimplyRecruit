@@ -20,7 +20,7 @@ namespace SimplyRecruitAPI.Controllers
     [Route("api")]
     public class AuthController : ControllerBase
     {
-        private readonly string[] NordDomains = { "@nordsec.com", "@tesonet.com", "@surfshark.com" };
+        private readonly string[] NordDomains = { "@nordsec.com", "@tesonet.com" };
         private UserManager<SimplyUser> _userManager;
         private IJwtTokenService _jwtTokenService;
         private IConfiguration _configuration;

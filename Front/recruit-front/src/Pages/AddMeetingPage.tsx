@@ -10,6 +10,9 @@ import {
   IconButton,
   Input,
   InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Stack,
   TextField,
   Typography,
@@ -19,9 +22,13 @@ import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RowStackCenter } from "../Styles/Theme";
+import {
+  ColumnStackCenter,
+  RowStackCenter,
+  RowStackLeft,
+} from "../Styles/Theme";
 import createMeeting from "../Helpers/googleMeetsHelper";
-import { CreateMeetingDto, Meeting } from "../Types/types";
+import { CreateMeetingDto, Meeting, MeetingType } from "../Types/types";
 import { getUTCDate } from "../Helpers/DateHelper";
 
 type MeetingFormData = {
@@ -48,12 +55,19 @@ const initialMeetingFormData: MeetingFormData = {
 
 const AddMeeting = () => {
   const [formData, setFormData] = useState(initialMeetingFormData);
+  const [selectedType, setSelectedType] = useState<MeetingType>(
+    MeetingType.Schedulable
+  );
   const { applicationId } = useParams();
   const navigate = useNavigate();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const typeChanged = (event: SelectChangeEvent<MeetingType>) => {
+    setSelectedType(event.target.value as MeetingType);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,6 +209,58 @@ const AddMeeting = () => {
           <Box component="form" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
+                <RowStackLeft spacing={3}>
+                  <FormControl sx={{ width: 320 }}>
+                    <InputLabel id="location-select-label">
+                      Meeting type
+                    </InputLabel>
+                    <Select
+                      labelId="field-select-label"
+                      id="field-simple-select"
+                      value={selectedType}
+                      required
+                      label="Meeting type"
+                      onChange={typeChanged}
+                      sx={{ mr: 3 }}
+                    >
+                      <MenuItem value={MeetingType.Schedulable}>
+                        {"Schedulable meeting"}
+                      </MenuItem>
+                      <MenuItem value={MeetingType.CandidateTimeSelect}>
+                        {"Candidate time select meeting"}
+                      </MenuItem>
+                      <MenuItem value={MeetingType.Final}>
+                        {"Final meeting"}
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <ColumnStackCenter>
+                    {/* 
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={formData.isFinalTime}
+                          onChange={handleCheckboxChange}
+                          name="isFinalTime"
+                          color="primary"
+                        />
+                      }
+                      label="The meeting time is final"
+                    /> */}
+                    <FormControlLabel
+                      disabled={selectedType === MeetingType.Schedulable}
+                      control={
+                        <Checkbox
+                          checked={formData.createGoogleMeet}
+                          onChange={handleGoogleCheckboxChange}
+                          name="createGoogleMeet"
+                          color="primary"
+                        />
+                      }
+                      label="Create Google Meet"
+                    />
+                  </ColumnStackCenter>
+                </RowStackLeft>
                 <TextField
                   name="title"
                   label="Meeting Title"
@@ -257,32 +323,6 @@ const AddMeeting = () => {
                   alignItems="center"
                   spacing={2}
                 >
-                  <RowStackCenter>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.isFinalTime}
-                          onChange={handleCheckboxChange}
-                          name="isFinalTime"
-                          color="primary"
-                        />
-                      }
-                      label="The meeting time is final"
-                    />
-                    <FormControlLabel
-                      disabled={!formData.isFinalTime}
-                      control={
-                        <Checkbox
-                          checked={formData.createGoogleMeet}
-                          onChange={handleGoogleCheckboxChange}
-                          name="createGoogleMeet"
-                          color="primary"
-                        />
-                      }
-                      label="Create Google Meet"
-                    />
-                  </RowStackCenter>
-
                   <FormControl>
                     <InputLabel htmlFor="duration">
                       Duration (minutes)
@@ -299,7 +339,7 @@ const AddMeeting = () => {
                   </FormControl>
                 </Stack>
               </Grid>
-              {formData.isFinalTime ? (
+              {selectedType === MeetingType.Final ? (
                 <Grid item xs={12}>
                   <TextField
                     name="finalTime"
