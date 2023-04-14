@@ -131,6 +131,15 @@ const Positions = () => {
           >
             All open positions
           </Typography>
+          <Typography
+            variant="h5"
+            align="center"
+            color="text.secondary"
+            paragraph
+          >
+            Welcome to our open positions page! Here you can find all of our
+            current job openings.
+          </Typography>
         </Container>
       </Box>
       <Container>
