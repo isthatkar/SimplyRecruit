@@ -15,10 +15,6 @@ import React from "react";
 import { Meeting, MeetingTime } from "../Types/types";
 import { RowStackItemsBetween } from "../Styles/Theme";
 import PersonIcon from "@mui/icons-material/Person";
-import {
-  findTimeConflictingMeetings,
-  GetFormatedDate,
-} from "../Helpers/DateHelper";
 import axios from "axios";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EditIcon from "@mui/icons-material/Edit";
@@ -26,6 +22,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import FinalTimeSelector from "../Components/Meetings/FinalTimeSelector";
 import { toast } from "react-toastify";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import {
+  GetFormatedDate,
+  findTimeConflictingMeetings,
+} from "../Helpers/DateHelper";
 
 const MeetingSchedulingPage = () => {
   const [meeting, setMeeting] = useState<Meeting>();
@@ -102,7 +102,6 @@ const MeetingSchedulingPage = () => {
       (s) => s.isFinalTime === true && new Date(s.finalTime) > now
     );
 
-    console.log(upcommingMeetings);
     responseMeeting.meetingTimes.forEach((time) => {
       time.conflictingMeetings = findTimeConflictingMeetings(
         time,
@@ -110,8 +109,6 @@ const MeetingSchedulingPage = () => {
         upcommingMeetings
       );
     });
-    console.log("aaaa");
-    console.log(responseMeeting);
     setMeeting(responseMeeting);
   }, []);
 

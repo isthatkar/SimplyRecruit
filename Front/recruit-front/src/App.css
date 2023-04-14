@@ -110,3 +110,8 @@ body {
   text-align: center;
   line-height: 50px;
 }
+
+.bottom-right-span {
+  position: fixed;
+  bottom: 0;
+}

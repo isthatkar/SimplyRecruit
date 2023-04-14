@@ -143,6 +143,12 @@ export enum WorkTime {
   Parttime,
 }
 
+export enum MeetingType {
+  Final,
+  Schedulable,
+  CandidateTimeSelect,
+}
+
 export enum Field {
   Administration,
   Architecture,

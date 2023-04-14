@@ -17,12 +17,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import PositionListItem from "../Components/Positions/PositionListItem";
 import { ColumnStackCenter, RowStackCenter, Theme } from "../Styles/Theme";
 import { Field, JobLocation, Position, WorkTime } from "../Types/types";
+import SearchBar from "../Components/SearchBar";
 
 const Positions = () => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 8;
   const [numPages, setNumPages] = useState(1);
   const [startIndex, setStartIndex] = useState(0);
+  const [searchValue, setSearchValue] = useState("");
   const [endIndex, setEndIndex] = useState(6);
   const [currentPageItems, setCurrentPageItems] = useState<Position[]>([]);
   const [filteredPositions, setFilteredPositions] = useState<Position[]>([]);
@@ -35,6 +37,11 @@ const Positions = () => {
     event: SelectChangeEvent<JobLocation | "">
   ) => {
     setLocationFilter(event.target.value as JobLocation);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    return;
   };
 
   const handleFieldFilterChange = (event: SelectChangeEvent<Field>) => {
@@ -86,14 +93,21 @@ const Positions = () => {
   }, [page]);
 
   useEffect(() => {
-    const filtered = filterPositions(allPositions);
+    let filtered = filterPositions(allPositions);
+    if (searchValue !== "") {
+      filtered = filtered.filter(
+        ({ name, description }) =>
+          name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          description.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
     setStartIndex(0);
     setEndIndex(6);
     setFilteredPositions(filtered);
     setCurrentPageItems(filtered.slice(0, 6));
     setNumPages(Math.ceil(filtered.length / itemsPerPage));
     setPage(1);
-  }, [locationFilter, fieldFilter]);
+  }, [locationFilter, fieldFilter, searchValue]);
 
   useEffect(() => {
     getPositions();
@@ -183,6 +197,12 @@ const Positions = () => {
                 </Select>
               </FormControl>
             </Grid>
+            <Stack sx={{ mt: 2 }}>
+              <SearchBar
+                value={searchValue}
+                onChange={handleSearchChange}
+              ></SearchBar>
+            </Stack>
           </Grid>
           <RowStackCenter>
             <Pagination

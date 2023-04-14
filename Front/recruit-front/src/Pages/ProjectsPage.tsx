@@ -14,8 +14,14 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import AddProjectDialog from "../Components/Projects/AddProjectDialog";
 import ProjectListItem from "../Components/Projects/ProjectListItem";
-import { ColumnStackStrech, RowStackCenter } from "../Styles/Theme";
+import {
+  ColumnStackStrech,
+  RowStackCenter,
+  RowStackItemsBetween,
+  RowStackLeft,
+} from "../Styles/Theme";
 import { NordProduct, Project } from "../Types/types";
+import SearchBar from "../Components/SearchBar";
 
 const Projects = () => {
   const [allProjects, setAllProjects] = useState<Project[]>([]);
@@ -25,6 +31,7 @@ const Projects = () => {
     NordProduct.All
   );
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
   const itemsPerPage = 8;
   const [numPages, setNumPages] = useState(1);
   const [startIndex, setStartIndex] = useState(0);
@@ -45,6 +52,11 @@ const Projects = () => {
     event: SelectChangeEvent<NordProduct | "">
   ) => {
     setProductFilter(event.target.value as NordProduct);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    return;
   };
 
   const handlePageChange = async (
@@ -74,14 +86,21 @@ const Projects = () => {
   }, [page]);
 
   useEffect(() => {
-    const filtered = filterProjects(allProjects);
+    let filtered = filterProjects(allProjects);
+    if (searchValue !== "") {
+      filtered = filtered.filter(
+        ({ name, description }) =>
+          name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          description.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
     setStartIndex(0);
     setEndIndex(8);
     setFilteredProjects(filtered);
     setCurrentPageItems(filtered.slice(0, 8));
     setNumPages(Math.ceil(filtered.length / itemsPerPage));
     setPage(1);
-  }, [productFilter]);
+  }, [productFilter, searchValue]);
 
   useEffect(() => {
     getProjects();
@@ -117,34 +136,39 @@ const Projects = () => {
             Here you can gain a deeper understanding of the company&apos;s
             recruiting project portfolio.
           </Typography>
-          <Stack
-            sx={{ pt: 4 }}
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-          >
-            {isEmployee ? <AddProjectDialog></AddProjectDialog> : ""}
-          </Stack>
         </Container>
       </Box>
       <Container sx={{ mb: 8 }}>
-        <FormControl sx={{ width: 200, mb: 1 }}>
-          <InputLabel id="location-select-label">Product</InputLabel>
+        <RowStackItemsBetween sx={{ mb: 3 }}>
+          <RowStackLeft>
+            <FormControl sx={{ width: 200 }}>
+              <InputLabel id="location-select-label">Product</InputLabel>
 
-          <Select
-            value={productFilter}
-            label={"Product"}
-            onChange={handleProductFilterChange}
-          >
-            <MenuItem value={NordProduct.All}>All products</MenuItem>
+              <Select
+                value={productFilter}
+                label={"Product"}
+                onChange={handleProductFilterChange}
+              >
+                <MenuItem value={NordProduct.All}>All products</MenuItem>
 
-            <MenuItem value={NordProduct.NordPass}>NordPass</MenuItem>
-            <MenuItem value={NordProduct.NordVPN}>NordVPN</MenuItem>
-            <MenuItem value={NordProduct.NordLocker}>NordLocker</MenuItem>
-            <MenuItem value={NordProduct.NordLayer}>NordLayer</MenuItem>
-            <MenuItem value={NordProduct.NordSecurity}>Nord Security</MenuItem>
-          </Select>
-        </FormControl>
+                <MenuItem value={NordProduct.NordPass}>NordPass</MenuItem>
+                <MenuItem value={NordProduct.NordVPN}>NordVPN</MenuItem>
+                <MenuItem value={NordProduct.NordLocker}>NordLocker</MenuItem>
+                <MenuItem value={NordProduct.NordLayer}>NordLayer</MenuItem>
+                <MenuItem value={NordProduct.NordSecurity}>
+                  Nord Security
+                </MenuItem>
+              </Select>
+            </FormControl>
+            <SearchBar
+              value={searchValue}
+              onChange={handleSearchChange}
+            ></SearchBar>
+          </RowStackLeft>
+
+          {isEmployee ? <AddProjectDialog></AddProjectDialog> : ""}
+        </RowStackItemsBetween>
+
         <ColumnStackStrech alignItems="strech">
           <RowStackCenter>
             <Pagination

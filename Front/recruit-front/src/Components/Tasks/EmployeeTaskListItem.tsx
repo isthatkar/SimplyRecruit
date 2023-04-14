@@ -1,11 +1,11 @@
 import { ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import React from "react";
-import { GetFormatedDate } from "../../Helpers/DateHelper";
 import { useStyles } from "../../Styles/Theme";
 import { Task } from "../../Types/types";
 import TaskAnswerViewModal from "./TaskAnswerViewModal";
 import TaskStateChip from "./TaskStateChip";
 import TaskViewModal from "./TaskViewModal";
+import { GetFormatedDate } from "../../Helpers/DateHelper";
 
 interface TaskListItemProps {
   task: Task;
