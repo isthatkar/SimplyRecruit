@@ -1,4 +1,5 @@
 ﻿using SimplyRecruitAPI.Auth.Model;
+using SimplyRecruitAPI.Data.Enums;
 
 namespace SimplyRecruitAPI.Data.Entities
 {
@@ -9,7 +10,6 @@ namespace SimplyRecruitAPI.Data.Entities
         public string Description { get; set; }
         public string? MeetingUrl { get; set; }
         public string? SchedullingUrl { get; set; }
-        public bool IsFinal { get; set; }
         public int DurationMinutes { get; set; }
         public DateTime? FinalTime { get; set; }
         public bool IsCanceled { get; set; }
@@ -17,5 +17,6 @@ namespace SimplyRecruitAPI.Data.Entities
         public string Atendees { get; set; }
         public string SelectedAtendees { get; set; }
         public Application Application { get; set; }
+        public MeetingType MeetingType { get; set; }
     }
 }

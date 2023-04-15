@@ -3,8 +3,9 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Chip } from "@mui/material";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
-import { Meeting } from "../../Types/types";
+import { Meeting, MeetingType } from "../../Types/types";
 import DoneIcon from "@mui/icons-material/Done";
+import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 
 type Props = {
   meeting: Meeting;
@@ -25,7 +26,7 @@ const MeetingStateChip = ({ meeting }: Props) => {
       <Chip icon={<EventBusyIcon />} variant="outlined" label="Canceled" />
     );
   }
-  if (meeting.isFinalTime) {
+  if (meeting.meetingType === MeetingType.Final) {
     if (hasMeetingPassed()) {
       return <Chip icon={<DoneIcon />} label="Completed" variant="outlined" />;
     }
@@ -39,12 +40,23 @@ const MeetingStateChip = ({ meeting }: Props) => {
     );
   }
 
+  if (meeting.meetingType === MeetingType.CandidateTimeSelect) {
+    return (
+      <Chip
+        icon={<HistoryToggleOffIcon />}
+        variant="outlined"
+        color="info"
+        label="Waiting for candidate to select time..."
+      />
+    );
+  }
+
   return (
     <Chip
       icon={<HourglassBottomIcon />}
       variant="outlined"
-      color="warning"
-      label="Scheduling in progress"
+      color="info"
+      label="Scheduling in progress..."
     />
   );
 };

@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Data.Dtos.Meetings;
 using SimplyRecruitAPI.Data.Entities;
+using SimplyRecruitAPI.Data.Enums;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
 using System.Security.Claims;
 
@@ -44,7 +45,7 @@ namespace SimplyRecruitAPI.Controllers
                 m.Title,
                 m.Description,
                 m.FinalTime,
-                m.IsFinal,
+                m.MeetingType,
                 m.Atendees,
                 m.SelectedAtendees,
                 meetTimes.ToArray(),
@@ -78,7 +79,7 @@ namespace SimplyRecruitAPI.Controllers
                 meeting.Title,
                 meeting.Description,
                 meeting.FinalTime,
-                meeting.IsFinal,
+                meeting.MeetingType,
                 meeting.Atendees,
                 meeting.SelectedAtendees,
                 meetTimes.ToArray(),
@@ -109,7 +110,7 @@ namespace SimplyRecruitAPI.Controllers
                  meeting.Title,
                  meeting.Description,
                  meeting.FinalTime,
-                 meeting.IsFinal,
+                 meeting.MeetingType,
                  meeting.Atendees,
                  meeting.SelectedAtendees,
                  meetTimes.ToArray(),
@@ -122,7 +123,7 @@ namespace SimplyRecruitAPI.Controllers
 
 
         [HttpPut]
-        [Authorize(Roles = Roles.Employee)] //cadidates cannot edit meetings
+        [Authorize] 
         [Route("{meetingId}")]
         public async Task<ActionResult<MeetingDto>> Update(int meetingId, UpdateMeetingDto updateMeetingDto)
         {
@@ -139,7 +140,7 @@ namespace SimplyRecruitAPI.Controllers
             meeting.Description = updateMeetingDto.Description is null ? meeting.Description : updateMeetingDto.Description;
             meeting.DurationMinutes = (int)(updateMeetingDto.Duration is null ? meeting.DurationMinutes : updateMeetingDto.Duration);
             meeting.FinalTime = updateMeetingDto.FinalTime is null ? meeting.FinalTime : updateMeetingDto.FinalTime;
-            meeting.IsFinal = (bool)(updateMeetingDto.IsFinalTime is null ? meeting.IsFinal : updateMeetingDto.IsFinalTime);
+            meeting.MeetingType = (MeetingType)(updateMeetingDto.MeetingType is null ? meeting.MeetingType : updateMeetingDto.MeetingType);
             meeting.MeetingUrl = updateMeetingDto.MeetingUrl is null ? meeting.MeetingUrl : updateMeetingDto.MeetingUrl;
 
             if(updateMeetingDto.NewMeetingTimes is not null)
@@ -165,7 +166,7 @@ namespace SimplyRecruitAPI.Controllers
                   meeting.Title,
                   meeting.Description,
                   meeting.FinalTime,
-                  meeting.IsFinal,
+                  meeting.MeetingType,
                   meeting.Atendees,
                   meeting.SelectedAtendees,
                   meetingTimes.ToArray(),

@@ -27,7 +27,7 @@ export interface Meeting {
   title: string;
   description: string;
   finalTime: Date;
-  isFinalTime: boolean;
+  meetingType: MeetingType;
   attendees: string;
   meetingTimes: MeetingTime[];
   duration: number;
@@ -42,7 +42,7 @@ export interface CreateMeetingDto {
   title: string;
   description: string;
   finalTime: Date;
-  isFinalTime: boolean;
+  meetingType: MeetingType;
   attendees: string;
   duration: number;
   schedulingUrl: string;
@@ -144,9 +144,9 @@ export enum WorkTime {
 }
 
 export enum MeetingType {
-  Final,
   Schedulable,
   CandidateTimeSelect,
+  Final,
 }
 
 export enum Field {

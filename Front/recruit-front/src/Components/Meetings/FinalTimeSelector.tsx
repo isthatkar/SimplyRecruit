@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { Meeting, MeetingTime } from "../../Types/types";
+import { Meeting, MeetingTime, MeetingType } from "../../Types/types";
 import PersonIcon from "@mui/icons-material/Person";
 import { GetFormatedDate, getUTCDate } from "../../Helpers/DateHelper";
 import axios from "axios";
@@ -25,6 +25,8 @@ interface FinalTimeSelectorProps {
 const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
   const navigate = useNavigate();
   const [selectedTime, setSelectedTime] = useState<number>(-1);
+  const roles = localStorage.getItem("roles");
+  const [isCandidate, setIsCandidate] = useState(roles === "Candidate");
   const [sendGoogleMeetsInvite, setSendGoogleMeetsInvite] = useState(true);
 
   function handleTimeClick(timeId: number) {
@@ -65,7 +67,7 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
     }
 
     const response = await axios.put(`/meetings/${meeting.id}`, {
-      isFinalTime: true,
+      meetingType: MeetingType.Final,
       finalTime: finalTime?.startTime,
       meetingUrl: data === null ? "" : data.htmlLink,
       googleId: data === null ? "" : data.id,
@@ -116,6 +118,7 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
           control={
             <Checkbox
               checked={sendGoogleMeetsInvite}
+              disabled={isCandidate}
               onChange={handleCheckboxChange}
               inputProps={{ "aria-label": "controlled checkbox" }}
             />

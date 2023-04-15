@@ -22,11 +22,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import {
-  ColumnStackCenter,
-  RowStackCenter,
-  RowStackLeft,
-} from "../Styles/Theme";
+import { ColumnStackCenter, RowStackLeft } from "../Styles/Theme";
 import createMeeting from "../Helpers/googleMeetsHelper";
 import { CreateMeetingDto, Meeting, MeetingType } from "../Types/types";
 import { getUTCDate } from "../Helpers/DateHelper";
@@ -35,7 +31,6 @@ type MeetingFormData = {
   title: string;
   description: string;
   finalTime: string;
-  isFinalTime: boolean;
   attendees: string[];
   meetingTimes: string[];
   duration: number;
@@ -46,7 +41,6 @@ const initialMeetingFormData: MeetingFormData = {
   title: "",
   description: "",
   finalTime: "",
-  isFinalTime: false,
   attendees: [""],
   meetingTimes: [""],
   createGoogleMeet: false,
@@ -68,14 +62,6 @@ const AddMeeting = () => {
 
   const typeChanged = (event: SelectChangeEvent<MeetingType>) => {
     setSelectedType(event.target.value as MeetingType);
-  };
-
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      isFinalTime: checked,
-    }));
   };
 
   const handleGoogleCheckboxChange = (
@@ -148,15 +134,19 @@ const AddMeeting = () => {
       description: formData.description,
       meetingUrl: "",
       schedulingUrl: "",
-      isFinalTime: formData.isFinalTime,
+      meetingType: selectedType,
       duration: formData.duration,
       attendees: attendeesNew,
-      meetingTimes: formData.isFinalTime ? [] : formData.meetingTimes,
-      finalTime: formData.isFinalTime
-        ? getUTCDate(formData.finalTime)
-        : new Date(Date.UTC(2023, 1, 1)),
+      meetingTimes:
+        selectedType === MeetingType.Final ? [] : formData.meetingTimes,
+      finalTime:
+        selectedType === MeetingType.Final
+          ? getUTCDate(formData.finalTime)
+          : new Date(Date.UTC(2023, 1, 1)),
     };
 
+    console.log("meeting data");
+    console.log(meetingDto);
     let data = undefined;
     if (formData.createGoogleMeet) {
       data = await createMeeting(meetingDto as CreateMeetingDto);
@@ -235,18 +225,6 @@ const AddMeeting = () => {
                     </Select>
                   </FormControl>
                   <ColumnStackCenter>
-                    {/* 
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.isFinalTime}
-                          onChange={handleCheckboxChange}
-                          name="isFinalTime"
-                          color="primary"
-                        />
-                      }
-                      label="The meeting time is final"
-                    /> */}
                     <FormControlLabel
                       disabled={selectedType === MeetingType.Schedulable}
                       control={

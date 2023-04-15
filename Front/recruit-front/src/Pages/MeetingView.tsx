@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { Meeting } from "../Types/types";
+import { Meeting, MeetingType } from "../Types/types";
 import React from "react";
 import AttendeeList from "../Components/Meetings/AttendeesList";
 import { ColumnStackCenter, RowStackCenter } from "../Styles/Theme";
@@ -68,7 +68,7 @@ const MeetingView = () => {
     const fetchedMeeting = response.data;
     console.log(fetchedMeeting);
     setMeeting(fetchedMeeting);
-    if (fetchedMeeting.isFinalTime) {
+    if (fetchedMeeting.meetingType === MeetingType.Final) {
       setFinalTimeString(
         getTimeString(fetchedMeeting.finalTime, fetchedMeeting.duration)
       );
@@ -110,7 +110,7 @@ const MeetingView = () => {
 
   const hasMeetingPassed = () => {
     if (meeting) {
-      if (meeting.isFinalTime === false) {
+      if (meeting.meetingType !== MeetingType.Final) {
         return false;
       }
       const startDateTimeString = meeting.finalTime;
@@ -135,13 +135,11 @@ const MeetingView = () => {
           {meeting?.title}
         </Typography>
         {meeting && (meeting?.isCanceled || hasMeetingPassed()) ? (
-          <RowStackCenter sx={{ mb: 2 }}>
-            <MeetingStateChip meeting={meeting}></MeetingStateChip>
-          </RowStackCenter>
+          ""
         ) : (
           <RowStackCenter sx={{ mb: 2 }}>
             <>
-              {!meeting?.isFinalTime ? (
+              {meeting?.meetingType !== MeetingType.Final ? (
                 <RowStackCenter>
                   <Tooltip title={"Copy scheduling link"}>
                     <IconButton onClick={handleCopyLink}>
@@ -158,6 +156,7 @@ const MeetingView = () => {
                 ""
               )}
             </>
+
             <>
               {meeting && isUserMeeting ? (
                 <>
@@ -167,7 +166,8 @@ const MeetingView = () => {
               ) : (
                 ""
               )}
-              {meeting?.isCanceled === false && meeting.isFinalTime === true ? (
+              {meeting?.isCanceled === false &&
+              meeting.meetingType === MeetingType.Final ? (
                 <>
                   {meeting.meetingUrl !== "" ? (
                     <>
@@ -201,9 +201,16 @@ const MeetingView = () => {
             </>
           </RowStackCenter>
         )}
+        {meeting ? (
+          <RowStackCenter sx={{ mb: 2 }}>
+            <MeetingStateChip meeting={meeting}></MeetingStateChip>
+          </RowStackCenter>
+        ) : (
+          ""
+        )}
 
         <ColumnStackCenter spacing={2}>
-          {meeting?.isFinalTime && (
+          {meeting?.meetingType === MeetingType.Final && (
             <Typography variant="h6" gutterBottom>
               {finalTimeString}
             </Typography>

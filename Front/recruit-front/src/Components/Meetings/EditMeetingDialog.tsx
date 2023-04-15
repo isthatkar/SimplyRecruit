@@ -18,7 +18,7 @@ import axios from "axios";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import { Meeting } from "../../Types/types";
+import { Meeting, MeetingType } from "../../Types/types";
 import { ColumnStackStrech } from "../../Styles/Theme";
 import { toast } from "react-toastify";
 import { GetFormatedDate } from "../../Helpers/DateHelper";
@@ -31,7 +31,7 @@ type MeetingFormData = {
   title: string;
   description: string;
   finalTime: Date;
-  isFinalTime: boolean;
+  meetingType: MeetingType;
   attendees: string[];
   meetingTimes: string[];
   duration: number;
@@ -42,7 +42,7 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
     title: meeting.title,
     description: meeting.description,
     finalTime: meeting.finalTime,
-    isFinalTime: meeting.isFinalTime,
+    meetingType: meeting.meetingType,
     attendees: meeting.attendees.split(";"),
     meetingTimes: [],
     duration: meeting.duration,
@@ -71,7 +71,10 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
       finalTime: formData.finalTime,
       attendees: formData.attendees.join(";"),
       duration: formData.duration,
-      newMeetingTimes: meeting.isFinalTime ? null : formData.meetingTimes,
+      newMeetingTimes:
+        meeting.meetingType === MeetingType.Final
+          ? null
+          : formData.meetingTimes,
     };
 
     const response = await axios.put(`meetings/${meeting.id}`, meetingDto);
@@ -222,7 +225,7 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
                   />
                 </FormControl>
               </Grid>
-              {formData.isFinalTime ? (
+              {formData.meetingType === MeetingType.Final ? (
                 <Grid item xs={12}>
                   <TextField
                     name="finalTime"

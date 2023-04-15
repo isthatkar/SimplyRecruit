@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { Meeting, MeetingTime } from "../Types/types";
+import { Meeting, MeetingTime, MeetingType } from "../Types/types";
 import { RowStackItemsBetween } from "../Styles/Theme";
 import PersonIcon from "@mui/icons-material/Person";
 import axios from "axios";
@@ -32,6 +32,8 @@ const MeetingSchedulingPage = () => {
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
   const userEmail = localStorage.getItem("email");
   const [isUserMeeting, setIsUserMeeting] = useState(false);
+  const [isCandidate, setIsCandidate] = useState(false);
+  const [isAttendee, setIsAttendee] = useState(false);
   const [userHasSelectedTimes, setUserHasSelectedTimes] =
     useState<boolean>(false);
   const [isSelectingFinalTime, setIsSelectingFinalTime] =
@@ -74,12 +76,16 @@ const MeetingSchedulingPage = () => {
   const getMeeting = useCallback(async () => {
     const response = await axios.get(`/meetings/${meetingId}`);
     const responseMeeting = response.data as Meeting;
-    if (responseMeeting?.isFinalTime || responseMeeting?.isCanceled) {
+    if (
+      responseMeeting?.meetingType === MeetingType.Final ||
+      responseMeeting?.isCanceled
+    ) {
       navigate(`/meetings/${responseMeeting.id}`);
     }
     const hasSelected = responseMeeting.selectedAtendees.includes(
       userEmail as string
     );
+    CheckIfIsCandidateOfTheMeeting(responseMeeting);
     setUserHasSelectedTimes(hasSelected);
     if (hasSelected) {
       const userSelectedTimes = responseMeeting.meetingTimes
@@ -89,17 +95,14 @@ const MeetingSchedulingPage = () => {
       setSelectedTimes(userSelectedTimes);
     }
     const userId = localStorage.getItem("userId");
-    console.log(userId);
-    console.log(responseMeeting.userId);
     setIsUserMeeting(responseMeeting.userId === userId);
 
     const userMeetingsResponse = await axios.get(`/meetings`);
-    console.log(userMeetingsResponse);
     const allMeetings = userMeetingsResponse.data;
     const now = new Date();
 
     const upcommingMeetings = (allMeetings as Meeting[]).filter(
-      (s) => s.isFinalTime === true && new Date(s.finalTime) > now
+      (s) => s.meetingType !== MeetingType.Final && new Date(s.finalTime) > now
     );
 
     responseMeeting.meetingTimes.forEach((time) => {
@@ -116,8 +119,6 @@ const MeetingSchedulingPage = () => {
     atendeesString: string,
     emailToAddOrRemove: string
   ): string {
-    console.log(atendeesString);
-    console.log(emailToAddOrRemove);
     const emails = atendeesString.split(";").filter((e) => e !== "");
     const index = emails.indexOf(emailToAddOrRemove);
 
@@ -128,6 +129,23 @@ const MeetingSchedulingPage = () => {
     }
 
     return emails.join(";");
+  }
+
+  function CheckIfIsCandidateOfTheMeeting(meeting: Meeting) {
+    const role = localStorage.getItem("roles");
+
+    if (meeting.attendees.includes(userEmail as string)) {
+      setIsAttendee(true);
+      console.log("candidate for final meeting");
+      console.log(role);
+      if (role === "Candidate") {
+        setIsCandidate(true);
+        console.log("candidate for final meeting");
+        if (meeting.meetingType === MeetingType.CandidateTimeSelect) {
+          setIsSelectingFinalTime(true);
+        }
+      }
+    }
   }
 
   useEffect(() => {
@@ -207,15 +225,20 @@ const MeetingSchedulingPage = () => {
                 alignItems="center"
                 spacing={2}
               >
-                <Tooltip title="Edit selection">
-                  <IconButton
-                    sx={{ ml: 2 }}
-                    onClick={handleEditClick}
-                    disabled={isSelectingFinalTime}
-                  >
-                    <EditIcon color="secondary"></EditIcon>
-                  </IconButton>
-                </Tooltip>
+                {isSelectingFinalTime ? (
+                  ""
+                ) : (
+                  <Tooltip title="Edit selection">
+                    <IconButton
+                      sx={{ ml: 2 }}
+                      onClick={handleEditClick}
+                      disabled={isSelectingFinalTime}
+                    >
+                      <EditIcon color="secondary"></EditIcon>
+                    </IconButton>
+                  </Tooltip>
+                )}
+
                 {isUserMeeting ? (
                   <Tooltip title={"Select final time"}>
                     <IconButton
