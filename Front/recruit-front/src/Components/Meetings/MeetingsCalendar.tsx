@@ -4,7 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { EventSourceInput } from "@fullcalendar/core";
 import interactionPlugin from "@fullcalendar/interaction";
-import { Meeting } from "../../Types/types";
+import { Meeting, MeetingType } from "../../Types/types";
 import { Button } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { Theme, useStyles } from "../../Styles/Theme";
@@ -22,14 +22,18 @@ const MeetingCalendar = ({ meetings }: CalendarProps) => {
 
   useEffect(() => {
     const mappedMeetings = meetings
-      .filter((m) => !m.isCanceled && m.isFinalTime) //only not canceled and final time meetings
+      .filter((m) => !m.isCanceled && m.meetingType === MeetingType.Final) //only not canceled and final time meetings
       .map(convertToEventInput);
     const eventSourcesm = [
       {
         events: mappedMeetings,
       },
     ];
-    setUpcomingMeetings(meetings.filter((m) => !m.isCanceled && m.isFinalTime));
+    setUpcomingMeetings(
+      meetings.filter(
+        (m) => !m.isCanceled && m.meetingType === MeetingType.Final
+      )
+    );
     setEventSources(eventSourcesm);
   }, [meetings]);
 

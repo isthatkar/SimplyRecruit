@@ -2,7 +2,7 @@ import { Box, Pagination, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { ColumnStackCenter, RowStackCenter } from "../Styles/Theme";
-import { Meeting } from "../Types/types";
+import { Meeting, MeetingType } from "../Types/types";
 import MeetingListItem from "../Components/Meetings/MeetingListItem";
 import MeetingCalendar from "../Components/Meetings/MeetingsCalendar";
 import axios from "axios";
@@ -26,7 +26,7 @@ const UserMeetings = () => {
     const now = new Date();
 
     const upcommingMeetings = (allMeetings as Meeting[]).filter(
-      (s) => s.isFinalTime === false || new Date(s.finalTime) > now
+      (s) => s.meetingType !== MeetingType.Final || new Date(s.finalTime) > now
     );
     setUpcommingMeetings(upcommingMeetings);
     setNumPages(Math.ceil(upcommingMeetings.length / itemsPerPage));

@@ -27,7 +27,6 @@ namespace SimplyRecruitAPI
 
             builder.Services.AddDbContext<SimplyRecruitDbContext>(o => o.UseSqlServer(builder.Configuration["ConnectionStrings:DB_CONNECTION_STRING"]));
             builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
-            builder.Services.AddScoped<AuthDbSeeder>();
 
 
             builder.Services.AddIdentity<SimplyUser, IdentityRole>()
@@ -89,8 +88,6 @@ namespace SimplyRecruitAPI
             app.UseAuthentication();
             app.UseAuthorization();
 
-            var dbSeeder = app.Services.CreateScope().ServiceProvider.GetRequiredService<AuthDbSeeder>();
-            await dbSeeder.SeedAsync();
             app.Run();
         }
     }

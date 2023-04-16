@@ -42,7 +42,7 @@ namespace SimplyRecruitAPI.Controllers
                 m.Title,
                 m.Description,
                 m.FinalTime,
-                m.IsFinal,
+                m.MeetingType,
                 m.Atendees,
                 m.SelectedAtendees,
                 new MeetingTimes[] {  },
@@ -72,9 +72,9 @@ namespace SimplyRecruitAPI.Controllers
                Description = createMeetingDto.Description,
                MeetingUrl = createMeetingDto.MeetingUrl,
                SchedullingUrl = application.Id + RandomStringGenerator.GenerateRandomString(25),
-               IsFinal = createMeetingDto.IsFinalTime,
+               MeetingType = createMeetingDto.MeetingType,
                DurationMinutes = createMeetingDto.Duration,
-               FinalTime = createMeetingDto.IsFinalTime ? createMeetingDto.FinalTime : new DateTime(),
+               FinalTime = createMeetingDto.MeetingType == Data.Enums.MeetingType.Final ? createMeetingDto.FinalTime : new DateTime(),
                IsCanceled = false,
                SelectedAtendees = string.Empty,
                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
@@ -85,7 +85,7 @@ namespace SimplyRecruitAPI.Controllers
             await _meetingsRepository.CreateAsync(meeting);
 
             IEnumerable<MeetingTimes> meetingTimes = new List<MeetingTimes>();
-            if (!createMeetingDto.IsFinalTime && createMeetingDto.MeetingTimes is not null)
+            if (!(createMeetingDto.MeetingType == Data.Enums.MeetingType.Final) && createMeetingDto.MeetingTimes is not null)
             {
                 meetingTimes = createMeetingDto.MeetingTimes.Select(t => new MeetingTimes()
                 {
@@ -109,7 +109,7 @@ namespace SimplyRecruitAPI.Controllers
                 meeting.Description,
                 meeting.MeetingUrl,
                 meeting.SchedullingUrl,
-                meeting.IsFinal,
+                meeting.MeetingType,
                 meeting.DurationMinutes,
                 meeting.IsCanceled,
                 meeting.Atendees,
