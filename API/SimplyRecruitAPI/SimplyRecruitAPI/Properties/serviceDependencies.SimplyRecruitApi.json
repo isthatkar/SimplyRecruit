@@ -4,8 +4,7 @@
       "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/simply-recruit-dbserver/databases/SimplyRecruitDb",
       "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:DB_CONNECTION_STRING",
-      "dynamicId": null
+      "connectionId": "DB_CONNECTION_STRING"
     }
   }
 }
