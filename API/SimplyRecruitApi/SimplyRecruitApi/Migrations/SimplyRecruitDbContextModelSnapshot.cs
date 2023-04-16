@@ -370,8 +370,8 @@ namespace SimplyRecruitAPI.Migrations
                     b.Property<bool>("IsCanceled")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsFinal")
-                        .HasColumnType("bit");
+                    b.Property<int>("MeetingType")
+                        .HasColumnType("int");
 
                     b.Property<string>("MeetingUrl")
                         .HasColumnType("nvarchar(max)");
