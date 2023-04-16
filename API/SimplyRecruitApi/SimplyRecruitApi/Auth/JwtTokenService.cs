@@ -12,11 +12,11 @@ namespace SimplyRecruitAPI.Auth
         private string _issuer;
         private string _audience;
 
-        public JwtTokenService(IConfiguration configuration)
+        public JwtTokenService()
         {
-            _authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
-            _issuer = configuration["JWT:ValidIssuer"];
-            _audience = configuration["JWT:ValidAudience"];
+            _authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT:Secret")));
+            _issuer = Environment.GetEnvironmentVariable("JWT:ValidIssuer");
+            _audience = Environment.GetEnvironmentVariable("JWT:ValidAudience");
         }
 
         public string CreateAccessToken(string email, string userId, IEnumerable<string> userRoles)

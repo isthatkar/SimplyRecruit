@@ -9,10 +9,6 @@ using System.Text;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Auth;
 using Google.Apis.Auth;
-using System.Linq;
-using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json.Linq;
-using System.Security.Principal;
 
 namespace SimplyRecruitAPI.Controllers
 {
