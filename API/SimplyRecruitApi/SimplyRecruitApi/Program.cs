@@ -27,7 +27,7 @@ namespace SimplyRecruitAPI
             
 
 
-            builder.Services.AddDbContext<SimplyRecruitDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStrings:DB_CONNECTION_STRING")));
+            builder.Services.AddDbContext<SimplyRecruitDbContext>(o => o.UseSqlServer(builder.Configuration["DB_CONNECTION_STRING"]));
             builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<AuthDbSeeder>();
 
