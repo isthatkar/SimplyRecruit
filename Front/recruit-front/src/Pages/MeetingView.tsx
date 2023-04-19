@@ -36,7 +36,7 @@ const MeetingView = () => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(
-      ("http://localhost:3000/activeShedule/" +
+      ("https://simplyrecruitfrontend.azurewebsites.net/activeShedule/" +
         meeting?.schedulingUrl) as string
     );
     toast.success("Link copied to clipboard", {

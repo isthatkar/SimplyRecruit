@@ -112,7 +112,7 @@ namespace SimplyRecruitAPI.Controllers
         public async Task<IActionResult> Revoke(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return BadRequest("Invalid email");
+            if (user == null) return NotFound();
 
             user.RefreshToken = null;
             user.AccessToken = null;
