@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SimplyRecruitAPI.Controllers;
-using SimplyRecruitAPI.Data.Dtos.Positions;
 using SimplyRecruitAPI.Data.Dtos.Projects;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
