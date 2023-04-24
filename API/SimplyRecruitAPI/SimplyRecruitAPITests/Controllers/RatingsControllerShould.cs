@@ -5,19 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SimplyRecruitAPI.Auth.Model;
 using SimplyRecruitAPI.Controllers;
-using SimplyRecruitAPI.Data.Dtos.Meetings;
 using SimplyRecruitAPI.Data.Dtos.Ratings;
 using SimplyRecruitAPI.Data.Entities;
-using SimplyRecruitAPI.Data.Repositories;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit.Abstractions;
 
 namespace SimplyRecruitAPITests.Controllers
 {
