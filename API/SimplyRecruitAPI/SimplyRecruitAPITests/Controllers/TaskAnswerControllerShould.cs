@@ -32,8 +32,9 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
+            task.Deadline = DateTime.MaxValue;
             taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(task);
-            taskAnswerRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
+            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
 
             var result = await sut.Create(6, formFile.Object, dto);
 
@@ -88,7 +89,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(task);
-            taskAnswerRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(answer);
+            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync(answer);
 
             var result = await sut.Create(6, formFile.Object, dto);
 
@@ -144,8 +145,9 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
+            task.Deadline = DateTime.MaxValue;
             taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(task);
-            taskAnswerRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
+            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
 
             var result = await sut.Create(6, formFile.Object, dto);
 
