@@ -5,12 +5,13 @@ import Box from "@mui/material/Box";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert/Alert";
 import axios from "axios";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 
 export default function LoginButton() {
   const navigate = useNavigate();
   const [failed, setFailed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const location = useLocation();
   const from = location.state?.from.pathname ?? "/";
@@ -36,7 +37,7 @@ export default function LoginButton() {
       refreshToken = data.refresh_token;
       return { idToken, accessToken, refreshToken };
     } catch {
-      console.log("catched exception");
+      console.log("exception while getting google token");
     }
 
     return { idToken, accessToken, refreshToken };
@@ -82,7 +83,6 @@ export default function LoginButton() {
 
   const login = useGoogleLogin({
     onSuccess: async (response: any) => {
-      console.log(response);
       onSuccess(response);
     },
     scope: "https://www.googleapis.com/auth/calendar",
@@ -90,8 +90,9 @@ export default function LoginButton() {
   });
 
   const handleSignIn = async () => {
+    setIsLoading(true);
     const googleAuthResponse = await login();
-    console.log(googleAuthResponse);
+    setIsLoading(false);
   };
 
   async function navigateToPage(to: string) {
@@ -107,17 +108,21 @@ export default function LoginButton() {
         alignItems: "center",
       }}
     >
-      <Button
-        sx={{ padding: "10px 20px" }}
-        variant="contained"
-        onClick={handleSignIn}
-        endIcon={<GoogleIcon />}
-      >
-        Login with Google
-      </Button>
+      {isLoading ? (
+        <CircularProgress size={24} />
+      ) : (
+        <Button
+          sx={{ padding: "10px 20px" }}
+          variant="contained"
+          onClick={handleSignIn}
+          endIcon={<GoogleIcon />}
+        >
+          Login with Google
+        </Button>
+      )}
 
       {failed ? (
-        <Alert severity="error" variant="outlined" sx={{ my: 1, width: "50%" }}>
+        <Alert severity="error" variant="outlined" sx={{ my: 1, width: "ū0%" }}>
           <AlertTitle>Error</AlertTitle>
           Login failed. Please try again.
         </Alert>

@@ -52,12 +52,10 @@ const MeetingSchedulingPage = () => {
     });
 
     const newMeeting = meeting;
-    console.log(newMeeting);
     const selectedTime = meeting?.meetingTimes.find((t) => t.id === timeId);
     const selectedTimeIndex = meeting?.meetingTimes.findIndex(
       (t) => t.id === timeId
     );
-    console.log(selectedTime);
 
     if (
       newMeeting &&
@@ -136,11 +134,8 @@ const MeetingSchedulingPage = () => {
 
     if (meeting.attendees.includes(userEmail as string)) {
       setIsAttendee(true);
-      console.log("candidate for final meeting");
-      console.log(role);
       if (role === "Candidate") {
         setIsCandidate(true);
-        console.log("candidate for final meeting");
         if (meeting.meetingType === MeetingType.CandidateTimeSelect) {
           setIsSelectingFinalTime(true);
         }
@@ -165,7 +160,6 @@ const MeetingSchedulingPage = () => {
   };
 
   const selectTimes = useCallback(async () => {
-    console.log(selectedTimes);
     const response = await axios.put(`/meetingTimes/select`, {
       meetingId: meeting?.id,
       ids: selectedTimes,

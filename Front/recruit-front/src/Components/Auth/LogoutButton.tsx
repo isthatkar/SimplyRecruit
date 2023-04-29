@@ -12,7 +12,6 @@ export default function LoginButton() {
     e.preventDefault();
     const response = await axios.post(`revoke/${id}`, "");
 
-    console.log(response);
     googleLogout();
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

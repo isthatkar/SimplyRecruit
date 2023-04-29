@@ -62,7 +62,7 @@ const Home = () => {
               time-consuming and frustrating process. Our platform simplifies
               the process, making it easy for job seekers to find and apply for
               jobs and for employers to find and hire top talent. Say goodbye to
-              the hassle with SimplyRecruit.
+              the hassle with NordRecruit.
             </Typography>
             {token ? (
               <Button

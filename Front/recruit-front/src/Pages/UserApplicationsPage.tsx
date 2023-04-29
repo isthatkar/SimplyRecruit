@@ -14,7 +14,6 @@ const UserApplications = () => {
   const [allApplications, setAllApplications] = useState<Application[]>([]);
   const getUserApplications = useCallback(async () => {
     const response = await axios.get("applications/currentUser");
-    console.log(response.data);
     const applications = response.data;
     setAllApplications(applications);
   }, []);

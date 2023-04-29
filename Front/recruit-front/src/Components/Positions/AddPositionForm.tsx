@@ -61,14 +61,11 @@ const AddPositionPage = () => {
       expectations: expectations,
       offers: offers,
     };
-
-    console.log(positionsDto);
     const response = await axios.post(
       `projects/${projectid}/positions`,
       positionsDto
     );
 
-    console.log(response);
     if (response.status === 201) {
       return navigate(`/projects/${projectid}`);
     } else {

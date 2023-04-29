@@ -29,7 +29,6 @@ axios.interceptors.response.use(
             "Content-Type": "application/json",
           },
         });
-        console.log(response);
 
         if (response.status === 200) {
           axios.defaults.headers.common[

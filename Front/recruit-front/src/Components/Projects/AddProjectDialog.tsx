@@ -39,7 +39,8 @@ const AddProjectDialog = () => {
     setOpen(false);
   };
 
-  const handleAdd = async () => {
+  const handleAdd = async (event: React.FormEvent) => {
+    event.preventDefault();
     await addProject();
     setOpen(false);
   };
@@ -58,8 +59,9 @@ const AddProjectDialog = () => {
 
     const response = await axios.post("projects", projectDto);
 
-    console.log(response);
-    if (response.status !== 201) {
+    if (response.status === 201) {
+      location.reload();
+    } else {
       toast.error("Failed to add collection!", {
         position: toast.POSITION.TOP_RIGHT,
       });

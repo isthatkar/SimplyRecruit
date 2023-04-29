@@ -18,8 +18,10 @@ import PositionListItem from "../Components/Positions/PositionListItem";
 import { ColumnStackCenter, RowStackCenter, Theme } from "../Styles/Theme";
 import { Field, JobLocation, Position, WorkTime } from "../Types/types";
 import SearchBar from "../Components/SearchBar";
+import Loader from "../Components/Loading/Loader";
 
 const Positions = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const itemsPerPage = 8;
   const [numPages, setNumPages] = useState(1);
@@ -59,8 +61,13 @@ const Positions = () => {
 
   const [allPositions, setAllPositions] = useState<Position[]>([]);
   const getPositions = useCallback(async () => {
+    let apiCallCompleted = false;
+    const apiTimeout = setTimeout(() => {
+      if (!apiCallCompleted) {
+        setIsLoading(true);
+      }
+    }, 200);
     const response = await axios.get("positions");
-    console.log(response.data);
     const positions = response.data;
     const openPositions = (positions as Position[]).filter(
       (position) => position.isOpen
@@ -70,6 +77,9 @@ const Positions = () => {
     setNumPages(Math.ceil(filtered.length / itemsPerPage));
     setCurrentPageItems(filtered.slice(startIndex, endIndex));
     setFilteredPositions(filtered);
+
+    apiCallCompleted = true;
+    setIsLoading(false);
   }, []);
 
   const filterPositions = (positions: Position[]): Position[] => {
@@ -213,23 +223,29 @@ const Positions = () => {
               ></SearchBar>
             </Stack>
           </Grid>
-          <RowStackCenter>
-            <Pagination
-              count={numPages}
-              page={page}
-              onChange={handlePageChange}
-            />
-          </RowStackCenter>
-          {currentPageItems.map((position) => (
-            <PositionListItem
-              key={position.id}
-              id={position.id}
-              isOpen={position.isOpen}
-              positionName={position.name}
-              location={JobLocation[position.location]}
-              time={WorkTime[position.workTime]}
-            ></PositionListItem>
-          ))}
+          {isLoading ? (
+            <Loader></Loader>
+          ) : (
+            <>
+              <RowStackCenter>
+                <Pagination
+                  count={numPages}
+                  page={page}
+                  onChange={handlePageChange}
+                />
+              </RowStackCenter>
+              {currentPageItems.map((position) => (
+                <PositionListItem
+                  key={position.id}
+                  id={position.id}
+                  isOpen={position.isOpen}
+                  positionName={position.name}
+                  location={JobLocation[position.location]}
+                  time={WorkTime[position.workTime]}
+                ></PositionListItem>
+              ))}
+            </>
+          )}
         </ColumnStackCenter>
       </Container>
     </>

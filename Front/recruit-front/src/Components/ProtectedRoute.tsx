@@ -6,13 +6,11 @@ const ProtectedRoute = () => {
   const location = useLocation();
   const token = localStorage.getItem("accessToken");
   const isAuthent = !(token === null);
-  console.log(isAuthent);
 
   const redirectToLogin = () => (
     <Navigate to="/login" state={{ from: location }} replace />
   );
 
-  console.log(isAuthent);
   if (isAuthent) {
     return <Outlet />;
   }

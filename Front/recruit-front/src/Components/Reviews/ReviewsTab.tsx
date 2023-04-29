@@ -6,12 +6,14 @@ import AddReviewDialog from "./AddReviewDialog";
 import { ColumnStackCenter, RowStackCenter } from "../../Styles/Theme";
 import { Rating } from "../../Types/types";
 import axios from "axios";
+import Loader from "../Loading/Loader";
 
 interface ReviewsTabProps {
   applicationId: number;
 }
 const ReviewsTab = ({ applicationId }: ReviewsTabProps) => {
   const itemsPerPage = 10;
+  const [isLoading, setIsLoading] = useState(false);
   const [ratings, setRatings] = React.useState<Rating[]>([]);
   const [page, setPage] = useState(1);
   const [numPages, setNumPages] = useState(1);
@@ -20,13 +22,14 @@ const ReviewsTab = ({ applicationId }: ReviewsTabProps) => {
   const [currentPageItems, setCurrentPageItems] = useState<Rating[]>(ratings);
 
   const getReviews = useCallback(async () => {
+    setIsLoading(true);
     const response = await axios.get(`applications/${applicationId}/ratings`);
-    console.log(response.data);
     const ratings = response.data;
 
     setRatings(ratings);
     setNumPages(Math.ceil(ratings.length / itemsPerPage));
     setCurrentPageItems(ratings.slice(startIndex, endIndex));
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -68,50 +71,56 @@ const ReviewsTab = ({ applicationId }: ReviewsTabProps) => {
         ></AddReviewDialog>
       </Box>
 
-      {ratings.length > 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <ColumnStackCenter
-            sx={{
-              width: "80%",
-              mb: 8,
-              maxWidth: "900",
-              "@media (max-width: 900px)": {
-                width: "100%",
-              },
-            }}
-            spacing={1}
-          >
-            <Typography align="center" variant="h5" sx={{ mb: 5 }}>
-              APPLICANT REVIEWS
-            </Typography>
-            <Pagination
-              count={numPages}
-              page={page}
-              onChange={handlePageChange}
-            />
-
-            {currentPageItems.map((review) => (
-              <ReviewListItem
-                key={review.id}
-                rating={review}
-                onObjectChange={getReviews}
-              ></ReviewListItem>
-            ))}
-          </ColumnStackCenter>
-        </Box>
+      {isLoading ? (
+        <Loader></Loader>
       ) : (
-        <RowStackCenter spacing={1}>
-          <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
-          <Typography align="center" variant="h5">
-            NO REVIEWS ADDED YET
-          </Typography>
-        </RowStackCenter>
+        <>
+          {ratings.length > 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ColumnStackCenter
+                sx={{
+                  width: "80%",
+                  mb: 8,
+                  maxWidth: "900",
+                  "@media (max-width: 900px)": {
+                    width: "100%",
+                  },
+                }}
+                spacing={1}
+              >
+                <Typography align="center" variant="h5" sx={{ mb: 5 }}>
+                  APPLICANT REVIEWS
+                </Typography>
+                <Pagination
+                  count={numPages}
+                  page={page}
+                  onChange={handlePageChange}
+                />
+
+                {currentPageItems.map((review) => (
+                  <ReviewListItem
+                    key={review.id}
+                    rating={review}
+                    onObjectChange={getReviews}
+                  ></ReviewListItem>
+                ))}
+              </ColumnStackCenter>
+            </Box>
+          ) : (
+            <RowStackCenter spacing={1}>
+              <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
+              <Typography align="center" variant="h5">
+                NO REVIEWS ADDED YET
+              </Typography>
+            </RowStackCenter>
+          )}
+        </>
       )}
     </div>
   );

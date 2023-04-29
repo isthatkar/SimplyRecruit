@@ -31,7 +31,6 @@ const CancelMeetingDialog = ({ meeting }: CancelMeetingProps) => {
       isCanceled: true,
     });
 
-    console.log(response);
     if (response.status === 200) {
       toast.success("Meeting canceled.", {
         position: toast.POSITION.TOP_RIGHT,

@@ -61,7 +61,6 @@ const AddTaskDialog = ({ applicationId, onAddObject }: AddTaskProps) => {
       { headers }
     );
 
-    console.log(response);
     if (response?.status === 201) {
       toast.success("Added task!", {
         position: toast.POSITION.TOP_RIGHT,

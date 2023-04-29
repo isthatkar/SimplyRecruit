@@ -40,8 +40,6 @@ const EditProjectDialog = (props: any) => {
 
   const getProject = async () => {
     const response = await axios.get(`projects/${projectId}`);
-
-    console.log(response);
     const fetchedProject = response.data;
     setProject(fetchedProject);
     setEmail(fetchedProject.responsiblePersonEmail);
@@ -60,7 +58,6 @@ const EditProjectDialog = (props: any) => {
 
     const response = await axios.put(`projects/${projectId}`, projectDto);
 
-    console.log(response);
     if (response.status !== 200) {
       toast.error("Failed to edit project!", {
         position: toast.POSITION.TOP_RIGHT,

@@ -19,8 +19,6 @@ const TaskAnswerViewModal = ({ taskId }: TaskAnswerViewModalProps) => {
   const [answer, setAnswer] = React.useState<TaskAnswer>();
 
   const handleClickOpen = () => {
-    console.log(answer);
-
     setOpen(true);
   };
 

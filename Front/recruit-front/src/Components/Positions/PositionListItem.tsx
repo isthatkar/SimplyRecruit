@@ -13,7 +13,6 @@ const PositionListItem = (props: any) => {
   const navigate = useNavigate();
 
   function openPositionPage() {
-    console.log(props.id);
     return navigate(`/positions/${props.id}`);
   }
 

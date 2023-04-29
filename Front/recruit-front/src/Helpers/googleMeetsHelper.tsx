@@ -3,7 +3,6 @@ import React from "react";
 import { CreateMeetingDto } from "../Types/types";
 
 const getEndTime = (startTime: Date, durationMinutes: number): Date => {
-  console.log(typeof startTime);
   const endDate = new Date(
     new Date(startTime).getTime() + durationMinutes * 60000
   );
@@ -16,14 +15,12 @@ const queryParams = new URLSearchParams({
 
 const getGoogleAccessToken = async () => {
   const response = await axios.get("/curentUser");
-  console.log(response.data);
   const user = response.data;
   return user.googleAccessToken;
 };
 
 export const createMeeting = async (meeting: CreateMeetingDto) => {
   const accessToken = await getGoogleAccessToken();
-  console.log(meeting);
   const event = {
     summary: meeting.title,
     location: "Remote",
@@ -52,9 +49,6 @@ export const createMeeting = async (meeting: CreateMeetingDto) => {
     guestsCanModify: false,
     guestsCanInviteOthers: false,
   };
-
-  console.log("event");
-  console.log(event);
 
   const response = await fetch(
     `https://www.googleapis.com/calendar/v3/calendars/primary/events?${queryParams}`,

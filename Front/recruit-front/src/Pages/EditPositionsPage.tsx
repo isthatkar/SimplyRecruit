@@ -93,7 +93,6 @@ const EditPositions = (props: any) => {
   const getPosition = useCallback(async () => {
     const response = await axios.get(`positions/${positionId}`);
     const position = response.data;
-    console.log(position);
     setPosition(position);
     setName(position.name);
     setDescription(position.description);

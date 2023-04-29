@@ -24,14 +24,12 @@ const Projects = () => {
 
   const getProjects = useCallback(async () => {
     const response = await axios.get(`projects/${projectid}`);
-    console.log(response);
     const project = response.data;
     setProject(project);
   }, []);
 
   const getPositions = useCallback(async () => {
     const response = await axios.get(`projects/${projectid}/positions`);
-    console.log(response.data);
     const positions = response.data;
     setProjectsPositions(positions);
   }, []);

@@ -11,6 +11,7 @@ import ApplicationMeetings from "../Components/Meetings/ApplicationMeetings";
 import ReviewsTab from "../Components/Reviews/ReviewsTab";
 import EmployeeTasksTab from "../Components/Tasks/EmployeeTasksTab";
 import ApplicationCard from "../Components/Applications/ApplicationCard";
+import Loader from "../Components/Loading/Loader";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,6 +40,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const ApplicationView = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { applicationId } = useParams();
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
@@ -46,9 +48,11 @@ const ApplicationView = () => {
   const [resume, setResume] = useState<Resume>();
 
   const getApplication = useCallback(async () => {
+    setIsLoading(true);
     const response = await axios.get(`applications/${applicationId}`);
     const applications = response.data;
     setApplication(applications);
+    setIsLoading(false);
   }, []);
 
   const getResume = useCallback(async () => {
@@ -102,28 +106,37 @@ const ApplicationView = () => {
           </Tabs>
         </Container>
       </Box>
-      {application ? (
-        <>
-          <TabPanel value={value} index={0}>
-            <ApplicationCard
-              application={application}
-              resume={resume}
-            ></ApplicationCard>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <ApplicationMeetings
-              candidateEmail={application?.contactEmail}
-            ></ApplicationMeetings>
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <ReviewsTab applicationId={application?.id}></ReviewsTab>
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            <EmployeeTasksTab applicationId={application.id}></EmployeeTasksTab>
-          </TabPanel>
-        </>
+
+      {isLoading ? (
+        <Loader></Loader>
       ) : (
-        ""
+        <>
+          {application ? (
+            <>
+              <TabPanel value={value} index={0}>
+                <ApplicationCard
+                  application={application}
+                  resume={resume}
+                ></ApplicationCard>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <ApplicationMeetings
+                  candidateEmail={application?.contactEmail}
+                ></ApplicationMeetings>
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                <ReviewsTab applicationId={application?.id}></ReviewsTab>
+              </TabPanel>
+              <TabPanel value={value} index={3}>
+                <EmployeeTasksTab
+                  applicationId={application.id}
+                ></EmployeeTasksTab>
+              </TabPanel>
+            </>
+          ) : (
+            "Something went wrong"
+          )}
+        </>
       )}
     </div>
   );

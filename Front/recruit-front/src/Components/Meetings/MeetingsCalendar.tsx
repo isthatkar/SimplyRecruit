@@ -50,7 +50,6 @@ const MeetingCalendar = ({ meetings }: CalendarProps) => {
     };
   };
   const handleExportClick = () => {
-    console.log("Export button clicked");
     downloadICal();
   };
 

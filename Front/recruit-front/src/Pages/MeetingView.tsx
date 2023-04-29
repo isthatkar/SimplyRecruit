@@ -56,7 +56,6 @@ const MeetingView = () => {
         const response = await axios.put(`/meetings/${meeting.id}`, {
           meetingUrl: data.htmlLink,
         });
-        console.log(response);
         setMeeting({ ...meeting, meetingUrl: data.htmlLink });
       }
     }
@@ -64,9 +63,7 @@ const MeetingView = () => {
 
   const getMeeting = useCallback(async () => {
     const response = await axios.get(`/meetings/${meetingId}`);
-    console.log(response);
     const fetchedMeeting = response.data;
-    console.log(fetchedMeeting);
     setMeeting(fetchedMeeting);
     if (fetchedMeeting.meetingType === MeetingType.Final) {
       setFinalTimeString(
@@ -86,9 +83,6 @@ const MeetingView = () => {
     const endDateTime = new Date(
       startDateTime.getTime() + duration * 60 * 1000
     );
-
-    console.log(startTime);
-    console.log(endDateTime);
 
     const formattedStartDateTimeString = startDateTime.toLocaleString("en-US", {
       month: "short",

@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
@@ -22,8 +21,10 @@ import {
 } from "../Styles/Theme";
 import { NordProduct, Project } from "../Types/types";
 import SearchBar from "../Components/SearchBar";
+import Loader from "../Components/Loading/Loader";
 
 const Projects = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [isEmployee, setIsEmployee] = useState(false);
@@ -39,6 +40,7 @@ const Projects = () => {
   const [currentPageItems, setCurrentPageItems] = useState<Project[]>([]);
 
   const getProjects = useCallback(async () => {
+    setIsLoading(true);
     const response = await axios.get("projects");
     const projects = response.data;
     setAllProjects(projects);
@@ -46,6 +48,7 @@ const Projects = () => {
     setNumPages(Math.ceil(filtered.length / itemsPerPage));
     setCurrentPageItems(filtered.slice(startIndex, endIndex));
     setFilteredProjects(filtered);
+    setIsLoading(false);
   }, []);
 
   const handleProductFilterChange = (
@@ -169,21 +172,25 @@ const Projects = () => {
           {isEmployee ? <AddProjectDialog></AddProjectDialog> : ""}
         </RowStackItemsBetween>
 
-        <ColumnStackStrech alignItems="strech">
-          <RowStackCenter>
-            <Pagination
-              count={numPages}
-              page={page}
-              onChange={handlePageChange}
-            />
-          </RowStackCenter>
+        {isLoading ? (
+          <Loader></Loader>
+        ) : (
+          <ColumnStackStrech alignItems="strech">
+            <RowStackCenter>
+              <Pagination
+                count={numPages}
+                page={page}
+                onChange={handlePageChange}
+              />
+            </RowStackCenter>
 
-          {currentPageItems.map((pr) => (
-            <div key={pr.id}>
-              <ProjectListItem project={pr} key={pr.id}></ProjectListItem>
-            </div>
-          ))}
-        </ColumnStackStrech>
+            {currentPageItems.map((pr) => (
+              <div key={pr.id}>
+                <ProjectListItem project={pr} key={pr.id}></ProjectListItem>
+              </div>
+            ))}
+          </ColumnStackStrech>
+        )}
       </Container>
     </div>
   );

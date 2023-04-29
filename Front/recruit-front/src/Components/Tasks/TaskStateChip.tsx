@@ -11,13 +11,10 @@ type Props = {
 
 export function hasDeadlinePassed(dateString: string): boolean {
   const date = new Date(dateString);
-  console.log("date comparison");
-  console.log(date.getTime() < Date.now());
   return date.getTime() < Date.now();
 }
 
 const TaskStateChip = ({ task }: Props) => {
-  console.log(task);
   if (hasDeadlinePassed(task.deadline) && task.answerSubmited === false) {
     return (
       <Chip

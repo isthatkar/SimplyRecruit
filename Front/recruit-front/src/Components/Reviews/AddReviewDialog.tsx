@@ -68,7 +68,6 @@ const AddReviewDialog = ({ applicationId, onAddObject }: AddReviewProps) => {
     setWorkRelatedRating(3);
     setCommunicationRating(3);
     setAttitudeRating(3);
-    console.log(response);
   };
 
   return (

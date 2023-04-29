@@ -63,7 +63,6 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    console.log(formData);
     setOpen(false);
     const meetingDto = {
       title: formData.title,
@@ -78,14 +77,11 @@ const EditMeetingDialog = ({ meeting }: EditMeetingDialogProps) => {
     };
 
     const response = await axios.put(`meetings/${meeting.id}`, meetingDto);
-
-    console.log(response);
     if (response.status !== 200) {
       toast.error("Failed to edit meeting!", {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
-    console.log(formData);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

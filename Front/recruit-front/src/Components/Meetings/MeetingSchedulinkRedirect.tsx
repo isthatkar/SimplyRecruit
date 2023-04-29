@@ -8,12 +8,9 @@ const MeetingSchedulingRedirect = () => {
   const { randomUrl } = useParams();
 
   async function getMeeting() {
-    console.log(randomUrl);
     const response = await axios.get(`/meetings/url/${randomUrl}`);
     if (response.status === 200) {
       const meet = await response.data;
-      console.log(meet);
-
       navigate(`/meetings/${meet.id}/schedule`);
     }
   }

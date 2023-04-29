@@ -20,7 +20,6 @@ const UserMeetings = () => {
 
   const getMeetings = useCallback(async () => {
     const response = await axios.get(`/meetings`);
-    console.log(response);
     const allMeetings = response.data;
     setMeetings(allMeetings);
     const now = new Date();

@@ -39,7 +39,6 @@ const ApplicationForm = (props: any) => {
         `applications/${applicationId}/resume`,
         formData
       );
-      console.log(response.data);
     } catch (error) {
       console.error(error);
       toast.error("Failed to add resume to application!", {

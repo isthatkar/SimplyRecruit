@@ -30,8 +30,6 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
   const [sendGoogleMeetsInvite, setSendGoogleMeetsInvite] = useState(true);
 
   function handleTimeClick(timeId: number) {
-    console.log(timeId);
-    console.log(meeting.meetingTimes);
     setSelectedTime(timeId);
   }
 
@@ -43,9 +41,6 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
     const finalTime = meeting.meetingTimes.find(
       (time) => time.id === selectedTime
     );
-
-    console.log("finalTime");
-    console.log(finalTime);
 
     let data = null;
 
@@ -72,7 +67,6 @@ const FinalTimeSelector = ({ meeting }: FinalTimeSelectorProps) => {
       meetingUrl: data === null ? "" : data.htmlLink,
       googleId: data === null ? "" : data.id,
     });
-    console.log(response);
     navigate(`/meetings/${meeting.id}`);
   }, [selectedTime]);
 

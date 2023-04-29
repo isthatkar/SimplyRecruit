@@ -145,8 +145,6 @@ const AddMeeting = () => {
           : new Date(Date.UTC(2023, 1, 1)),
     };
 
-    console.log("meeting data");
-    console.log(meetingDto);
     let data = undefined;
     if (formData.createGoogleMeet) {
       data = await createMeeting(meetingDto as CreateMeetingDto);
@@ -161,13 +159,11 @@ const AddMeeting = () => {
       meetingDto.meetingUrl = data.htmlLink;
     }
 
-    console.log(meetingDto);
     const response = await axios.post(
       `applications/${applicationId}/meetings`,
       meetingDto
     );
 
-    console.log(response);
     if (response.status === 201) {
       return navigate(`/application/${applicationId}?tab=1`);
     } else {
@@ -180,7 +176,6 @@ const AddMeeting = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     addMeeting();
-    console.log(formData);
   };
   return (
     <div>

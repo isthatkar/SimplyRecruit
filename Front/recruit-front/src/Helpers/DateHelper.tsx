@@ -40,17 +40,10 @@ export function findTimeConflictingMeetings(
   );
 
   for (const meeting of meetings) {
-    console.log("meetings conflict?");
-    console.log(meeting);
     const meetingStartTime = new Date(meeting.finalTime);
     const meetingEndTime = new Date(
       meetingStartTime.getTime() + meeting.duration * 60000
     );
-
-    console.log(meetingStartTime);
-    console.log(meetingEndTime);
-    console.log(meetingTimeEnd);
-    console.log(meetingTimeStart);
     if (
       meetingStartTime <= meetingTimeEnd &&
       meetingEndTime >= meetingTimeStart
@@ -63,7 +56,6 @@ export function findTimeConflictingMeetings(
 }
 
 export const getUTCDate = (ISOdateString: string): Date => {
-  console.log(ISOdateString);
   return new Date(
     Date.UTC(
       parseInt(ISOdateString.substr(0, 4)), // Year
