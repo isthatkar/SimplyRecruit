@@ -16,7 +16,7 @@ import axios from "axios";
 import Loader from "../Loading/Loader";
 
 const ApplicationMeetings = (props: any) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 6;
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [page, setPage] = useState(1);

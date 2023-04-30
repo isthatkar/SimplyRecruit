@@ -13,7 +13,7 @@ interface ReviewsTabProps {
 }
 const ReviewsTab = ({ applicationId }: ReviewsTabProps) => {
   const itemsPerPage = 10;
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [ratings, setRatings] = React.useState<Rating[]>([]);
   const [page, setPage] = useState(1);
   const [numPages, setNumPages] = useState(1);

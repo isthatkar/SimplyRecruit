@@ -9,6 +9,7 @@ import axios from "axios";
 import Loader from "../Components/Loading/Loader";
 
 const UserMeetings = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 4;
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [upcomingMeetings, setUpcommingMeetings] = useState<Meeting[]>([]);
@@ -19,6 +20,7 @@ const UserMeetings = () => {
   const [currentPageItems, setCurrentPageItems] = useState<Meeting[]>(meetings);
 
   const getMeetings = useCallback(async () => {
+    setIsLoading(true);
     const response = await axios.get(`/meetings`);
     const allMeetings = response.data;
     setMeetings(allMeetings);
@@ -30,6 +32,7 @@ const UserMeetings = () => {
     setUpcommingMeetings(upcommingMeetings);
     setNumPages(Math.ceil(upcommingMeetings.length / itemsPerPage));
     setCurrentPageItems(upcommingMeetings.slice(startIndex, endIndex));
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -51,66 +54,73 @@ const UserMeetings = () => {
 
   return (
     <div>
-      {meetings ? (
+      {isLoading ? (
+        <Loader></Loader>
+      ) : (
         <>
-          {meetings.length > 0 ? (
-            <div>
+          {meetings ? (
+            <>
+              {meetings.length > 0 ? (
+                <div>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      mt: 8,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ColumnStackCenter
+                      sx={{
+                        width: "80%",
+                        maxWidth: "900",
+                        "@media (max-width: 900px)": {
+                          width: "100%",
+                        },
+                      }}
+                      spacing={1}
+                    >
+                      <Typography align="center" variant="h2" sx={{ mb: 5 }}>
+                        Upcoming meetings
+                      </Typography>
+
+                      <Pagination
+                        count={numPages}
+                        page={page}
+                        onChange={handlePageChange}
+                      />
+                      {currentPageItems.map((meet) => (
+                        <MeetingListItem
+                          meet={meet}
+                          key={meet.id}
+                        ></MeetingListItem>
+                      ))}
+                    </ColumnStackCenter>
+                  </Box>
+                </div>
+              ) : (
+                <RowStackCenter spacing={1} sx={{ mt: 8 }}>
+                  <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
+                  <Typography align="center" variant="h5">
+                    NO UPCOMING MEETINGS
+                  </Typography>
+                </RowStackCenter>
+              )}
               <Box
                 sx={{
                   display: "flex",
-                  mt: 8,
                   justifyContent: "center",
-                  alignItems: "center",
+                  mb: 8,
+                  mt: 4,
                 }}
               >
-                <ColumnStackCenter
-                  sx={{
-                    width: "80%",
-                    maxWidth: "900",
-                    "@media (max-width: 900px)": {
-                      width: "100%",
-                    },
-                  }}
-                  spacing={1}
-                >
-                  <Typography align="center" variant="h2" sx={{ mb: 5 }}>
-                    Upcoming meetings
-                  </Typography>
-                  <Pagination
-                    count={numPages}
-                    page={page}
-                    onChange={handlePageChange}
-                  />
-                  {currentPageItems.map((meet) => (
-                    <MeetingListItem
-                      meet={meet}
-                      key={meet.id}
-                    ></MeetingListItem>
-                  ))}
-                </ColumnStackCenter>
+                <MeetingCalendar meetings={meetings}></MeetingCalendar>
               </Box>
-            </div>
+            </>
           ) : (
-            <RowStackCenter spacing={1} sx={{ mt: 8 }}>
-              <InfoOutlinedIcon fontSize="large"></InfoOutlinedIcon>
-              <Typography align="center" variant="h5">
-                NO UPCOMING MEETINGS
-              </Typography>
-            </RowStackCenter>
+            "Something went wrong"
           )}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              mb: 8,
-              mt: 4,
-            }}
-          >
-            <MeetingCalendar meetings={meetings}></MeetingCalendar>
-          </Box>
         </>
-      ) : (
-        <Loader></Loader>
       )}
     </div>
   );

@@ -12,7 +12,7 @@ interface TaskTabProps {
   applicationId: number;
 }
 const EmployeeTasksTab = ({ applicationId }: TaskTabProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const getTasks = useCallback(async () => {

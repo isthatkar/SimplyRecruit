@@ -28,6 +28,7 @@ import {
 } from "../Helpers/DateHelper";
 
 const MeetingSchedulingPage = () => {
+  const [isLoding, setIsLoading] = useState(false);
   const [meeting, setMeeting] = useState<Meeting>();
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
   const userEmail = localStorage.getItem("email");
@@ -72,6 +73,12 @@ const MeetingSchedulingPage = () => {
   }
 
   const getMeeting = useCallback(async () => {
+    let apiCallCompleted = false;
+    const apiTimeout = setTimeout(() => {
+      if (!apiCallCompleted) {
+        setIsLoading(true);
+      }
+    }, 200);
     const response = await axios.get(`/meetings/${meetingId}`);
     const responseMeeting = response.data as Meeting;
     if (
@@ -111,6 +118,8 @@ const MeetingSchedulingPage = () => {
       );
     });
     setMeeting(responseMeeting);
+    apiCallCompleted = true;
+    setIsLoading(false);
   }, []);
 
   function updateEmails(

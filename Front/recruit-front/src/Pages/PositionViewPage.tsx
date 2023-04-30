@@ -10,6 +10,7 @@ import ApplicationForm from "../Components/Applications/ApplicationForm";
 import { Position } from "../Types/types";
 
 const PositionView = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [position, setPosition] = useState<Position>();
   const [isEmployee, setIsEmployee] = useState(false);
   const [isCandidate, setIsCandidate] = useState(false);
@@ -20,6 +21,7 @@ const PositionView = () => {
   const [offers, setOffers] = useState<string[]>([]);
 
   const getPosition = useCallback(async () => {
+    setIsLoading(true);
     const response = await axios.get(`positions/${positionId}`);
     const position = response.data;
     setPosition(position);
@@ -36,6 +38,7 @@ const PositionView = () => {
     if (offersList) {
       setOffers(offersList);
     }
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {

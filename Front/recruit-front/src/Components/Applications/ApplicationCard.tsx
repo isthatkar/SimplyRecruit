@@ -81,6 +81,7 @@ const ApplicationCard = ({ resume, application }: CardProps) => {
         direction="column"
         justifyContent="center"
         alignItems="center"
+        sx={{ mb: 4, mt: 2, mx: 8, width: "92%" }}
       >
         <Typography variant="h5">Cover letter</Typography>
         <Typography>

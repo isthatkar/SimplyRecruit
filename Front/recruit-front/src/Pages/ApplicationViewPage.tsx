@@ -51,8 +51,8 @@ const ApplicationView = () => {
     setIsLoading(true);
     const response = await axios.get(`applications/${applicationId}`);
     const applications = response.data;
-    setApplication(applications);
     setIsLoading(false);
+    setApplication(applications);
   }, []);
 
   const getResume = useCallback(async () => {

@@ -24,7 +24,7 @@ import SearchBar from "../Components/SearchBar";
 import Loader from "../Components/Loading/Loader";
 
 const Projects = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [isEmployee, setIsEmployee] = useState(false);
