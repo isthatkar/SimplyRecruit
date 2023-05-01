@@ -11,7 +11,7 @@ const Loader = () => {
         height: "50vh",
       }}
     >
-      <CircularProgress color="secondary" />;
+      <CircularProgress color="secondary" />
     </Box>
   );
 };

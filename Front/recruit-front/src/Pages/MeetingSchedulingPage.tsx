@@ -107,7 +107,7 @@ const MeetingSchedulingPage = () => {
     const now = new Date();
 
     const upcommingMeetings = (allMeetings as Meeting[]).filter(
-      (s) => s.meetingType !== MeetingType.Final && new Date(s.finalTime) > now
+      (s) => s.meetingType === MeetingType.Final && new Date(s.finalTime) > now
     );
 
     responseMeeting.meetingTimes.forEach((time) => {
