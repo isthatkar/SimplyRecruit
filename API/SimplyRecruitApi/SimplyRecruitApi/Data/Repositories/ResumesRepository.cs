@@ -25,14 +25,10 @@ namespace SimplyRecruitAPI.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Resume?> GetApplicationResumeAsync(int applicationId)
-        {
-            return await _context.Resumes.FirstOrDefaultAsync(p => p.Application.Id == applicationId);
-        }
+        public async Task<Resume?> GetApplicationResumeAsync(int applicationId) =>
+            await _context.Resumes.FirstOrDefaultAsync(p => p.Application.Id == applicationId);
 
-        public async Task<Resume?> GetAsync(int resumeId)
-        {
-            return await _context.Resumes.FirstOrDefaultAsync(p => p.Id == resumeId);
-        }
+        public async Task<Resume?> GetAsync(int resumeId) =>
+            await _context.Resumes.FirstOrDefaultAsync(p => p.Id == resumeId);
     }
 }

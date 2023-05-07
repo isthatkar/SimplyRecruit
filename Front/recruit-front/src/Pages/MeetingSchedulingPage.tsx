@@ -26,9 +26,10 @@ import {
   GetFormatedDate,
   findTimeConflictingMeetings,
 } from "../Helpers/DateHelper";
+import Loader from "../Components/Loading/Loader";
 
 const MeetingSchedulingPage = () => {
-  const [isLoding, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [meeting, setMeeting] = useState<Meeting>();
   const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
   const userEmail = localStorage.getItem("email");
@@ -73,6 +74,7 @@ const MeetingSchedulingPage = () => {
   }
 
   const getMeeting = useCallback(async () => {
+    setIsLoading(true);
     let apiCallCompleted = false;
     const apiTimeout = setTimeout(() => {
       if (!apiCallCompleted) {
@@ -194,137 +196,145 @@ const MeetingSchedulingPage = () => {
         width: 1,
       }}
     >
-      <Container sx={{ width: "100%", my: 8 }}>
-        <Stack
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="stretch"
-          spacing={3}
-        >
-          <Typography variant="h3" align="center">
-            {meeting?.title}{" "}
-          </Typography>
+      {isLoading ? (
+        <Loader></Loader>
+      ) : (
+        <>
+          <Container sx={{ width: "100%", my: 8 }}>
+            <Stack
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="stretch"
+              spacing={3}
+            >
+              <Typography variant="h3" align="center">
+                {meeting?.title}{" "}
+              </Typography>
 
-          <Typography variant="body1" align="center">
-            The meeting will take {meeting?.duration} minutes
-          </Typography>
+              <Typography variant="body1" align="center">
+                The meeting will take {meeting?.duration} minutes
+              </Typography>
 
-          <RowStackItemsBetween sx={{ width: "100%" }}>
-            <Typography variant="h6">
-              {isSelectingFinalTime ? (
-                "Select the final meeting time:"
-              ) : (
-                <>
-                  {userHasSelectedTimes || isEditingTimes
-                    ? "You have already selected the available times for this meeting"
-                    : " Select the times when you are available:"}
-                </>
-              )}
-            </Typography>
-            {userHasSelectedTimes ? (
-              <Stack
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="center"
-                spacing={2}
-              >
-                {isSelectingFinalTime ? (
-                  ""
-                ) : (
-                  <Tooltip title="Edit selection">
-                    <IconButton
-                      sx={{ ml: 2 }}
-                      onClick={handleEditClick}
-                      disabled={isSelectingFinalTime}
-                    >
-                      <EditIcon color="secondary"></EditIcon>
-                    </IconButton>
-                  </Tooltip>
-                )}
-
-                {isUserMeeting ? (
-                  <Tooltip title={"Select final time"}>
-                    <IconButton
-                      onClick={handleSelectFinalTime}
-                      disabled={isEditingTimes}
-                    >
-                      <EventAvailableIcon color="secondary" />
-                    </IconButton>
-                  </Tooltip>
-                ) : (
-                  ""
-                )}
-              </Stack>
-            ) : (
-              ""
-            )}
-          </RowStackItemsBetween>
-
-          {meeting && !isSelectingFinalTime ? (
-            <div>
-              <List>
-                {meeting.meetingTimes.map((time: MeetingTime) => (
-                  <ListItem
-                    key={time.id}
-                    button
-                    disabled={userHasSelectedTimes && !isEditingTimes}
-                    selected={selectedTimes.includes(time.id)}
-                    onClick={() => handleTimeClick(time.id)}
+              <RowStackItemsBetween sx={{ width: "100%" }}>
+                <Typography variant="h6">
+                  {isSelectingFinalTime ? (
+                    "Select the final meeting time:"
+                  ) : (
+                    <>
+                      {userHasSelectedTimes || isEditingTimes
+                        ? "You have already selected the available times for this meeting"
+                        : " Select the times when you are available:"}
+                    </>
+                  )}
+                </Typography>
+                {userHasSelectedTimes ? (
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                    spacing={2}
                   >
-                    {time.conflictingMeetings.length > 0 ? (
-                      <Tooltip title="You have meetings in your calendar that are overlapping with this time">
-                        <PriorityHighIcon></PriorityHighIcon>
+                    {isSelectingFinalTime ? (
+                      ""
+                    ) : (
+                      <Tooltip title="Edit selection">
+                        <IconButton
+                          sx={{ ml: 2 }}
+                          onClick={handleEditClick}
+                          disabled={isSelectingFinalTime}
+                        >
+                          <EditIcon color="secondary"></EditIcon>
+                        </IconButton>
+                      </Tooltip>
+                    )}
+
+                    {isUserMeeting ? (
+                      <Tooltip title={"Select final time"}>
+                        <IconButton
+                          onClick={handleSelectFinalTime}
+                          disabled={isEditingTimes}
+                        >
+                          <EventAvailableIcon color="secondary" />
+                        </IconButton>
                       </Tooltip>
                     ) : (
                       ""
                     )}
-                    <ListItemText primary={GetFormatedDate(time.startTime)} />
+                  </Stack>
+                ) : (
+                  ""
+                )}
+              </RowStackItemsBetween>
 
-                    <Tooltip
-                      title={
-                        time.selectedAttendees.length === 0
-                          ? "No attendees selected"
-                          : time.selectedAttendees.split(";").join(", ")
-                      }
-                    >
-                      <div>
-                        {time.selectedAttendees.length === 0
-                          ? ""
-                          : time.selectedAttendees
-                              .split(";")
-                              .map((attendee, index) => (
-                                <React.Fragment key={attendee}>
-                                  <PersonIcon color="secondary" />
-                                </React.Fragment>
-                              ))}
-                      </div>
-                    </Tooltip>
-                  </ListItem>
-                ))}
-              </List>
-              <Button
-                variant="contained"
-                onClick={handleSaveClick}
-                sx={{ my: 3 }}
-                disabled={
-                  (userHasSelectedTimes && !isEditingTimes) ||
-                  selectedTimes.length <= 0
-                }
-              >
-                Save
-              </Button>
-            </div>
-          ) : (
-            <>
-              {meeting ? (
-                <FinalTimeSelector meeting={meeting}></FinalTimeSelector>
+              {meeting && !isSelectingFinalTime ? (
+                <div>
+                  <List>
+                    {meeting.meetingTimes.map((time: MeetingTime) => (
+                      <ListItem
+                        key={time.id}
+                        button
+                        disabled={userHasSelectedTimes && !isEditingTimes}
+                        selected={selectedTimes.includes(time.id)}
+                        onClick={() => handleTimeClick(time.id)}
+                      >
+                        {time.conflictingMeetings.length > 0 ? (
+                          <Tooltip title="You have meetings in your calendar that are overlapping with this time">
+                            <PriorityHighIcon></PriorityHighIcon>
+                          </Tooltip>
+                        ) : (
+                          ""
+                        )}
+                        <ListItemText
+                          primary={GetFormatedDate(time.startTime)}
+                        />
+
+                        <Tooltip
+                          title={
+                            time.selectedAttendees.length === 0
+                              ? "No attendees selected"
+                              : time.selectedAttendees.split(";").join(", ")
+                          }
+                        >
+                          <div>
+                            {time.selectedAttendees.length === 0
+                              ? ""
+                              : time.selectedAttendees
+                                  .split(";")
+                                  .map((attendee, index) => (
+                                    <React.Fragment key={attendee}>
+                                      <PersonIcon color="secondary" />
+                                    </React.Fragment>
+                                  ))}
+                          </div>
+                        </Tooltip>
+                      </ListItem>
+                    ))}
+                  </List>
+                  <Button
+                    variant="contained"
+                    onClick={handleSaveClick}
+                    sx={{ my: 3 }}
+                    disabled={
+                      (userHasSelectedTimes && !isEditingTimes) ||
+                      selectedTimes.length <= 0
+                    }
+                  >
+                    Save
+                  </Button>
+                </div>
               ) : (
-                ""
+                <>
+                  {meeting ? (
+                    <FinalTimeSelector meeting={meeting}></FinalTimeSelector>
+                  ) : (
+                    ""
+                  )}
+                </>
               )}
-            </>
-          )}
-        </Stack>
-      </Container>
+            </Stack>
+          </Container>
+        </>
+      )}
     </Box>
   );
 };

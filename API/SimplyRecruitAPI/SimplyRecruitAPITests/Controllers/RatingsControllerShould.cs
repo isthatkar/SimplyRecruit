@@ -18,12 +18,12 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task CreateRatingForApplication(
-         SimplyUser userToReturn,
-         Application application,
-         AddRatingDto dto,
-         IEnumerable<Rating> ratings, 
-         [Frozen] Mock<IRatingsRepository> ratingsRepository,
-         [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            SimplyUser userToReturn,
+            Application application,
+            AddRatingDto dto,
+            IEnumerable<Rating> ratings, 
+            [Frozen] Mock<IRatingsRepository> ratingsRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -51,11 +51,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindApplicationToAddRatingTo(
-        SimplyUser userToReturn,
-        AddRatingDto dto,
-        IEnumerable<Rating> ratings,
-        [Frozen] Mock<IRatingsRepository> ratingsRepository,
-        [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            SimplyUser userToReturn,
+            AddRatingDto dto,
+            IEnumerable<Rating> ratings,
+            [Frozen] Mock<IRatingsRepository> ratingsRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -70,7 +70,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
-            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
             ratingsRepository.Setup(x => x.GetApplicationRatings(It.IsAny<int>())).ReturnsAsync(ratings.ToList());
 
             var result = await sut.Create(6, dto);
@@ -130,7 +130,7 @@ namespace SimplyRecruitAPITests.Controllers
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
             applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(application);
-            ratingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Rating)null);
+            ratingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Rating)null!);
 
             var result = await sut.Update(6, 6, dto);
 
@@ -160,7 +160,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
-            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
             ratingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(rating);
 
             var result = await sut.Update(6, 6, dto);
@@ -172,13 +172,13 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnOkResultIfRatingUpdatesSuccessfully(
-           SimplyUser userToReturn,
-           IEnumerable<Rating> items,
-           Rating rating,
-           Application application,
-           UpdateRatingDto dto,
-           [Frozen] Mock<IRatingsRepository> ratingsRepository,
-           [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            SimplyUser userToReturn,
+            IEnumerable<Rating> items,
+            Rating rating,
+            Application application,
+            UpdateRatingDto dto,
+            [Frozen] Mock<IRatingsRepository> ratingsRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -226,7 +226,7 @@ namespace SimplyRecruitAPITests.Controllers
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
             applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(application);
-            ratingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Rating)null);
+            ratingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Rating)null!);
 
             var result = await sut.Remove(6, 6);
 
@@ -236,10 +236,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindApplicationRatingToDelete(
-           SimplyUser userToReturn,
-           Rating rating,
-           [Frozen] Mock<IRatingsRepository> ratingsRepository,
-           [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            SimplyUser userToReturn,
+            Rating rating,
+            [Frozen] Mock<IRatingsRepository> ratingsRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -254,7 +254,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
-            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
             ratingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(rating);
 
             var result = await sut.Remove(6, 6);
@@ -265,12 +265,12 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNoContentIfRatingDeletdSuccessfuly(
-           SimplyUser userToReturn,
-           IEnumerable<Rating> items,
-           Rating rating,
-           Application application,
-           [Frozen] Mock<IRatingsRepository> ratingsRepository,
-           [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            SimplyUser userToReturn,
+            IEnumerable<Rating> items,
+            Rating rating,
+            Application application,
+            [Frozen] Mock<IRatingsRepository> ratingsRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 

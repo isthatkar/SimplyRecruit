@@ -131,6 +131,7 @@ namespace SimplyRecruitAPI.Controllers
                 taskAnswer.Url,
                 taskId
                );
+
             return Ok(tasksDto);
         }
     }

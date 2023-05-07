@@ -72,6 +72,7 @@ export default function LoginButton() {
           "Authorization"
         ] = `Bearer ${token.accessToken}`;
 
+        setIsLoading(false);
         return await navigateToPage(from);
       } else {
         setFailed(true);
@@ -79,11 +80,18 @@ export default function LoginButton() {
     } else {
       setFailed(true);
     }
+    setIsLoading(false);
   };
 
   const login = useGoogleLogin({
     onSuccess: async (response: any) => {
       onSuccess(response);
+    },
+    onError: () => {
+      setIsLoading(false);
+    },
+    onNonOAuthError: () => {
+      setIsLoading(false);
     },
     scope: "https://www.googleapis.com/auth/calendar",
     flow: "auth-code",
@@ -92,7 +100,6 @@ export default function LoginButton() {
   const handleSignIn = async () => {
     setIsLoading(true);
     const googleAuthResponse = await login();
-    setIsLoading(false);
   };
 
   async function navigateToPage(to: string) {

@@ -39,8 +39,8 @@ namespace SimplyRecruitAPITests.Controllers
             var result = await sut.GetPositionsApplications(position.Id);
 
             var okObjectResult = result.Result as OkObjectResult;
-            var appDto = okObjectResult.Value as IEnumerable<SimplyRecruitAPI.Data.Dtos.Applications.ApplicationsDtos.PositionApplicationDto>;
-            Assert.Equal(returnItems.Count, appDto.Count());
+            var appDto = okObjectResult!.Value as IEnumerable<PositionApplicationDto>;
+            Assert.Equal(returnItems.Count, appDto!.Count());
         }
 
         [Theory]
@@ -60,7 +60,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null);
+            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null!);
 
             var result = await sut.GetPositionsApplications(56);
 
@@ -86,7 +86,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null);
+            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null!);
 
             var result = await sut.Create(56, createDto);
 

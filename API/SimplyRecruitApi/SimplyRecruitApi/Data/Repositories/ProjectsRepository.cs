@@ -25,15 +25,11 @@ namespace SimplyRecruitAPI.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Project?> GetAsync(int projectId)
-        {
-            return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
-        }
+        public async Task<Project?> GetAsync(int projectId) =>
+            await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
 
-        public async Task<IReadOnlyList<Project>> GetManyAsync()
-        {
-            return await _context.Projects.ToListAsync();
-        }
+        public async Task<IReadOnlyList<Project>> GetManyAsync() =>
+            await _context.Projects.ToListAsync();
 
         public async Task UpdateAsync(Project project)
         {

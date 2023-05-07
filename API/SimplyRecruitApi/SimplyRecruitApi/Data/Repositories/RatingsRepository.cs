@@ -25,15 +25,11 @@ namespace SimplyRecruitAPI.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<Rating>> GetApplicationRatings(int applicationId)
-        {
-            return await _context.Ratings.Where(a => a.Application.Id == applicationId).ToListAsync();
-        }
+        public async Task<IReadOnlyList<Rating>> GetApplicationRatings(int applicationId) =>
+            await _context.Ratings.Where(a => a.Application.Id == applicationId).ToListAsync();
 
-        public async Task<Rating?> GetAsync(int ratingId)
-        {
-            return await _context.Ratings.FirstOrDefaultAsync(p => p.Id == ratingId);
-        }
+        public async Task<Rating?> GetAsync(int ratingId) =>
+            await _context.Ratings.FirstOrDefaultAsync(p => p.Id == ratingId);
 
         public async Task UpdateAsync(Rating rating)
         {

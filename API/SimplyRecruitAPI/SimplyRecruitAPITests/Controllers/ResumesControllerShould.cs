@@ -29,7 +29,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
 
             var result = await sut.Get(6);
 
@@ -41,8 +41,8 @@ namespace SimplyRecruitAPITests.Controllers
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindResume(
             Application application,
-           [Frozen] Mock<IResumesRepository> resumesRepository,
-           [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            [Frozen] Mock<IResumesRepository> resumesRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -55,7 +55,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(application);
-            resumesRepository.Setup(x => x.GetApplicationResumeAsync(It.IsAny<int>())).ReturnsAsync((Resume)null);
+            resumesRepository.Setup(x => x.GetApplicationResumeAsync(It.IsAny<int>())).ReturnsAsync((Resume)null!);
 
 
             var result = await sut.Get(6);
@@ -67,10 +67,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnResume(
-           Application application,
-           Resume resume,
-          [Frozen] Mock<IResumesRepository> resumesRepository,
-          [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Application application,
+            Resume resume,
+            [Frozen] Mock<IResumesRepository> resumesRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -95,9 +95,9 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindResumeOnDownload(
-           Application application,
-          [Frozen] Mock<IResumesRepository> resumesRepository,
-          [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Application application,
+            [Frozen] Mock<IResumesRepository> resumesRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -110,7 +110,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(application);
-            resumesRepository.Setup(x => x.GetApplicationResumeAsync(It.IsAny<int>())).ReturnsAsync((Resume)null);
+            resumesRepository.Setup(x => x.GetApplicationResumeAsync(It.IsAny<int>())).ReturnsAsync((Resume)null!);
 
 
             var result = await sut.DownloadResume(6);
@@ -121,10 +121,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task DownloadResumeFile(
-           Application application,
-           Resume resume,
-          [Frozen] Mock<IResumesRepository> resumesRepository,
-          [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Application application,
+            Resume resume,
+            [Frozen] Mock<IResumesRepository> resumesRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -149,10 +149,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindApplicationOnAddResume(
-          Mock<IFormFile> file,
-          CreateResumeDto dto,
-         [Frozen] Mock<IResumesRepository> resumesRepository,
-         [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Mock<IFormFile> file,
+            CreateResumeDto dto,
+            [Frozen] Mock<IResumesRepository> resumesRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -164,7 +164,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
 
             var result = await sut.Create(6, file.Object, dto);
 
@@ -175,12 +175,12 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnUnauthorizedIfUserThatsTryingToAddResumeDidNotCreateApplication(
-          Mock<IFormFile> file,
-          Application application,
-          Resume resume,
-          CreateResumeDto dto,
-         [Frozen] Mock<IResumesRepository> resumesRepository,
-         [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Mock<IFormFile> file,
+            Application application,
+            Resume resume,
+            CreateResumeDto dto,
+            [Frozen] Mock<IResumesRepository> resumesRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -204,12 +204,12 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnBadRequestIfApplicationAlreadyHasAResume(
-          Mock<IFormFile> file,
-          Application application,
-          Resume resume,
-          CreateResumeDto dto,
-         [Frozen] Mock<IResumesRepository> resumesRepository,
-         [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Mock<IFormFile> file,
+            Application application,
+            Resume resume,
+            CreateResumeDto dto,
+            [Frozen] Mock<IResumesRepository> resumesRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userId = application.UserId;
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -234,11 +234,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnCreatedResultIfResumeAddedSuccessfully(
-          Mock<IFormFile> file,
-          Application application,
-          CreateResumeDto dto,
-         [Frozen] Mock<IResumesRepository> resumesRepository,
-         [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Mock<IFormFile> file,
+            Application application,
+            CreateResumeDto dto,
+            [Frozen] Mock<IResumesRepository> resumesRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userId = application.UserId;
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -251,7 +251,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             applicationsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(application);
-            resumesRepository.Setup(x => x.GetApplicationResumeAsync(It.IsAny<int>())).ReturnsAsync((Resume)null);
+            resumesRepository.Setup(x => x.GetApplicationResumeAsync(It.IsAny<int>())).ReturnsAsync((Resume)null!);
 
             var result = await sut.Create(6, file.Object, dto);
 

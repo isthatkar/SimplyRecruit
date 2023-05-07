@@ -25,25 +25,19 @@ namespace SimplyRecruitAPI.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<Application>> GetAllPositionsApplicationsAsync(int positionId)
-        {
-            return await _context.Applications.Where(a => a.Position.Id == positionId).ToListAsync();
-        }
+        public async Task<IReadOnlyList<Application>> GetAllPositionsApplicationsAsync(int positionId) => 
+            await _context.Applications.Where(a => a.Position.Id == positionId).ToListAsync();
 
-        public async Task<IReadOnlyList<Application>> GetAllUsersApplicationsAsync(string userId)
-        {
-            return await _context.Applications.Where(a => a.UserId == userId).ToListAsync();
-        }
+        public async Task<IReadOnlyList<Application>> GetAllUsersApplicationsAsync(string userId) => 
+            await _context.Applications.Where(a => a.UserId == userId).ToListAsync();
 
-        public async Task<Application?> GetAsync(int applicationId)
-        {
-            return await _context.Applications.FirstOrDefaultAsync(p => p.Id == applicationId);
-        }
+        public async Task<Application?> GetAsync(int applicationId) =>
+            await _context.Applications.FirstOrDefaultAsync(p => p.Id == applicationId);
+ 
 
-        public async Task<IReadOnlyList<Application>> GetManyAsync()
-        {
-            return await _context.Applications.ToListAsync();
-        }
+        public async Task<IReadOnlyList<Application>> GetManyAsync() =>
+            await _context.Applications.ToListAsync();
+        
 
         public async Task UpdateAsync(Application application)
         {

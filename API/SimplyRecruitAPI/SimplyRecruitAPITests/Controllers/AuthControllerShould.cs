@@ -10,7 +10,6 @@ using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using static SimplyRecruitAPI.Auth.AuthDtos;
-using Microsoft.AspNetCore.DataProtection;
 
 namespace SimplyRecruitAPITests.Controllers
 {
@@ -24,13 +23,11 @@ namespace SimplyRecruitAPITests.Controllers
             [Frozen] Mock<IConfiguration> configuration)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
-
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId),
             }));
-
             var sut = new AuthController(userManager.Object, jwtTokenService.Object, configuration.Object);
             sut.ControllerContext = new ControllerContext()
             {
@@ -49,8 +46,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCurrentUserNull(
-          [Frozen] Mock<IJwtTokenService> jwtTokenService,
-          [Frozen] Mock<IConfiguration> configuration)
+            [Frozen] Mock<IJwtTokenService> jwtTokenService,
+            [Frozen] Mock<IConfiguration> configuration)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -65,7 +62,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((SimplyUser)null);
+            userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((SimplyUser)null!);
 
             var result = await sut.CurrentUser();
 
@@ -75,8 +72,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfTriedToLogoutAndCouldNotFindUser(
-         [Frozen] Mock<IJwtTokenService> jwtTokenService,
-         [Frozen] Mock<IConfiguration> configuration)
+            [Frozen] Mock<IJwtTokenService> jwtTokenService,
+            [Frozen] Mock<IConfiguration> configuration)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -91,7 +88,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((SimplyUser)null);
+            userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((SimplyUser)null!);
 
             var result = await sut.Revoke("randomId");
 
@@ -102,8 +99,8 @@ namespace SimplyRecruitAPITests.Controllers
         [AutoData]
         public async Task LogoutUser(
         SimplyUser userToReturn,
-        [Frozen] Mock<IJwtTokenService> jwtTokenService,
-        [Frozen] Mock<IConfiguration> configuration)
+            [Frozen] Mock<IJwtTokenService> jwtTokenService,
+            [Frozen] Mock<IConfiguration> configuration)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -129,8 +126,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnBadRequestWhenTryingToRefreshTokenWithNullTokenModel(
-       [Frozen] Mock<IJwtTokenService> jwtTokenService,
-       [Frozen] Mock<IConfiguration> configuration)
+            [Frozen] Mock<IJwtTokenService> jwtTokenService,
+            [Frozen] Mock<IConfiguration> configuration)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -146,7 +143,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            var result = await sut.RefreshToken(null);
+            var result = await sut.RefreshToken(null!);
 
             Assert.IsType<BadRequestObjectResult>(result);
         }

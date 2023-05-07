@@ -37,7 +37,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
-            meetingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Meeting)null);
+            meetingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Meeting)null!);
 
             var result = await sut.Select(dto);
 
@@ -67,7 +67,7 @@ namespace SimplyRecruitAPITests.Controllers
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
             meetingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(meeting);
-            meetingTimesRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((MeetingTimes)null);
+            meetingTimesRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((MeetingTimes)null!);
 
 
             var result = await sut.Select(dto);
@@ -103,7 +103,7 @@ namespace SimplyRecruitAPITests.Controllers
 
             var result = await sut.Select(dto);
 
-            meetingTimesRepository.Verify(x => x.UpdateAsync(It.Is<MeetingTimes>(t => t.SelectedAttendees.Contains(userToReturn.Email))), Times.Exactly(dto.Ids.Length));
+            meetingTimesRepository.Verify(x => x.UpdateAsync(It.Is<MeetingTimes>(t => t.SelectedAttendees!.Contains(userToReturn.Email))), Times.Exactly(dto.Ids.Length));
             Assert.IsType<OkResult>(result);
         }
     }

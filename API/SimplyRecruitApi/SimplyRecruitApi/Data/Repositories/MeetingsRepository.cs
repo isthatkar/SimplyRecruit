@@ -25,25 +25,17 @@ namespace SimplyRecruitAPI.Data.Repositories
             await _contex.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<Meeting>> GetApplicationsManyAsync(int applicationId)
-        {
-            return await _contex.Meetings.Where(m => m.Application.Id == applicationId).ToListAsync();
-        }
+        public async Task<IReadOnlyList<Meeting>> GetApplicationsManyAsync(int applicationId) =>
+            await _contex.Meetings.Where(m => m.Application.Id == applicationId).ToListAsync();
 
-        public async Task<Meeting?> GetAsync(int meetingId)
-        {
-            return await _contex.Meetings.FirstOrDefaultAsync(m => m.Id == meetingId);
-        }
+        public async Task<Meeting?> GetAsync(int meetingId) =>
+            await _contex.Meetings.FirstOrDefaultAsync(m => m.Id == meetingId);
 
-        public async Task<Meeting?> GetByUrlAsync(string schedulingUrl)
-        {
-            return await _contex.Meetings.FirstOrDefaultAsync(m => m.SchedullingUrl == schedulingUrl);
-        }
+        public async Task<Meeting?> GetByUrlAsync(string schedulingUrl) =>
+            await _contex.Meetings.FirstOrDefaultAsync(m => m.SchedullingUrl == schedulingUrl);
 
-        public async Task<IReadOnlyList<Meeting>> GetUsersManyAsync(string email)
-        {
-            return await _contex.Meetings.Where(m => m.Atendees.Contains(email)).ToListAsync();
-        }
+        public async Task<IReadOnlyList<Meeting>> GetUsersManyAsync(string email) =>
+            await _contex.Meetings.Where(m => m.Atendees.Contains(email)).ToListAsync();
 
         public async Task UpdateAsync(Meeting meeting)
         {

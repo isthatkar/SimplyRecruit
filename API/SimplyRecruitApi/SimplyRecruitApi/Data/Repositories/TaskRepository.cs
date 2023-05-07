@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimplyRecruitAPI.Data.Entities;
 using SimplyRecruitAPI.Data.Repositories.Interfaces;
-using System;
 
 namespace SimplyRecruitAPI.Data.Repositories
 {
@@ -25,15 +24,11 @@ namespace SimplyRecruitAPI.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<ApplicationTask>> GetApplicationsManyAsync(int applicationId)
-        {
-            return await _context.Tasks.Where(p => p.Application.Id == applicationId).ToListAsync();
-        }
+        public async Task<IReadOnlyList<ApplicationTask>> GetApplicationsManyAsync(int applicationId) =>
+            await _context.Tasks.Where(p => p.Application.Id == applicationId).ToListAsync();
 
-        public async Task<ApplicationTask?> GetAsync(int taskId)
-        {
-            return await _context.Tasks.FirstOrDefaultAsync(p => p.Id == taskId);
-        }
+        public async Task<ApplicationTask?> GetAsync(int taskId) =>
+            await _context.Tasks.FirstOrDefaultAsync(p => p.Id == taskId);
 
         public async Task UpdateAsync(ApplicationTask task)
         {

@@ -16,10 +16,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task Return404IfCouldNotFindApplicationToGetMeetingsOf(
-        Application application,
-        [Frozen] Mock<IApplicationsRepository> applicationRepository,
-        [Frozen] Mock<IMeetingsRepository> meetingsRepository,
-        [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
+            Application application,
+            [Frozen] Mock<IApplicationsRepository> applicationRepository,
+            [Frozen] Mock<IMeetingsRepository> meetingsRepository,
+            [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -32,7 +32,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            applicationRepository.Setup(r => r.GetAsync(application.Id)).ReturnsAsync((Application)null);
+            applicationRepository.Setup(r => r.GetAsync(application.Id)).ReturnsAsync((Application)null!);
 
             var result = await sut.GetApplicationMeetings(application.Id);
 
@@ -43,11 +43,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnAllApplicationsMeetings(
-         IEnumerable<Meeting> items,
-         Application application,
-         [Frozen] Mock<IApplicationsRepository> applicationRepository,
-         [Frozen] Mock<IMeetingsRepository> meetingsRepository,
-         [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
+             IEnumerable<Meeting> items,
+             Application application,
+             [Frozen] Mock<IApplicationsRepository> applicationRepository,
+             [Frozen] Mock<IMeetingsRepository> meetingsRepository,
+             [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -67,18 +67,18 @@ namespace SimplyRecruitAPITests.Controllers
             var result = await sut.GetApplicationMeetings(application.Id);
 
             var okObjectResult = result.Result as OkObjectResult;
-            var meetingsDto = okObjectResult.Value as IEnumerable<MeetingDto>;
-            Assert.Equal(returnItems.Count, meetingsDto.Count());
+            var meetingsDto = okObjectResult!.Value as IEnumerable<MeetingDto>;
+            Assert.Equal(returnItems.Count, meetingsDto!.Count());
         }
 
         [Theory]
         [AutoData]
         public async Task Return404IfCouldNotFindApplicationToCreateMeetingTo(
-        Application application,
-        CreateMeetingDto createMeetingDto,
-        [Frozen] Mock<IApplicationsRepository> applicationRepository,
-        [Frozen] Mock<IMeetingsRepository> meetingsRepository,
-        [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
+            Application application,
+            CreateMeetingDto createMeetingDto,
+            [Frozen] Mock<IApplicationsRepository> applicationRepository,
+            [Frozen] Mock<IMeetingsRepository> meetingsRepository,
+            [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -92,7 +92,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            applicationRepository.Setup(r => r.GetAsync(application.Id)).ReturnsAsync((Application)null);
+            applicationRepository.Setup(r => r.GetAsync(application.Id)).ReturnsAsync((Application)null!);
 
             var result = await sut.Create(application.Id, createMeetingDto);
 
@@ -104,11 +104,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task CreateMeetingAndReturnSuccessIfMeetingCreatedSuccessfuly(
-        Application application,
-        CreateMeetingDto createMeetingDto,
-        [Frozen] Mock<IApplicationsRepository> applicationRepository,
-        [Frozen] Mock<IMeetingsRepository> meetingsRepository,
-        [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
+            Application application,
+            CreateMeetingDto createMeetingDto,
+            [Frozen] Mock<IApplicationsRepository> applicationRepository,
+            [Frozen] Mock<IMeetingsRepository> meetingsRepository,
+            [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -133,11 +133,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task AddEachMeetingTimeToMeetingTimes(
-       Application application,
-       CreateMeetingDto createMeetingDto,
-       [Frozen] Mock<IApplicationsRepository> applicationRepository,
-       [Frozen] Mock<IMeetingsRepository> meetingsRepository,
-       [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
+            Application application,
+            CreateMeetingDto createMeetingDto,
+            [Frozen] Mock<IApplicationsRepository> applicationRepository,
+            [Frozen] Mock<IMeetingsRepository> meetingsRepository,
+            [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -154,7 +154,7 @@ namespace SimplyRecruitAPITests.Controllers
 
             var result = await sut.Create(application.Id, createMeetingDto);
 
-            meetingTimesRepository.Verify(x => x.CreateAsync(It.IsAny<MeetingTimes>()), Times.Exactly(createMeetingDto.MeetingTimes.Length));
+            meetingTimesRepository.Verify(x => x.CreateAsync(It.IsAny<MeetingTimes>()), Times.Exactly(createMeetingDto.MeetingTimes!.Length));
         }
     }
 }

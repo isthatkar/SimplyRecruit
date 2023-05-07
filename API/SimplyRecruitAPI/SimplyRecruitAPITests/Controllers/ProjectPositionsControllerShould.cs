@@ -16,10 +16,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnProjectPositions(
-              Project project,
-              IEnumerable<Position> positions,
-              [Frozen] Mock<IProjectsRepository> projectsRepository,
-              [Frozen] Mock<IPositionsRepository> positionsRepository)
+            Project project,
+            IEnumerable<Position> positions,
+            [Frozen] Mock<IProjectsRepository> projectsRepository,
+            [Frozen] Mock<IPositionsRepository> positionsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -39,16 +39,16 @@ namespace SimplyRecruitAPITests.Controllers
             var result = await sut.GetProjectsPositions(project.Id);
 
             var okObjectResult = result.Result as OkObjectResult;
-            var appDto = okObjectResult.Value as IEnumerable<ProjectPositionDto>;
-            Assert.Equal(returnItems.Count, appDto.Count());
+            var appDto = okObjectResult!.Value as IEnumerable<ProjectPositionDto>;
+            Assert.Equal(returnItems.Count, appDto!.Count());
         }
 
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindProjectOfWhichPositionsToReturn(
-             Project project,
-             [Frozen] Mock<IProjectsRepository> projectsRepository,
-             [Frozen] Mock<IPositionsRepository> positionsRepository)
+            Project project,
+            [Frozen] Mock<IProjectsRepository> projectsRepository,
+            [Frozen] Mock<IPositionsRepository> positionsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -61,7 +61,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null);
+            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null!);
 
             var result = await sut.GetProjectsPositions(project.Id);
 
@@ -72,10 +72,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindProjectToCreatePositionIn(
-             Project project,
-             CreatePositionDto positionDto,
-             [Frozen] Mock<IProjectsRepository> projectsRepository,
-             [Frozen] Mock<IPositionsRepository> positionsRepository)
+            Project project,
+            CreatePositionDto positionDto,
+            [Frozen] Mock<IProjectsRepository> projectsRepository,
+            [Frozen] Mock<IPositionsRepository> positionsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -88,7 +88,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null);
+            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null!);
 
             var result = await sut.Create(project.Id, positionDto);
 

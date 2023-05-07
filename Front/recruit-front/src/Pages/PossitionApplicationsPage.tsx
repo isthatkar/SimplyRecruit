@@ -172,6 +172,7 @@ export default function EnhancedTable() {
                                       key={app.id.toString()}
                                       draggableId={app.id.toString()}
                                       index={index}
+                                      isDragDisabled={stageIndex > 6}
                                     >
                                       {(provided: any, snapshot: any) => (
                                         <Paper

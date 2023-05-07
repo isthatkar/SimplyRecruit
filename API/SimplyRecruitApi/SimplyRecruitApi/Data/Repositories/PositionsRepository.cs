@@ -25,10 +25,8 @@ namespace SimplyRecruitAPI.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<Position>> GetProjectsManyAsync(int projectId)
-        {
-            return await _context.Positions.Where(p => p.Project.Id == projectId).ToListAsync();
-        }
+        public async Task<IReadOnlyList<Position>> GetProjectsManyAsync(int projectId) =>
+            await _context.Positions.Where(p => p.Project.Id == projectId).ToListAsync();
 
         public async Task UpdateAsync(Position position)
         {
@@ -36,14 +34,10 @@ namespace SimplyRecruitAPI.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Position?> GetAsync(int positionId)
-        {
-            return await _context.Positions.FirstOrDefaultAsync(p => p.Id == positionId);
-        }
+        public async Task<Position?> GetAsync(int positionId) =>
+            await _context.Positions.FirstOrDefaultAsync(p => p.Id == positionId);
 
-        public async Task<IReadOnlyList<Position>> GetManyAsync()
-        {
-            return await _context.Positions.ToListAsync();
-        }
+        public async Task<IReadOnlyList<Position>> GetManyAsync() =>
+            await _context.Positions.ToListAsync();
     }
 }

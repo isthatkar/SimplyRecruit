@@ -17,8 +17,7 @@ namespace SimplyRecruitAPITests.Controllers
         [AutoData]
         public async Task ReturnAllApplications(
             IEnumerable<Application> items,
-            [Frozen] Mock<IApplicationsRepository> applicationRepository
-            )
+            [Frozen] Mock<IApplicationsRepository> applicationRepository)
         {
             var sut = new ApplicationsController(applicationRepository.Object);
             var returnItems = items.ToList();
@@ -89,7 +88,7 @@ namespace SimplyRecruitAPITests.Controllers
         public async Task ReturnOkayResultIfUpdateSuccessfull(
             Application application,
             UpdateApplicationDto updateApplicationDto,
-           [Frozen] Mock<IApplicationsRepository> applicationRepository)
+            [Frozen] Mock<IApplicationsRepository> applicationRepository)
         {
             var sut = new ApplicationsController(applicationRepository.Object);
             applicationRepository.Setup(r => r.GetAsync(application.Id)).ReturnsAsync(application);
@@ -104,9 +103,9 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task Return404IfCouldNotFindApplicationToUpdate(
-          Application application,
-          UpdateApplicationDto updateApplicationDto,
-         [Frozen] Mock<IApplicationsRepository> applicationRepository)
+            Application application,
+            UpdateApplicationDto updateApplicationDto,
+            [Frozen] Mock<IApplicationsRepository> applicationRepository)
         {
             var sut = new ApplicationsController(applicationRepository.Object);
             applicationRepository.Setup(r => r.GetAsync(application.Id)).ReturnsAsync((Application)null);
@@ -121,8 +120,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindApplicationToRemove(
-        Application application,
-        [Frozen] Mock<IApplicationsRepository> applicationRepository)
+            Application application,
+            [Frozen] Mock<IApplicationsRepository> applicationRepository)
         {
             var sut = new ApplicationsController(applicationRepository.Object);
             applicationRepository.Setup(r => r.GetAsync(application.Id)).ReturnsAsync((Application)null);
@@ -137,8 +136,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNoContentWhenDeletedApplication(
-       Application application,
-       [Frozen] Mock<IApplicationsRepository> applicationRepository)
+            Application application,
+            [Frozen] Mock<IApplicationsRepository> applicationRepository)
         {
             var sut = new ApplicationsController(applicationRepository.Object);
             applicationRepository.Setup(r => r.GetAsync(application.Id)).ReturnsAsync(application);

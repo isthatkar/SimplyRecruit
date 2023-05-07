@@ -16,8 +16,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnAllPositions(
-          IEnumerable<Position> positions,
-          [Frozen] Mock<IPositionsRepository> positionsRepository)
+            IEnumerable<Position> positions,
+            [Frozen] Mock<IPositionsRepository> positionsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -40,8 +40,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnPositionById(
-          Position position,
-          [Frozen] Mock<IPositionsRepository> positionsRepository)
+            Position position,
+            [Frozen] Mock<IPositionsRepository> positionsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -65,7 +65,7 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfPositionWasNotFound(
-          [Frozen] Mock<IPositionsRepository> positionsRepository)
+            [Frozen] Mock<IPositionsRepository> positionsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -78,7 +78,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null);
+            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null!);
 
             var result = await sut.Get(6);
 
@@ -103,7 +103,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null);
+            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null!);
 
             var result = await sut.Update(6, updatePositionDto);
 
@@ -114,9 +114,9 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnOkayResultWhenPositionEditedSuccessfully(
-           UpdatePositionDto updatePositionDto,
-           Position position,
-           [Frozen] Mock<IPositionsRepository> positionsRepository)
+            UpdatePositionDto updatePositionDto,
+            Position position,
+            [Frozen] Mock<IPositionsRepository> positionsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -154,7 +154,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null);
+            positionsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Position)null!);
 
             var result = await sut.Remove(6);
 
@@ -165,8 +165,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNoContentIfPositionDeletedSuccessfully(
-           Position position,
-           [Frozen] Mock<IPositionsRepository> positionsRepository)
+            Position position,
+            [Frozen] Mock<IPositionsRepository> positionsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]

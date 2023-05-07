@@ -16,11 +16,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnCreatedResultWhenTaskAnswerCreatedSuccessfully(
-           [Frozen] Mock<ITaskRepository> taskRepository,
-           [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
-           Mock<IFormFile> formFile,
-           ApplicationTask task,
-           CreateTaskAnswerDto dto)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
+            Mock<IFormFile> formFile,
+            ApplicationTask task,
+            CreateTaskAnswerDto dto)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -34,7 +34,7 @@ namespace SimplyRecruitAPITests.Controllers
             };
             task.Deadline = DateTime.MaxValue;
             taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(task);
-            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
+            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null!);
 
             var result = await sut.Create(6, formFile.Object, dto);
 
@@ -45,10 +45,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundWhenCouldNotFindTaskToAddAnswerTo(
-         [Frozen] Mock<ITaskRepository> taskRepository,
-         [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
-         Mock<IFormFile> formFile,
-         CreateTaskAnswerDto dto)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
+            Mock<IFormFile> formFile,
+            CreateTaskAnswerDto dto)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -71,12 +71,12 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnBadRequestIfTaskAlreadyHasAnswerAdded(
-        [Frozen] Mock<ITaskRepository> taskRepository,
-        [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
-        Mock<IFormFile> formFile,
-        ApplicationTask task,
-        TaskAnswer answer,
-        CreateTaskAnswerDto dto)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
+            Mock<IFormFile> formFile,
+            ApplicationTask task,
+            TaskAnswer answer,
+            CreateTaskAnswerDto dto)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -100,11 +100,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnBadRequestIfTaskDeadlineHasPassed(
-        [Frozen] Mock<ITaskRepository> taskRepository,
-        [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
-        Mock<IFormFile> formFile,
-        ApplicationTask task,
-        CreateTaskAnswerDto dto)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
+            Mock<IFormFile> formFile,
+            ApplicationTask task,
+            CreateTaskAnswerDto dto)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -118,7 +118,7 @@ namespace SimplyRecruitAPITests.Controllers
             };
             task.Deadline = DateTime.MinValue;
             taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(task);
-            taskAnswerRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
+            taskAnswerRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null!);
 
             var result = await sut.Create(6, formFile.Object, dto);
 
@@ -129,11 +129,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task UpdateTaskAsSubmitedOnSuccessfullAnswerAdd(
-        [Frozen] Mock<ITaskRepository> taskRepository,
-        [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
-        Mock<IFormFile> formFile,
-        ApplicationTask task,
-        CreateTaskAnswerDto dto)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository,
+            Mock<IFormFile> formFile,
+            ApplicationTask task,
+            CreateTaskAnswerDto dto)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -147,7 +147,7 @@ namespace SimplyRecruitAPITests.Controllers
             };
             task.Deadline = DateTime.MaxValue;
             taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(task);
-            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
+            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null!);
 
             var result = await sut.Create(6, formFile.Object, dto);
 
@@ -185,9 +185,9 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindTaskWhenDownloadingFile(
-          TaskAnswer answer,
-          [Frozen] Mock<ITaskRepository> taskRepository,
-          [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository)
+            TaskAnswer answer,
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -199,7 +199,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((ApplicationTask)null);
+            taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((ApplicationTask)null!);
             taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync(answer);
 
             var result = await sut.DownloadResume(6);
@@ -210,9 +210,9 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindTaskAnswerWhenDownloadingFile(
-        ApplicationTask task,
-        [Frozen] Mock<ITaskRepository> taskRepository,
-        [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository)
+            ApplicationTask task,
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -225,7 +225,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(task);
-            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
+            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null!);
 
             var result = await sut.DownloadResume(6);
 
@@ -277,7 +277,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(task);
-            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null);
+            taskAnswerRepository.Setup(s => s.GetTaskAnswerAsync(It.IsAny<int>())).ReturnsAsync((TaskAnswer)null!);
 
             var result = await sut.GetTaskAnswer(6);
 
@@ -288,8 +288,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindTaskWhenGettingTaskAnswer(
-          [Frozen] Mock<ITaskRepository> taskRepository,
-          [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<ITaskAnswerRepository> taskAnswerRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -301,7 +301,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((ApplicationTask)null);
+            taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((ApplicationTask)null!);
 
             var result = await sut.GetTaskAnswer(6);
 

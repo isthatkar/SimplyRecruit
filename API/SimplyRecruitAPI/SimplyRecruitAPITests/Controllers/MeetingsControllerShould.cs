@@ -18,11 +18,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnCurrentUsersMeetings(
-          IEnumerable<Meeting> items,
-          SimplyUser userToReturn,
-          IEnumerable<MeetingTimes> times,
-          [Frozen] Mock<IMeetingsRepository> meetingsRepository,
-          [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
+            IEnumerable<Meeting> items,
+            SimplyUser userToReturn,
+            IEnumerable<MeetingTimes> times,
+            [Frozen] Mock<IMeetingsRepository> meetingsRepository,
+            [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -74,7 +74,7 @@ namespace SimplyRecruitAPITests.Controllers
             var result = await sut.GetMeeting(meeting.Id);
 
             var actualItem = Assert.IsAssignableFrom<ActionResult<MeetingDto>>(result);
-            Assert.Equal(actualItem.Value.Id, meeting.Id);
+            Assert.Equal(actualItem.Value!.Id, meeting.Id);
         }
 
 
@@ -99,7 +99,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
-            meetingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Meeting)null);
+            meetingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Meeting)null!);
             meetingTimesRepository.Setup(x => x.GetMeetingsManyAsync(It.IsAny<int>())).ReturnsAsync(times.ToList());
 
             var result = await sut.GetMeeting(5);
@@ -130,13 +130,13 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
-            meetingsRepository.Setup(x => x.GetByUrlAsync(meeting.SchedullingUrl)).ReturnsAsync(meeting);
+            meetingsRepository.Setup(x => x.GetByUrlAsync(meeting.SchedullingUrl!)).ReturnsAsync(meeting);
             meetingTimesRepository.Setup(x => x.GetMeetingsManyAsync(It.IsAny<int>())).ReturnsAsync(times.ToList());
 
-            var result = await sut.GetMeetingByUrl(meeting.SchedullingUrl);
+            var result = await sut.GetMeetingByUrl(meeting.SchedullingUrl!);
 
             var actualItem = Assert.IsAssignableFrom<ActionResult<MeetingDto>>(result);
-            Assert.Equal(actualItem.Value.Id, meeting.Id);
+            Assert.Equal(actualItem.Value!.Id, meeting.Id);
         }
 
 
@@ -161,7 +161,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
-            meetingsRepository.Setup(x => x.GetByUrlAsync(It.IsAny<string>())).ReturnsAsync((Meeting)null);
+            meetingsRepository.Setup(x => x.GetByUrlAsync(It.IsAny<string>())).ReturnsAsync((Meeting)null!);
             meetingTimesRepository.Setup(x => x.GetMeetingsManyAsync(It.IsAny<int>())).ReturnsAsync(times.ToList());
 
             var result = await sut.GetMeetingByUrl("veryrandomurl");
@@ -173,11 +173,11 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindMeetingToUpdate(
-          SimplyUser userToReturn,
-          IEnumerable<MeetingTimes> times,
-          UpdateMeetingDto updateMeetingDto,
-          [Frozen] Mock<IMeetingsRepository> meetingsRepository,
-          [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
+            SimplyUser userToReturn,
+            IEnumerable<MeetingTimes> times,
+            UpdateMeetingDto updateMeetingDto,
+            [Frozen] Mock<IMeetingsRepository> meetingsRepository,
+            [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -192,7 +192,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             userManager.Setup(r => r.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(userToReturn);
-            meetingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Meeting)null);
+            meetingsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Meeting)null!);
             meetingTimesRepository.Setup(x => x.GetMeetingsManyAsync(It.IsAny<int>())).ReturnsAsync(times.ToList());
 
             var result = await sut.Update(5, updateMeetingDto);
@@ -206,11 +206,11 @@ namespace SimplyRecruitAPITests.Controllers
         [AutoData]
         public async Task ReturnOkayResultIfUpdateSuccessfull(
             Meeting meeting,
-          SimplyUser userToReturn,
-          IEnumerable<MeetingTimes> times,
-          UpdateMeetingDto updateMeetingDto,
-          [Frozen] Mock<IMeetingsRepository> meetingsRepository,
-          [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
+            SimplyUser userToReturn,
+            IEnumerable<MeetingTimes> times,
+            UpdateMeetingDto updateMeetingDto,
+            [Frozen] Mock<IMeetingsRepository> meetingsRepository,
+            [Frozen] Mock<IMeetingTimesRepository> meetingTimesRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 

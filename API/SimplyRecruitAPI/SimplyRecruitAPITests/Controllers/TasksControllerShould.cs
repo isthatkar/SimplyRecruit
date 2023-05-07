@@ -19,12 +19,12 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnCreatedResultWhenSuccessfullyCreatedTask(
-           [Frozen] Mock<ITaskRepository> taskRepository,
-           Application application,
-           [Frozen] Mock<IApplicationsRepository> applicationsRepository,
-           Mock<IFormFile> formFile,
-           ApplicationTask task,
-           CreateTaskDto dto)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            Application application,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository,
+            Mock<IFormFile> formFile,
+            ApplicationTask task,
+            CreateTaskDto dto)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -67,7 +67,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((ApplicationTask)null);
+            taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((ApplicationTask)null!);
 
             var result = await sut.Create(6, formFile.Object, dto);
 
@@ -108,8 +108,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindApplicationWhenDownloadingFile(
-          [Frozen] Mock<ITaskRepository> taskRepository,
-          [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -123,7 +123,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
 
             var result = await sut.DownloadResume(6, 6);
 
@@ -134,8 +134,8 @@ namespace SimplyRecruitAPITests.Controllers
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindTaskWhenDownloadingFile(
             Application application,
-          [Frozen] Mock<ITaskRepository> taskRepository,
-          [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -150,7 +150,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync(application);
-            taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((ApplicationTask)null);
+            taskRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((ApplicationTask)null!);
 
             var result = await sut.DownloadResume(6, 6);
 
@@ -189,9 +189,9 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindApplicationWhenGettingItsTasks(
-           ApplicationTask task,
-           [Frozen] Mock<ITaskRepository> taskRepository,
-           [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            ApplicationTask task,
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -206,7 +206,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             task.FileData = null;
-            applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
 
             var result = await sut.GetApplicationTasks(6);
 
@@ -234,7 +234,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             task.FileData = null;
-            applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
 
             var result = await sut.GetTask(6, 6);
 
@@ -245,9 +245,9 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldNotFindTaskWhenGettingTask(
-           ApplicationTask task,
-           [Frozen] Mock<ITaskRepository> taskRepository,
-           [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            ApplicationTask task,
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -262,7 +262,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             task.FileData = null;
-            applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null);
+            applicationsRepository.Setup(s => s.GetAsync(It.IsAny<int>())).ReturnsAsync((Application)null!);
 
             var result = await sut.GetTask(6, 6);
 
@@ -273,10 +273,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnOkResultWhenGetTasksWasSuccessfull(
-           Application application,
-           IEnumerable<ApplicationTask> tasks,
-           [Frozen] Mock<ITaskRepository> taskRepository,
-           [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Application application,
+            IEnumerable<ApplicationTask> tasks,
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 
@@ -302,10 +302,10 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnOkResultWhenGettingTask(
-          Application application,
-          ApplicationTask task,
-          [Frozen] Mock<ITaskRepository> taskRepository,
-          [Frozen] Mock<IApplicationsRepository> applicationsRepository)
+            Application application,
+            ApplicationTask task,
+            [Frozen] Mock<ITaskRepository> taskRepository,
+            [Frozen] Mock<IApplicationsRepository> applicationsRepository)
         {
             var userManager = new Mock<UserManager<SimplyUser>>(new Mock<IUserStore<SimplyUser>>().Object, null, null, null, null, null, null, null, null);
 

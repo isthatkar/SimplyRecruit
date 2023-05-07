@@ -40,8 +40,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnProjectById(
-          Project project,
-          [Frozen] Mock<IProjectsRepository> projectsRepository)
+            Project project,
+            [Frozen] Mock<IProjectsRepository> projectsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -59,13 +59,13 @@ namespace SimplyRecruitAPITests.Controllers
             var result = await sut.Get(5);
 
             var actualItem = Assert.IsAssignableFrom<ActionResult<ProjectDto>>(result);
-            Assert.Equal(actualItem.Value.Id, project.Id);
+            Assert.Equal(actualItem.Value!.Id, project.Id);
         }
 
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundIfCouldntFindProjectById(
-         [Frozen] Mock<IProjectsRepository> projectsRepository)
+           [Frozen] Mock<IProjectsRepository> projectsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -78,7 +78,7 @@ namespace SimplyRecruitAPITests.Controllers
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
-            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null);
+            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null!);
 
             var result = await sut.Get(5);
 
@@ -138,9 +138,9 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundWhenCannotFindProjectToEdit(
-           UpdateProjectDto dto,
-           Project project,
-           [Frozen] Mock<IProjectsRepository> projectsRepository)
+            UpdateProjectDto dto,
+            Project project,
+            [Frozen] Mock<IProjectsRepository> projectsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -152,7 +152,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null);
+            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null!);
 
             var result = await sut.Update(project.Id, dto);
 
@@ -163,8 +163,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNotFoundWhenCannotFindProjectToRemove(
-           Project project,
-           [Frozen] Mock<IProjectsRepository> projectsRepository)
+            Project project,
+            [Frozen] Mock<IProjectsRepository> projectsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -176,7 +176,7 @@ namespace SimplyRecruitAPITests.Controllers
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null);
+            projectsRepository.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((Project)null!);
 
             var result = await sut.Remove(project.Id);
 
@@ -186,8 +186,8 @@ namespace SimplyRecruitAPITests.Controllers
         [Theory]
         [AutoData]
         public async Task ReturnNoContentWhenSuccessullyRemovedProject(
-           Project project,
-           [Frozen] Mock<IProjectsRepository> projectsRepository)
+            Project project,
+            [Frozen] Mock<IProjectsRepository> projectsRepository)
         {
             var userId = "testUserId";
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]

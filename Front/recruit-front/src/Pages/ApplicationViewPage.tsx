@@ -1,4 +1,4 @@
-import { Box, Container, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Button, Container, Tab, Tabs, Typography } from "@mui/material";
 import TaskIcon from "@mui/icons-material/Task";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import InfoIcon from "@mui/icons-material/Info";
@@ -12,6 +12,7 @@ import ReviewsTab from "../Components/Reviews/ReviewsTab";
 import EmployeeTasksTab from "../Components/Tasks/EmployeeTasksTab";
 import ApplicationCard from "../Components/Applications/ApplicationCard";
 import Loader from "../Components/Loading/Loader";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -84,6 +85,10 @@ const ApplicationView = () => {
     navigate(`/application/${applicationId}?tab=${newValue}`);
   };
 
+  const handleBackClick = () => {
+    navigate(`/positions/${application?.positionId}/applications`);
+  };
+
   return (
     <div>
       <Box
@@ -105,6 +110,10 @@ const ApplicationView = () => {
             <Tab icon={<TaskIcon />} label="Tasks" sx={{ flexGrow: 1 }} />
           </Tabs>
         </Container>
+        <Button sx={{ ml: 3, mb: -4 }} onClick={handleBackClick}>
+          <ArrowBackIcon></ArrowBackIcon>
+          Go to project
+        </Button>
       </Box>
 
       {isLoading ? (
