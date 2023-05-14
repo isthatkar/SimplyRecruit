@@ -6,8 +6,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useStyles } from "../../Styles/Theme";
-import { Stage } from "../../Types/types";
+import { RowStackLeft, useStyles } from "../../Styles/Theme";
+import GetStateLabel from "../../Helpers/ApplicationStateToText";
 
 const ApplicationListItem = (props: any) => {
   const navigate = useNavigate();
@@ -30,9 +30,15 @@ const ApplicationListItem = (props: any) => {
             <Typography variant="subtitle1" color="text.primary">
               {props.fullName}
             </Typography>
-            <Typography variant="subtitle1" color="text.primary">
-              Stage of application: {Object.values(Stage)[props.stage]}
-            </Typography>
+
+            <RowStackLeft>
+              <Typography variant="subtitle1" sx={{ mr: 1 }}>
+                Current stage:
+              </Typography>
+              <Typography variant="subtitle2">
+                {GetStateLabel(props.stage)}
+              </Typography>
+            </RowStackLeft>
           </React.Fragment>
         }
       />

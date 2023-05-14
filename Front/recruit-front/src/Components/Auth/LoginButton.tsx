@@ -7,6 +7,11 @@ import Alert from "@mui/material/Alert/Alert";
 import axios from "axios";
 import { Button, CircularProgress } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
+import {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_REDIRECT_URL,
+} from "../../appConfig";
 
 export default function LoginButton() {
   const navigate = useNavigate();
@@ -22,6 +27,15 @@ export default function LoginButton() {
     let refreshToken;
     let idToken;
     params.append("code", code);
+    params.append("client_id", GOOGLE_CLIENT_ID);
+    params.append("client_secret", GOOGLE_CLIENT_SECRET);
+    params.append(
+      "redirect_uri",
+      GOOGLE_REDIRECT_URL
+      //  "http://localhost:3000" //uncomment this line for local testing and comment the one above
+    );
+    params.append("grant_type", "authorization_code");
+    params.append("response_type: ", "id_token");
 
     try {
       const response = await fetch("https://oauth2.googleapis.com/token", {

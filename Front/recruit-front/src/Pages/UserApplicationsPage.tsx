@@ -9,13 +9,17 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import ApplicationListItem from "../Components/Applications/ApplicationListItem";
 import { Application } from "../Types/types";
+import Loader from "../Components/Loading/Loader";
 
 const UserApplications = () => {
   const [allApplications, setAllApplications] = useState<Application[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const getUserApplications = useCallback(async () => {
+    setIsLoading(true);
     const response = await axios.get("applications/currentUser");
     const applications = response.data;
     setAllApplications(applications);
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -42,25 +46,31 @@ const UserApplications = () => {
           </Typography>
         </Container>
       </Box>
-      <Container>
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-          sx={{ mb: 8 }}
-        >
-          {allApplications.map((application) => (
-            <ApplicationListItem
-              key={application.id}
-              email={application.contactEmail}
-              id={application.id}
-              stage={application.stage}
-              positionName={application.positionName}
-            ></ApplicationListItem>
-          ))}
-        </Stack>
-      </Container>
+      {isLoading ? (
+        <Loader></Loader>
+      ) : (
+        <>
+          <Container>
+            <Stack
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+              sx={{ mb: 8 }}
+            >
+              {allApplications.map((application) => (
+                <ApplicationListItem
+                  key={application.id}
+                  email={application.contactEmail}
+                  id={application.id}
+                  stage={application.stage}
+                  positionName={application.positionName}
+                ></ApplicationListItem>
+              ))}
+            </Stack>
+          </Container>
+        </>
+      )}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_URL } from "../appConfig";
 
-axios.defaults.baseURL = "https://simplyrecruitapi.azurewebsites.net/api/";
+axios.defaults.baseURL = API_URL;
 
 let refresh = false;
 

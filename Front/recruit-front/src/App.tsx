@@ -25,12 +25,13 @@ import ProtectedRouteEmployee from "./Components/ProtectedRouteEmployee";
 import CandidateApplicationView from "./Pages/CandidateApplicationView";
 import MeetingSchedulingRedirect from "./Components/Meetings/MeetingSchedulinkRedirect";
 import { ToastContainer } from "react-toastify";
+import { GOOGLE_CLIENT_ID } from "./appConfig";
 
 const roles = localStorage.getItem("roles");
 const isEmployee = roles ? roles.includes("Employee") : false;
 function App() {
   return (
-    <GoogleOAuthProvider clientId="724152737023-qh4mjh84lm1r0buhsheotob3biugicgs.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <ThemeProvider theme={Theme}>
         <ToastContainer></ToastContainer>
         <BrowserRouter>

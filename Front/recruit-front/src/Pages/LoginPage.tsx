@@ -1,6 +1,5 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
@@ -20,7 +19,6 @@ const Login = () => {
       component="main"
       sx={{ minHeight: "90vh", overflowX: "auto" }}
     >
-      <CssBaseline />
       <Grid item xs={false} sm={false} md={7} container>
         <Hidden mdDown>
           <Box
@@ -32,7 +30,7 @@ const Login = () => {
               width: "100%",
             }}
           >
-            <img src={image} alt="Your image" height="90%" width="auto" />
+            <img src={image} alt="Your image" height="90%" width="100%" />
             <Typography variant="subtitle2" align="center">
               designed by Vectorjuice -
               <a href="https://www.freepik.com"> Freepik.com</a>

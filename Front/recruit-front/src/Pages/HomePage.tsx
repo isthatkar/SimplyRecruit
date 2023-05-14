@@ -1,4 +1,4 @@
-import { Grid, Typography, Button, Box, Stack } from "@mui/material";
+import { Grid, Typography, Button, Box, Stack, Hidden } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import image from "../img/Projects/homepage.jpg";
@@ -18,24 +18,25 @@ const Home = () => {
     <Grid
       container
       component="main"
-      item
       sx={{ minHeight: "90vh", overflowX: "auto" }}
     >
       <Grid
+        item
         xs={false}
         sm={false}
         md={7}
         alignItems="bottom"
         sx={{ mt: 10, mb: 2 }}
-        item
       >
-        <Stack alignItems="bottom">
-          <img src={image}></img>
-          <Typography variant="subtitle2" align="center">
-            designed by Pch.vector -
-            <a href="https://www.freepik.com"> Freepik.com</a>
-          </Typography>
-        </Stack>
+        <Hidden mdDown>
+          <Box alignItems="bottom">
+            <img src={image} height="100%" width="100%"></img>
+            <Typography variant="subtitle2" align="center">
+              designed by Pch.vector -
+              <a href="https://www.freepik.com"> Freepik.com</a>
+            </Typography>
+          </Box>
+        </Hidden>
       </Grid>
       <Grid item xs={12} sm={12} md={5} justifyContent="center" container>
         <Stack
@@ -66,7 +67,7 @@ const Home = () => {
             </Typography>
             {token ? (
               <Button
-                sx={{ mt: 4 }}
+                sx={{ mt: 4, mb: 8 }}
                 size="large"
                 variant="outlined"
                 onClick={handlePositionsClick}

@@ -14,24 +14,30 @@ import {
   Project,
   WorkTime,
 } from "../Types/types";
+import Loader from "../Components/Loading/Loader";
 
 const Projects = () => {
   const [project, setProject] = useState<Project>();
+  const [isLoading, setIsLoading] = useState(false);
   const [allPositions, setProjectsPositions] = useState<Position[]>([]);
   const [isEmployee, setIsEmployee] = useState(false);
   const { projectid } = useParams();
   const navigate = useNavigate();
 
   const getProjects = useCallback(async () => {
+    setIsLoading(true);
     const response = await axios.get(`projects/${projectid}`);
     const project = response.data;
     setProject(project);
+    setIsLoading(false);
   }, []);
 
   const getPositions = useCallback(async () => {
+    setIsLoading(true);
     const response = await axios.get(`projects/${projectid}/positions`);
     const positions = response.data;
     setProjectsPositions(positions);
+    setIsLoading(false);
   }, []);
 
   const handleClickAdd = () => {
@@ -48,61 +54,72 @@ const Projects = () => {
 
   return (
     <div>
-      <Box
-        sx={{
-          bgcolor: "background.paper",
-          pt: 8,
-          pb: 6,
-        }}
-      >
-        <Container maxWidth="sm">
-          <Typography
-            component="h1"
-            variant="h2"
-            align="center"
-            color="text.primary"
-            gutterBottom
+      {isLoading ? (
+        <Loader></Loader>
+      ) : (
+        <>
+          <Box
+            sx={{
+              bgcolor: "background.paper",
+              pt: 8,
+              pb: 6,
+            }}
           >
-            {NordProduct[project?.product as number]} {project?.name} positions
-          </Typography>
+            <Container maxWidth="sm">
+              <Typography
+                component="h1"
+                variant="h2"
+                align="center"
+                color="text.primary"
+                gutterBottom
+              >
+                {NordProduct[project?.product as number]} {project?.name}{" "}
+                positions
+              </Typography>
 
-          {isEmployee ? (
+              {isEmployee ? (
+                <Stack
+                  sx={{ pt: 4 }}
+                  direction="row"
+                  spacing={2}
+                  justifyContent="center"
+                >
+                  {" "}
+                  <Button variant="contained" onClick={handleClickAdd}>
+                    Add new position
+                  </Button>
+                </Stack>
+              ) : (
+                ""
+              )}
+              <Stack
+                sx={{ pt: 4 }}
+                direction="row"
+                spacing={2}
+                justifyContent="center"
+              ></Stack>
+            </Container>
+          </Box>
+          <Container sx={{ py: 1, mb: 8 }} maxWidth="md">
             <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
+              direction="column"
               justifyContent="center"
+              alignItems="center"
             >
-              {" "}
-              <Button variant="contained" onClick={handleClickAdd}>
-                Add new position
-              </Button>
+              {allPositions.map((position) => (
+                <PositionListItem
+                  key={position.id}
+                  isOpen={position.isOpen}
+                  id={position.id}
+                  positionName={position.name}
+                  location={JobLocation[position.location]}
+                  time={WorkTime[position.workTime]}
+                ></PositionListItem>
+              ))}
             </Stack>
-          ) : (
-            ""
-          )}
-          <Stack
-            sx={{ pt: 4 }}
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-          ></Stack>
-        </Container>
-      </Box>
-      <Container sx={{ py: 1, mb: 8 }} maxWidth="md">
-        <Stack direction="column" justifyContent="center" alignItems="center">
-          {allPositions.map((position) => (
-            <PositionListItem
-              key={position.id}
-              isOpen={position.isOpen}
-              id={position.id}
-              positionName={position.name}
-              location={JobLocation[position.location]}
-              time={WorkTime[position.workTime]}
-            ></PositionListItem>
-          ))}
-        </Stack>
-      </Container>
+          </Container>
+        </>
+      )}
     </div>
   );
 };

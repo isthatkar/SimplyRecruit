@@ -38,15 +38,14 @@ const PositionView = () => {
     if (offersList) {
       setOffers(offersList);
     }
+    const roles = localStorage.getItem("roles");
+    setIsEmployee(roles ? roles.includes("Employee") : false);
+    setIsCandidate(roles ? roles.includes("Candidate") : false);
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
     getPosition();
-
-    const roles = localStorage.getItem("roles");
-    setIsEmployee(roles ? roles.includes("Employee") : false);
-    setIsCandidate(roles ? roles.includes("Candidate") : false);
   }, []);
 
   const handleViewApplications = () => {
